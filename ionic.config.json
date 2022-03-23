@@ -1,0 +1,7 @@
+{
+  "name": "sabfzt_system",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
