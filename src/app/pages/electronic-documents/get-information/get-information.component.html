@@ -1,0 +1,292 @@
+<div class="container">
+  <mat-toolbar>
+    <span>Obtener información de Comprobante(s) electrónico(s)</span>
+  </mat-toolbar>
+  <div style="margin: 10px">
+    <button
+      style="min-width: 25px; margin-right: 20px"
+      mat-raised-button
+      color="primary"
+      [disabled]="listScannedElectronicDocument.length === 0"
+    >
+      Procesar
+    </button>
+    <button
+      style="min-width: 25px"
+      mat-raised-button
+      color="warn"
+      [disabled]="listScannedElectronicDocument.length === 0"
+      (click)="cleanListDigitalizedElectronicDocuments()"
+    >
+      Cancelar
+    </button>
+  </div>
+  <div *ngIf="listScannedElectronicDocument.length > 0">
+    <mat-card class="cardOptions" [style.background]="'transparent'">
+      <h3>Listado de Documentos escaneados</h3>
+      <div class="mat-elevation-z8">
+        <table
+          mat-table
+          [dataSource]="dataSourceScannedElectronicDocument"
+          matSort
+          style="width: 100%"
+        >
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+              >
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)"
+              >
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Id Column -->
+          <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+            <td mat-cell *matCellDef="let element" class="cell-style">
+              {{ element.Id }}
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+            <td mat-cell *matCellDef="let element" class="cell-style">
+              {{ element.Name }}
+            </td>
+          </ng-container>
+
+          <!-- FileType Column -->
+          <ng-container matColumnDef="FileType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+            <td mat-cell *matCellDef="let element" class="cell-style">
+              {{ element.FileType }}
+            </td>
+          </ng-container>
+
+          <!-- FileSize Column -->
+          <ng-container matColumnDef="FileSize">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tamaño</th>
+            <td mat-cell *matCellDef="let element" class="cell-style">
+              {{ element.FileSize }}
+            </td>
+          </ng-container>
+
+          <!-- State Column -->
+          <ng-container matColumnDef="State">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td mat-cell *matCellDef="let element" class="cell-style">
+              {{ element.State }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" class="actions">
+              <a
+                (click)="deleteScannedElectronicDocument(element.Item)"
+                class="link-actions delete"
+                matTooltip="Eliminar Comprobante electrónico"
+              >
+                <mat-icon>delete</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedScannedElectronicDocumentsColumns"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: displayedScannedElectronicDocumentsColumns
+            "
+          ></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons
+          aria-label="Select page of electronic documents"
+        ></mat-paginator>
+      </div>
+    </mat-card>
+    <br />
+
+    <mat-card class="cardOptions" [style.background]="'transparent'">
+      <h3>Listado de Documentos digitalizados</h3>
+      <div class="mat-elevation-z8">
+        <table
+          mat-table
+          [dataSource]="dataSourceDigitalizedElectronicDocument"
+          matSort
+          style="width: 100%"
+        >
+          <!-- Id Column -->
+          <ng-container matColumnDef="Id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{ elementDigitalizedElectronicDocument.Id }}
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{ elementDigitalizedElectronicDocument.Name }}
+            </td>
+          </ng-container>
+
+          <!-- FileType Column -->
+          <ng-container matColumnDef="FileType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Tipo archivo
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{ elementDigitalizedElectronicDocument.FileType }}
+            </td>
+          </ng-container>
+
+          <!-- DocumentType Column -->
+          <ng-container matColumnDef="DocumentType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Tipo documento
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{
+                elementDigitalizedElectronicDocument.DocumentType.Description
+              }}
+            </td>
+          </ng-container>
+
+          <!-- FormatType Column -->
+          <ng-container matColumnDef="FormatType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Tipo formato
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{ elementDigitalizedElectronicDocument.FormatType.Description }}
+            </td>
+          </ng-container>
+
+          <!-- WayPay Column -->
+          <ng-container matColumnDef="WayPay">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Forma pago
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{ elementDigitalizedElectronicDocument.WayPay.Description }}
+            </td>
+          </ng-container>
+
+          <!-- FileSize Column -->
+          <ng-container matColumnDef="FileSize">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tamaño</th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{ elementDigitalizedElectronicDocument.FileSize }}
+            </td>
+          </ng-container>
+
+          <!-- State Column -->
+          <ng-container matColumnDef="State">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="cell-style"
+            >
+              {{ elementDigitalizedElectronicDocument.State }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td
+              mat-cell
+              *matCellDef="let elementDigitalizedElectronicDocument"
+              class="actions"
+            >
+              <a
+                (click)="
+                  deleteScannedElectronicDocument(
+                    elementDigitalizedElectronicDocument.Item
+                  )
+                "
+                class="link-actions delete"
+                matTooltip="Eliminar Comprobante electrónico"
+              >
+                <mat-icon>delete</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedDigitalizedElectronicDocumentsColumns"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: displayedDigitalizedElectronicDocumentsColumns
+            "
+          ></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons
+          aria-label="Select page of electronic documents"
+        ></mat-paginator>
+      </div>
+    </mat-card>
+  </div>
+  <div
+    *ngIf="listScannedElectronicDocument.length === 0"
+    style="margin-left: 12px; margin-top: 48px; color: red"
+  >
+    <h2>No hay comprobantes electrónicos escaneados por digitalizar</h2>
+  </div>
+</div>

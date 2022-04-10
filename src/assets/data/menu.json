@@ -1,0 +1,22 @@
+[
+    {
+        "Name": "Home",
+        "Redirect": "/dashboard"
+    },
+    {
+        "Name": "Escanear Comprobantes electrónicos",
+        "Redirect": "/dashboard/electronic-documents-scan"
+    },
+    {
+        "Name": "Obtener información de Comprobantes electrónicos",
+        "Redirect": "/dashboard/electronic-documents-get-information"
+    },
+    {
+        "Name": "Listado de Comprobantes electónicos digitalizados",
+        "Redirect": "/dashboard/electronic-documents-list"
+    },
+    {
+        "Name": "Reporte de Comprobantes electónicos digitalizados",
+        "Redirect": "/dashboard/electronic-documents-report"
+    }
+]

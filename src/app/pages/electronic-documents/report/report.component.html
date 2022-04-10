@@ -1,0 +1,135 @@
+<div class="container">
+  <mat-toolbar>
+    <span>Reporte de Comprobantes electrónicos digitalizados</span>
+  </mat-toolbar>
+  <div style="margin: 10px">
+    <button
+      style="min-width: 25px; margin-right: 20px"
+      mat-raised-button
+      color="primary"
+    >
+      Procesar
+    </button>
+    <button
+      style="min-width: 25px"
+      mat-raised-button
+      color="warn"
+      (click)="cleanFilters()"
+    >
+      Cancelar
+    </button>
+  </div>
+  <mat-card class="cardOptions" [style.background]="'transparent'">
+    <mat-grid-list cols="3" rowHeight="70px">
+      <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-label>Tipo de transacción:</mat-label>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="2"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-form-field class="inputOptionShort">
+          <mat-select>
+            <mat-option
+              *ngFor="let transactionType of listTransactionTypes"
+              [value]="transactionType.Id"
+            >
+              {{ transactionType.Description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-label>Tipo de documento:</mat-label>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="2"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-form-field class="inputOptionShort">
+          <mat-select>
+            <mat-option
+              *ngFor="let documentType of listDocumentTypes"
+              [value]="documentType.Id"
+            >
+              {{ documentType.Description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-label>Tipo de formato:</mat-label>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="2"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-form-field class="inputOptionShort">
+          <mat-select>
+            <mat-option
+              *ngFor="let formatType of listFormatTypes"
+              [value]="formatType.Id"
+            >
+              {{ formatType.Description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-label>Tipo de moneda:</mat-label>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="2"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-form-field class="inputOptionShort">
+          <mat-select>
+            <mat-option *ngFor="let money of listMoneys" [value]="money.Id">
+              {{ money.Description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="1"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-label>Forma de pago:</mat-label>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="2"
+        [rowspan]="1"
+        [style.background]="'lightblue'"
+      >
+        <mat-form-field class="inputOptionShort">
+          <mat-select>
+            <mat-option *ngFor="let wayPay of listWayPays" [value]="wayPay.Id">
+              {{ wayPay.Description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card>
+</div>
