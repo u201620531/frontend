@@ -1,3 +1,15 @@
 .cardOptions {
     margin-top: 10px;
 }
+
+.inputOptionShort {
+    max-width: 40%;
+}
+
+.inputOptionMedium {
+    max-width: 70%;
+}
+
+.inputOptionLarge {
+    max-width: 90%;
+}

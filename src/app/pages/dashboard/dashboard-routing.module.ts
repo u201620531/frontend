@@ -7,6 +7,10 @@ import { ScanComponent } from '../electronic-documents/scan/scan.component';
 import { AddComponent } from '../electronic-documents/add/add.component';
 import { GetInformationComponent } from '../electronic-documents/get-information/get-information.component';
 import { ReportComponent } from '../electronic-documents/report/report.component';
+import { CustomerAddComponent } from '../customer/customer-add/customer-add.component';
+import { CustomerListComponent } from '../customer/customer-list/customer-list.component';
+import { SupplierAddComponent } from '../supplier/supplier-add/supplier-add.component';
+import { SupplierListComponent } from '../supplier/supplier-list/supplier-list.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, children: [
@@ -15,7 +19,11 @@ const routes: Routes = [
     { path: 'electronic-documents-get-information', component: GetInformationComponent },
     { path: 'electronic-documents-list', component: ListComponent },
     { path: 'electronic-documents-add', component: AddComponent },
-    { path: 'electronic-documents-report', component: ReportComponent }
+    { path: 'electronic-documents-report', component: ReportComponent },
+    { path: 'customer-add', component: CustomerAddComponent },
+    { path: 'customer-list', component: CustomerListComponent },
+    { path: 'supplier-add', component: SupplierAddComponent },
+    { path: 'supplier-list', component: SupplierListComponent }
   ] 
   }
 ];

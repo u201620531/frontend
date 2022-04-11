@@ -54,7 +54,7 @@ export class ElectronicDocumentsService {
       Number: '4578451',
       Supplier: {
         Id: 'S0000001',
-        CustomerType: 'J',
+        SupplierType: 'J',
         DocumentType: {
           Id: 'RUC',
           Description: 'RUC'

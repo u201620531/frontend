@@ -1,0 +1,170 @@
+<div class="container">
+  <mat-toolbar
+    style="background: cornflowerblue; color: white; font-family: cursive"
+  >
+    <span>Agregar Cliente</span>
+  </mat-toolbar>
+
+  <mat-card class="cardOptions">
+    <form [formGroup]="form" (ngSubmit)="addCustomer()">
+      <mat-grid-list cols="6" rowHeight="70px">
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field>
+              <mat-label>Id</mat-label>
+              <input matInput autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <img
+            src="../../../../assets/img/png/customers.png"
+            alt="customers"
+            width="350"
+            height="70"
+          />
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>Tipo de cliente</mat-label>
+              <mat-select formControlName="CustomerType"
+              [(ngModel)]="customerTypeId">
+                <mat-option
+                  *ngFor="let customerType of listCustomerTypes"
+                  [value]="customerType.Id"
+                >
+                  {{ customerType.Description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>Tipo de documento</mat-label>
+              <mat-select formControlName="DocumentType">
+                <mat-option
+                  *ngFor="let documentType of listDocumentTypes"
+                  [value]="documentType.Id"
+                >
+                  {{ documentType.Description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>N° de documento</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="DocumentNumber"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionLarge">
+                <mat-label *ngIf="customerTypeId === ''">Seleccione tipo de cliente</mat-label>
+                <mat-label *ngIf="customerTypeId === 'J'">Razón Social</mat-label>
+                <mat-label *ngIf="customerTypeId === 'N'">Apellidos</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="BusinessName"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionLarge">
+              <mat-label>Nombre Comercial</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="ComercialName"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionLarge">
+                <mat-label>Dirección</mat-label>
+              <input matInput autocomplete="off" formControlName="Address" />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID" style="width: 100%;">
+            <mat-form-field class="inputOptionLarge">
+                <mat-label>Dirección fiscal</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="FiscalAddress"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="6"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="submit"
+            [disabled]="form.invalid"
+          >
+            Guardar
+          </button>
+          <button mat-raised-button>Volver</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </mat-card>
+</div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { DocumentType } from 'src/app/interfaces/document-type';
 import { FormatType } from 'src/app/interfaces/format-type';
 import { Money } from 'src/app/interfaces/money';
@@ -21,6 +22,10 @@ export class ReportComponent implements OnInit {
   listFormatTypes: FormatType[] = [];
   listMoneys: Money[] = [];
   listWayPays: WayPay[] = [];
+  rangeDates = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
 
   constructor(
     private _documentTypeService: DocumentTypeService,

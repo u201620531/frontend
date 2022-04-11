@@ -2,7 +2,7 @@ import { DocumentType } from './document-type';
 
 export interface Supplier {
   Id: string;
-  CustomerType: string; //N-Natural, J-Jurídico
+  SupplierType: string; //N-Natural, J-Jurídico
   DocumentType: DocumentType;
   DocumentNumber: string;
   BusinessName: string;

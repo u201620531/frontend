@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .acctions {
+    text-align: right;
+  }
+
+  .link-actions {
+    cursor: pointer;
+  }
+
+  .search {
+    color: #23ff48;
+  }
+
+  .edit {
+    color: #1878d0;
+  }
+
+  .delete {
+    color: #e9331f;
+  }
+
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }

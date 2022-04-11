@@ -14,6 +14,12 @@ import { ListComponent } from './pages/electronic-documents/list/list.component'
 import { AddComponent } from './pages/electronic-documents/add/add.component';
 import { ReportComponent } from './pages/electronic-documents/report/report.component';
 import { GetInformationComponent } from './pages/electronic-documents/get-information/get-information.component';
+//*** Customer */
+import { CustomerAddComponent } from './pages/customer/customer-add/customer-add.component';
+import { CustomerListComponent } from './pages/customer/customer-list/customer-list.component';
+//***Supplier */
+import { SupplierAddComponent } from './pages/supplier/supplier-add/supplier-add.component';
+import { SupplierListComponent } from './pages/supplier/supplier-list/supplier-list.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +29,11 @@ import { GetInformationComponent } from './pages/electronic-documents/get-inform
     ScanComponent,
     ListComponent,
     ReportComponent,
-    GetInformationComponent
+    GetInformationComponent,
+    CustomerAddComponent,
+    CustomerListComponent,
+    SupplierAddComponent,
+    SupplierListComponent
   ],
   imports: [
     BrowserModule,
