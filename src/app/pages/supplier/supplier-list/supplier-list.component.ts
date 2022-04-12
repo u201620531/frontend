@@ -3,13 +3,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NavigationExtras, Router } from '@angular/router';
 import { Supplier } from 'src/app/interfaces/supplier';
 import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
   selector: 'app-supplier-list',
   templateUrl: './supplier-list.component.html',
-  styleUrls: ['./supplier-list.component.css']
+  styleUrls: ['./supplier-list.component.css'],
 })
 export class SupplierListComponent implements OnInit {
   listSuppliers: Supplier[] = [];
@@ -32,7 +33,8 @@ export class SupplierListComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _supplierService: SupplierService
+    private _supplierService: SupplierService,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -45,8 +47,7 @@ export class SupplierListComponent implements OnInit {
   }
 
   loadSuppliers() {
-    this.listSuppliers =
-      this._supplierService.getSuppliers();
+    this.listSuppliers = this._supplierService.getSuppliers();
     this.dataSource = new MatTableDataSource(this.listSuppliers);
   }
 
@@ -55,19 +56,24 @@ export class SupplierListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteSupplier(index: number) {
-    this._supplierService.deleteSupplier(index);
+  deleteSupplier(id: string) {
+    this._supplierService.deleteSupplier(id);
     this.loadSuppliers();
 
-    this._snackBar.open(
-      'El Proveedor fue eliminado con éxito.',
-      '',
-      {
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-        duration: 1500,
-      }
-    );
+    this._snackBar.open('El Proveedor fue eliminado con éxito.', '', {
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      duration: 1500,
+    });
   }
 
+  editSupplier(id: string, edit: number): void {
+    const extras: NavigationExtras = {
+      queryParams: {
+        id: id,
+        edit: edit,
+      },
+    };
+    this._router.navigate(['/dashboard/supplier-add'], extras);
+  }
 }

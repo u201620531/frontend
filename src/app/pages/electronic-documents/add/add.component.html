@@ -45,10 +45,12 @@
         >
           <mat-form-field class="inputOptionLarge">
             <mat-label>Tipo de transacción</mat-label>
+            <mat-option>(Seleccione)</mat-option>
             <mat-select
               formControlName="TransactionType"
               [(ngModel)]="transactionTypeId"
             >
+              <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let transactionType of listTransactionTypes"
                 [value]="transactionType.Id"
@@ -119,6 +121,7 @@
           <mat-form-field class="inputOptionLarge">
             <mat-label>Tipo de formato</mat-label>
             <mat-select formControlName="FormatType">
+              <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let formatType of listFormatTypes"
                 [value]="formatType.Id"
@@ -136,6 +139,7 @@
           <mat-form-field class="inputOptionLarge">
             <mat-label>Tipo de documento</mat-label>
             <mat-select formControlName="DocumentType">
+              <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let documentType of listDocumentTypes"
                 [value]="documentType.Id"
@@ -170,6 +174,7 @@
           <mat-form-field class="inputOptionLarge">
             <mat-label>Forma de Pago</mat-label>
             <mat-select formControlName="WayPay">
+              <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let wayPay of listWayPays"
                 [value]="wayPay.Id"
@@ -187,6 +192,7 @@
           <mat-form-field class="inputOptionLarge">
             <mat-label>Moneda</mat-label>
             <mat-select formControlName="Money">
+              <mat-option>(Seleccione)</mat-option>
               <mat-option *ngFor="let money of listMoneys" [value]="money.Id">
                 {{ money.Description }}
               </mat-option>

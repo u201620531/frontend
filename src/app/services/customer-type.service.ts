@@ -6,7 +6,6 @@ import { CustomerType } from '../interfaces/customer-type';
 })
 export class CustomerTypeService {
   listCustomerType: CustomerType[] = [
-    { Id: '', Description: '' },
     { Id: 'N', Description: 'Natural' },
     { Id: 'J', Description: 'Jurídica' },
   ];

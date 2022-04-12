@@ -61,9 +61,13 @@ export class SupplierService {
   getSuppliers() {
     return this.listSuppliers.slice();
   }
+  
+  getSupplierById(id: string) {
+    return this.listSuppliers.filter(s => s.Id === id);
+  }
 
-  deleteSupplier(index: number) {
-    this.listSuppliers.splice(index, 1);
+  deleteSupplier(id: string) {
+    this.listSuppliers.splice(1, 1);
   }
 
   addSupplier(supplier: Supplier) {

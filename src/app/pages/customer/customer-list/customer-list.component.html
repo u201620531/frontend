@@ -79,12 +79,14 @@
             <a
               class="link-actions search"
               matTooltip="Ver Cliente"
+              (click)="editCustomer(element.Id, 0)"
             >
               <mat-icon>search</mat-icon>
             </a>
             <a
               class="link-actions edit"
               matTooltip="Editar Cliente"
+              (click)="editCustomer(element.Id, 1)"
             >
               <mat-icon>edit</mat-icon>
             </a>
@@ -92,6 +94,7 @@
             (click)="deleteCustomer(element.Item)"
               class="link-actions delete"
               matTooltip="Eliminar Cliente"
+              (click)="deleteCustomer(element.Id)"
             >
               <mat-icon>delete</mat-icon>
             </a>

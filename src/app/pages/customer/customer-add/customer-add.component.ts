@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from 'src/app/interfaces/customer';
 import { CustomerType } from 'src/app/interfaces/customer-type';
 import { DocumentType } from 'src/app/interfaces/document-type';
@@ -12,13 +12,16 @@ import { DocumentTypeService } from 'src/app/services/document-type.service';
 @Component({
   selector: 'app-customer-add',
   templateUrl: './customer-add.component.html',
-  styleUrls: ['./customer-add.component.css']
+  styleUrls: ['./customer-add.component.css'],
 })
 export class CustomerAddComponent implements OnInit {
   form: FormGroup;
   listDocumentTypes: DocumentType[] = [];
   listCustomerTypes: CustomerType[] = [];
-  customerTypeId: string = '';
+  IdCustomer = '';
+  idDocumentType: string = '';
+  idCustomerType: string = '';
+  readonlyOption: boolean = false;
 
   constructor(
     private _documentTypeService: DocumentTypeService,
@@ -26,22 +29,51 @@ export class CustomerAddComponent implements OnInit {
     private _customerService: CustomerService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
-    private router: Router
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {
     this.form = this._formBuilder.group({
+      Id: [''],
       CustomerType: ['', Validators.required],
       DocumentType: ['', Validators.required],
       DocumentNumber: ['', Validators.required],
       BusinessName: ['', Validators.required],
       ComercialName: ['', Validators.required],
       Address: ['', Validators.required],
-      FiscalAddress: ['', Validators.required]
+      FiscalAddress: ['', Validators.required],
+      State: [''],
     });
   }
 
   ngOnInit(): void {
     this.loadDocumentTypes();
     this.loadCustomerTypes();
+    this.initParams();
+  }
+
+  initParams(): void {
+    this._route.queryParams.subscribe((params) => {
+      if (params && params['id']) {
+        this.IdCustomer = params['id'];
+        const customer: Customer[] = this.getCustomer(this.IdCustomer);
+        this.idDocumentType = customer[0].DocumentType.Id;
+        this.idCustomerType = customer[0].CustomerType;
+        this.form.setValue({
+          Id: customer[0].Id,
+          CustomerType: customer[0].CustomerType,
+          DocumentType: customer[0].DocumentType,
+          DocumentNumber: customer[0].DocumentNumber,
+          BusinessName: customer[0].BusinessName,
+          ComercialName: customer[0].ComercialName,
+          Address: customer[0].Address,
+          FiscalAddress: customer[0].FiscalAddress,
+          State: customer[0].State,
+        });
+      }
+      if (params && params['edit']) {
+        this.readonlyOption = params['edit'] !== '1' ? true : false;
+      }
+    });
   }
 
   loadDocumentTypes() {
@@ -50,6 +82,10 @@ export class CustomerAddComponent implements OnInit {
 
   loadCustomerTypes() {
     this.listCustomerTypes = this._customerTypeService.getCustomerTypes();
+  }
+
+  getCustomer(id: string) {
+    return this._customerService.getCustomerById(id);
   }
 
   addCustomer() {
@@ -68,16 +104,12 @@ export class CustomerAddComponent implements OnInit {
     };
 
     this._customerService.addCustomer(customer);
-    this.router.navigate(['/dashboard/customer-list']);
+    this._router.navigate(['/dashboard/customer-list']);
 
-    this._snackBar.open(
-      'El Cliete fue registrado con éxito.',
-      '',
-      {
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-        duration: 1500,
-      }
-    );
+    this._snackBar.open('El Cliete fue registrado con éxito.', '', {
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      duration: 1500,
+    });
   }
 }

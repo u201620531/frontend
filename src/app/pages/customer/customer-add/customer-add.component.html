@@ -16,7 +16,12 @@
           <div class="inputID">
             <mat-form-field>
               <mat-label>Id</mat-label>
-              <input matInput autocomplete="off" readonly />
+              <input
+                matInput
+                autocomplete="off"
+                readonly
+                formControlName="Id"
+              />
             </mat-form-field>
           </div>
         </mat-grid-tile>
@@ -40,8 +45,12 @@
           <div class="inputID">
             <mat-form-field class="inputOptionMedium">
               <mat-label>Tipo de cliente</mat-label>
-              <mat-select formControlName="CustomerType"
-              [(ngModel)]="customerTypeId">
+              <mat-select
+                formControlName="CustomerType"
+                [(value)]="idCustomerType"
+                [disabled]="readonlyOption"
+              >
+                <mat-option>(Seleccione)</mat-option>
                 <mat-option
                   *ngFor="let customerType of listCustomerTypes"
                   [value]="customerType.Id"
@@ -60,7 +69,13 @@
           <div class="inputID">
             <mat-form-field class="inputOptionMedium">
               <mat-label>Tipo de documento</mat-label>
-              <mat-select formControlName="DocumentType">
+              <mat-select
+                id="documentType"
+                name="documentType"
+                [(value)]="idDocumentType"
+                [disabled]="readonlyOption"
+              >
+                <mat-option>(Seleccione)</mat-option>
                 <mat-option
                   *ngFor="let documentType of listDocumentTypes"
                   [value]="documentType.Id"
@@ -83,6 +98,7 @@
                 matInput
                 autocomplete="off"
                 formControlName="DocumentNumber"
+                [readonly]="readonlyOption"
               />
             </mat-form-field>
           </div>
@@ -94,13 +110,16 @@
         >
           <div class="inputID">
             <mat-form-field class="inputOptionLarge">
-                <mat-label *ngIf="customerTypeId === ''">Seleccione tipo de cliente</mat-label>
-                <mat-label *ngIf="customerTypeId === 'J'">Razón Social</mat-label>
-                <mat-label *ngIf="customerTypeId === 'N'">Apellidos</mat-label>
+              <mat-label *ngIf="idCustomerType === ''"
+                >Seleccione tipo de cliente</mat-label
+              >
+              <mat-label *ngIf="idCustomerType === 'J'">Razón Social</mat-label>
+              <mat-label *ngIf="idCustomerType === 'N'">Apellidos</mat-label>
               <input
                 matInput
                 autocomplete="off"
                 formControlName="BusinessName"
+                [readonly]="readonlyOption"
               />
             </mat-form-field>
           </div>
@@ -117,6 +136,7 @@
                 matInput
                 autocomplete="off"
                 formControlName="ComercialName"
+                [readonly]="readonlyOption"
               />
             </mat-form-field>
           </div>
@@ -128,8 +148,13 @@
         >
           <div class="inputID">
             <mat-form-field class="inputOptionLarge">
-                <mat-label>Dirección</mat-label>
-              <input matInput autocomplete="off" formControlName="Address" />
+              <mat-label>Dirección</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="Address"
+                [readonly]="readonlyOption"
+              />
             </mat-form-field>
           </div>
         </mat-grid-tile>
@@ -138,13 +163,14 @@
           [rowspan]="1"
           [style.background]="'transparent'"
         >
-          <div class="inputID" style="width: 100%;">
+          <div class="inputID" style="width: 100%">
             <mat-form-field class="inputOptionLarge">
-                <mat-label>Dirección fiscal</mat-label>
+              <mat-label>Dirección fiscal</mat-label>
               <input
                 matInput
                 autocomplete="off"
                 formControlName="FiscalAddress"
+                [readonly]="readonlyOption"
               />
             </mat-form-field>
           </div>

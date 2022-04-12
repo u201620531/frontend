@@ -3,13 +3,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NavigationExtras, Router } from '@angular/router';
 import { Customer } from 'src/app/interfaces/customer';
 import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
-  styleUrls: ['./customer-list.component.css']
+  styleUrls: ['./customer-list.component.css'],
 })
 export class CustomerListComponent implements OnInit {
   listCustomers: Customer[] = [];
@@ -32,7 +33,8 @@ export class CustomerListComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _customerService: CustomerService
+    private _customerService: CustomerService,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -45,8 +47,7 @@ export class CustomerListComponent implements OnInit {
   }
 
   loadCustomers() {
-    this.listCustomers =
-      this._customerService.getCustomers();
+    this.listCustomers = this._customerService.getCustomers();
     this.dataSource = new MatTableDataSource(this.listCustomers);
   }
 
@@ -59,14 +60,20 @@ export class CustomerListComponent implements OnInit {
     this._customerService.deleteCustomer(index);
     this.loadCustomers();
 
-    this._snackBar.open(
-      'El Cliente fue eliminado con éxito.',
-      '',
-      {
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-        duration: 1500,
-      }
-    );
+    this._snackBar.open('El Cliente fue eliminado con éxito.', '', {
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      duration: 1500,
+    });
+  }
+
+  editCustomer(id: string, edit:number): void {
+    const extras: NavigationExtras = {
+      queryParams: {
+        id: id,
+        edit: edit
+      },
+    };
+    this._router.navigate(['/dashboard/customer-add'], extras);
   }
 }

@@ -62,6 +62,10 @@ export class CustomerService {
     return this.listCustomers.slice();
   }
 
+  getCustomerById(id: string) {
+    return this.listCustomers.filter(c => c.Id === id);
+  }
+
   deleteCustomer(index: number) {
     this.listCustomers.splice(index, 1);
   }
