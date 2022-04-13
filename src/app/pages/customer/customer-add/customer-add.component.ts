@@ -112,4 +112,8 @@ export class CustomerAddComponent implements OnInit {
       duration: 1500,
     });
   }
+
+  back() {
+    this._router.navigate(['/dashboard/customer-list']);
+  }
 }
