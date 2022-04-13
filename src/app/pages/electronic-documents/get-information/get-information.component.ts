@@ -2,19 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DigitalizedElectronicDocument } from 'src/app/interfaces/digitalized-electronic-document';
 import { ScannedElectronicDocument } from 'src/app/interfaces/scanned-electronic-document';
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-get-information',
   templateUrl: './get-information.component.html',
-  styleUrls: ['./get-information.component.css']
+  styleUrls: ['./get-information.component.css'],
 })
 export class GetInformationComponent implements OnInit {
   listScannedElectronicDocument: ScannedElectronicDocument[] = [];
   listDigitalizedElectronicDocument: DigitalizedElectronicDocument[] = [];
   scannedElectronicDocument: any;
   digitalizedElectronicDocument: any;
-  
+
   selection = new SelectionModel<DigitalizedElectronicDocument>(true, []);
 
   displayedScannedElectronicDocumentsColumns: string[] = [
@@ -23,7 +23,7 @@ export class GetInformationComponent implements OnInit {
     'Name',
     'FileType',
     'FileSize',
-    'State'
+    'State',
   ];
   displayedDigitalizedElectronicDocumentsColumns: string[] = [
     'Id',
@@ -34,12 +34,12 @@ export class GetInformationComponent implements OnInit {
     'WayPay',
     'FileSize',
     'State',
-    'Actions'
+    'Actions',
   ];
   dataSourceScannedElectronicDocument!: MatTableDataSource<ScannedElectronicDocument>;
   dataSourceDigitalizedElectronicDocument!: MatTableDataSource<DigitalizedElectronicDocument>;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.loadListScannedElectronicDocuments();
@@ -49,7 +49,6 @@ export class GetInformationComponent implements OnInit {
   deleteScannedElectronicDocument(index: number) {
     // this._electronicDocumentsService.deleteElectronicDocument(index);
     // this.loadElectronicDocuments();
-
     // this._snackBar.open(
     //   'El Comprobante electrónico fue eliminado con éxito.',
     //   '',
@@ -70,8 +69,8 @@ export class GetInformationComponent implements OnInit {
       State: 'C',
       Detail: '',
       ScanDate: new Date().toLocaleString(),
-      ScanUser: 'jlre'
-    }
+      ScanUser: 'jlre',
+    };
     this.listScannedElectronicDocument.push(this.scannedElectronicDocument);
     this.scannedElectronicDocument = {
       Id: 2,
@@ -81,8 +80,8 @@ export class GetInformationComponent implements OnInit {
       State: 'C',
       Detail: '',
       ScanDate: new Date().toLocaleString(),
-      ScanUser: 'jlre'
-    }
+      ScanUser: 'jlre',
+    };
     this.listScannedElectronicDocument.push(this.scannedElectronicDocument);
     this.scannedElectronicDocument = {
       Id: 3,
@@ -92,96 +91,106 @@ export class GetInformationComponent implements OnInit {
       State: 'C',
       Detail: '',
       ScanDate: new Date().toLocaleString(),
-      ScanUser: 'jlre'
-    }
+      ScanUser: 'jlre',
+    };
     this.listScannedElectronicDocument.push(this.scannedElectronicDocument);
-    this.dataSourceScannedElectronicDocument = new MatTableDataSource(this.listScannedElectronicDocument);
+    this.dataSourceScannedElectronicDocument = new MatTableDataSource(
+      this.listScannedElectronicDocument
+    );
   }
 
   loadListDigitalizedElectronicDocuments() {
     this.digitalizedElectronicDocument = {
       Id: 1,
       Name: 'prueba.pdf',
-      FileRoute: 'c:\prueba.pdf',
+      FileRoute: 'c:prueba.pdf',
       FileContent: 'xxxxxxxxxxxxxx',
       FileType: 'pdf',
       DocumentType: {
         Id: 'FAC',
-        Description: 'Factura'
+        Description: 'Factura',
       },
       FormatType: {
         Id: 'PDF',
-        Description: 'Documento PDF'
+        Description: 'Documento PDF',
       },
       WayPay: {
         Id: 'CON',
-        Description: 'Contado'
+        Description: 'Contado',
       },
       FileSize: 132456,
       State: 'C',
       Detail: '',
       DigitalizedDate: new Date().toLocaleString(),
-      DigitalizedUser: 'jlre'
-    }
-    this.listDigitalizedElectronicDocument.push(this.digitalizedElectronicDocument);
+      DigitalizedUser: 'jlre',
+    };
+    this.listDigitalizedElectronicDocument.push(
+      this.digitalizedElectronicDocument
+    );
     this.digitalizedElectronicDocument = {
       Id: 2,
       Name: 'prueba2.xml',
-      FileRoute: 'c:\prueba2.xml',
+      FileRoute: 'c:prueba2.xml',
       FileContent: 'FUJFJBT67 7  IG8778GJHBJHH  JJJGHJ',
       FileType: 'xml',
       DocumentType: {
         Id: 'FAC',
-        Description: 'Factura'
+        Description: 'Factura',
       },
       FormatType: {
         Id: 'XML',
-        Description: 'Documento XML'
+        Description: 'Documento XML',
       },
       WayPay: {
         Id: 'CON',
-        Description: 'Contado'
+        Description: 'Contado',
       },
       FileSize: 132456,
       State: 'C',
       Detail: '',
       DigitalizedDate: new Date().toLocaleString(),
-      DigitalizedUser: 'jlre'
-    }
-    this.listDigitalizedElectronicDocument.push(this.digitalizedElectronicDocument);
+      DigitalizedUser: 'jlre',
+    };
+    this.listDigitalizedElectronicDocument.push(
+      this.digitalizedElectronicDocument
+    );
     this.digitalizedElectronicDocument = {
       Id: 3,
       Name: 'prueba3.pdf',
-      FileRoute: 'c:\prueba3.pdf',
+      FileRoute: 'c:prueba3.pdf',
       FileContent: 'xxxxxxxxxxxxxx',
       FileType: 'pdf',
       DocumentType: {
         Id: 'BOL',
-        Description: 'Boleta'
+        Description: 'Boleta',
       },
       FormatType: {
         Id: 'PDF',
-        Description: 'Documento PDF'
+        Description: 'Documento PDF',
       },
       WayPay: {
         Id: 'CRE',
-        Description: 'Crédito'
+        Description: 'Crédito',
       },
       FileSize: 132456,
       State: 'C',
       Detail: '',
       DigitalizedDate: new Date().toLocaleString(),
-      DigitalizedUser: 'jlre'
-    }
-    this.listDigitalizedElectronicDocument.push(this.digitalizedElectronicDocument);
-    this.dataSourceDigitalizedElectronicDocument = new MatTableDataSource(this.listDigitalizedElectronicDocument);
-    console.log('listDigitalizedElectronicDocument',this.listDigitalizedElectronicDocument);
-    console.log('dataSourceDigitalizedElectronicDocument',this.dataSourceDigitalizedElectronicDocument);
+      DigitalizedUser: 'jlre',
+    };
+    this.listDigitalizedElectronicDocument.push(
+      this.digitalizedElectronicDocument
+    );
+    this.dataSourceDigitalizedElectronicDocument = new MatTableDataSource(
+      this.listDigitalizedElectronicDocument
+    );
   }
 
   cleanListDigitalizedElectronicDocuments() {
-    this.listDigitalizedElectronicDocument=[];
-    this.dataSourceDigitalizedElectronicDocument = new MatTableDataSource(this.listDigitalizedElectronicDocument);
+    this.listDigitalizedElectronicDocument = [];
+    this.dataSourceDigitalizedElectronicDocument = new MatTableDataSource(
+      this.listDigitalizedElectronicDocument
+    );
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -193,11 +202,10 @@ export class GetInformationComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    console.log(this.selection.selected.length);
-    console.log(this.dataSourceDigitalizedElectronicDocument.data.length);
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSourceDigitalizedElectronicDocument.data.forEach(row => this.selection.select(row));
-    this.dataSourceDigitalizedElectronicDocument.data.forEach(row => console.log(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSourceDigitalizedElectronicDocument.data.forEach((row) =>
+          this.selection.select(row)
+        );
   }
 }

@@ -44,7 +44,6 @@ export class ScanComponent implements OnInit {
 
   scan(event: any): void {
     var selectedFiles = event.target.files;
-    console.log(selectedFiles);
     let id = this.listScannedElectronicDocument.length;
     for (var i = 0; i < selectedFiles.length; i++) {
       id += 1;

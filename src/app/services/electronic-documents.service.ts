@@ -142,7 +142,6 @@ export class ElectronicDocumentsService {
   }
 
   deleteElectronicDocument(index: number) {
-    console.log(index);
     this.listElectronicDocuments.splice(index, 1);
   }
 

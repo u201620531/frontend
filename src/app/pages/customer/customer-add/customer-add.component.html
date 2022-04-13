@@ -188,7 +188,18 @@
           >
             Guardar
           </button>
-          <button type="button" mat-raised-button (click)="back();">Volver</button>
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="button"
+            [disabled]="form.invalid"
+            (click)="deleteCustomer()"
+          >
+            Eliminar
+          </button>
+          <button type="button" mat-raised-button (click)="back()">
+            Volver
+          </button>
         </mat-grid-tile>
       </mat-grid-list>
     </form>

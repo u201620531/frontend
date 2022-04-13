@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from 'src/app/interfaces/customer';
@@ -8,6 +9,7 @@ import { DocumentType } from 'src/app/interfaces/document-type';
 import { CustomerTypeService } from 'src/app/services/customer-type.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { DocumentTypeService } from 'src/app/services/document-type.service';
+import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-customer-add',
@@ -22,6 +24,7 @@ export class CustomerAddComponent implements OnInit {
   idDocumentType: string = '';
   idCustomerType: string = '';
   readonlyOption: boolean = false;
+  confirmation: boolean= false;
 
   constructor(
     private _documentTypeService: DocumentTypeService,
@@ -30,7 +33,8 @@ export class CustomerAddComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({
       Id: [''],
@@ -115,5 +119,23 @@ export class CustomerAddComponent implements OnInit {
 
   back() {
     this._router.navigate(['/dashboard/customer-list']);
+  }
+
+  deleteCustomer(): void {
+    const dialogRef = this._dialog.open(ConfirmationModalComponent, {
+      width: '350px',
+      data: {
+        confirmation: this.confirmation,
+        question: `¿Está seguro que desea eliminar al Cliente ${this.IdCustomer}?`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.confirmation = result;
+      if (this.confirmation) {
+        //this._customerService.deleteCustomer(0);
+        this.back();
+      }
+    });
   }
 }

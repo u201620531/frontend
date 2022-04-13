@@ -17,9 +17,11 @@ import { GetInformationComponent } from './pages/electronic-documents/get-inform
 //*** Customer */
 import { CustomerAddComponent } from './pages/customer/customer-add/customer-add.component';
 import { CustomerListComponent } from './pages/customer/customer-list/customer-list.component';
-//***Supplier */
+//*** Supplier */
 import { SupplierAddComponent } from './pages/supplier/supplier-add/supplier-add.component';
 import { SupplierListComponent } from './pages/supplier/supplier-list/supplier-list.component';
+//*** Modals */
+import { ConfirmationModalComponent } from './pages/modals/confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { SupplierListComponent } from './pages/supplier/supplier-list/supplier-l
     CustomerAddComponent,
     CustomerListComponent,
     SupplierAddComponent,
-    SupplierListComponent
+    SupplierListComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     BrowserModule,
