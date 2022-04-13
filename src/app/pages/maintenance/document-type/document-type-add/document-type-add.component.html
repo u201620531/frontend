@@ -1,0 +1,128 @@
+<div class="container">
+    <mat-toolbar
+      style="background: cornflowerblue; color: white; font-family: cursive"
+    >
+      <span>Agregar Tipo de documento</span>
+    </mat-toolbar>
+  
+    <mat-card class="cardOptions">
+      <form [formGroup]="form" (ngSubmit)="addDocumentType()">
+        <mat-grid-list cols="6" rowHeight="70px">
+          <mat-grid-tile
+            [colspan]="3"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <div class="inputID">
+              <mat-form-field>
+                <mat-label>Id</mat-label>
+                <input
+                  matInput
+                  autocomplete="off"
+                  [readonly]="readonlyOption"
+                  formControlName="Id"
+                />
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="3"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <img
+              src="../../../../assets/img/png/document-type.png"
+              alt="document type"
+              width="250"
+              height="70"
+            />
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <div class="inputID">
+              <mat-form-field class="inputOptionMedium">
+                <mat-label>Tipo</mat-label>
+                <mat-select
+                  formControlName="Type"
+                  [(value)]="idType"
+                  [disabled]="readonlyOption"
+                >
+                  <mat-option>(Seleccione)</mat-option>
+                  <mat-option
+                    *ngFor="let supportTable of listSupportTables"
+                    [value]="supportTable.Value"
+                  >
+                    {{ supportTable.Description }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <div class="inputID">
+              <mat-form-field class="inputOptionMedium">
+                <mat-label>Descripción</mat-label>
+                <input
+                  matInput
+                  autocomplete="off"
+                  formControlName="Description"
+                  [readonly]="readonlyOption"
+                />
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="3"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <div class="inputID">
+              <mat-form-field class="inputOptionLarge">
+                <mat-label>Abreviatura</mat-label>
+                <input
+                  matInput
+                  autocomplete="off"
+                  formControlName="Abbreviation"
+                  [readonly]="readonlyOption"
+                />
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="6"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <button
+              mat-raised-button
+              style="margin-right: 20px"
+              type="submit"
+              [disabled]="form.invalid"
+            >
+              Guardar
+            </button>
+            <button
+              mat-raised-button
+              style="margin-right: 20px"
+              type="button"
+              [disabled]="form.invalid"
+              (click)="deleteDocumentType()"
+            >
+              Eliminar
+            </button>
+            <button type="button" mat-raised-button (click)="back()">
+              Volver
+            </button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </form>
+    </mat-card>
+  </div>
+  

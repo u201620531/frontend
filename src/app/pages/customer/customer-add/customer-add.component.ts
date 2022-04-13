@@ -110,7 +110,7 @@ export class CustomerAddComponent implements OnInit {
     this._customerService.addCustomer(customer);
     this._router.navigate(['/dashboard/customer-list']);
 
-    this._snackBar.open('El Cliete fue registrado con éxito.', '', {
+    this._snackBar.open('El Cliente fue registrado con éxito.', '', {
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       duration: 1500,

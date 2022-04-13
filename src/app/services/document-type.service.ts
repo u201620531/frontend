@@ -5,16 +5,28 @@ import { DocumentType } from '../interfaces/document-type';
   providedIn: 'root',
 })
 export class DocumentTypeService {
-  listDocumentType: DocumentType[] = [
-    { Id: 'FAC', Description: 'Factura' },
-    { Id: 'BOL', Description: 'Boleta' },
-    { Id: 'NDC', Description: 'Nota de crédito' },
-    { Id: 'DNI', Description: 'Documento Nacional de Identidad' },
+  listDocumentTypes: DocumentType[] = [
+    { Id: 'FAC', Description: 'Factura', Abbreviation: '', Type: 'R', State: '' },
+    { Id: 'BOL', Description: 'Boleta', Abbreviation: '', Type: 'R', State: '' },
+    { Id: 'NDC', Description: 'Nota de crédito', Abbreviation: '', Type: 'R', State: '' },
+    { Id: 'DNI', Description: 'Documento Nacional de Identidad', Abbreviation: '', Type: 'R', State: '' },
   ];
 
   constructor() {}
 
   getDocumentTypes() {
-    return this.listDocumentType.slice();
+    return this.listDocumentTypes.slice();
+  }
+
+  getDocumentTypeById(id: string) {
+    return this.listDocumentTypes.filter(d => d.Id === id);
+  }
+
+  deleteDocumentType(index: number) {
+    this.listDocumentTypes.splice(index, 1);
+  }
+
+  addDocumentType(documentType: DocumentType) {
+    this.listDocumentTypes.unshift(documentType);
   }
 }

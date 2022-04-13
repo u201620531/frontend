@@ -20,6 +20,9 @@ import { CustomerListComponent } from './pages/customer/customer-list/customer-l
 //*** Supplier */
 import { SupplierAddComponent } from './pages/supplier/supplier-add/supplier-add.component';
 import { SupplierListComponent } from './pages/supplier/supplier-list/supplier-list.component';
+//*** DocumentType */
+import { DocumentTypeAddComponent } from './pages/maintenance/document-type/document-type-add/document-type-add.component';
+import { DocumentTypeListComponent } from './pages/maintenance/document-type/document-type-list/document-type-list.component';
 //*** Modals */
 import { ConfirmationModalComponent } from './pages/modals/confirmation-modal/confirmation-modal.component';
 
@@ -36,6 +39,8 @@ import { ConfirmationModalComponent } from './pages/modals/confirmation-modal/co
     CustomerListComponent,
     SupplierAddComponent,
     SupplierListComponent,
+    DocumentTypeListComponent,
+    DocumentTypeAddComponent,
     ConfirmationModalComponent
   ],
   imports: [

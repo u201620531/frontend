@@ -11,25 +11,35 @@ import { CustomerAddComponent } from '../customer/customer-add/customer-add.comp
 import { CustomerListComponent } from '../customer/customer-list/customer-list.component';
 import { SupplierAddComponent } from '../supplier/supplier-add/supplier-add.component';
 import { SupplierListComponent } from '../supplier/supplier-list/supplier-list.component';
+import { DocumentTypeAddComponent } from '../maintenance/document-type/document-type-add/document-type-add.component';
+import { DocumentTypeListComponent } from '../maintenance/document-type/document-type-list/document-type-list.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent, children: [
-    { path: '', component: MainComponent },
-    { path: 'electronic-documents-scan', component: ScanComponent },
-    { path: 'electronic-documents-get-information', component: GetInformationComponent },
-    { path: 'electronic-documents-list', component: ListComponent },
-    { path: 'electronic-documents-add', component: AddComponent },
-    { path: 'electronic-documents-report', component: ReportComponent },
-    { path: 'customer-add', component: CustomerAddComponent },
-    { path: 'customer-list', component: CustomerListComponent },
-    { path: 'supplier-add', component: SupplierAddComponent },
-    { path: 'supplier-list', component: SupplierListComponent }
-  ] 
-  }
+  {
+    path: '',
+    component: DashboardComponent,
+    children: [
+      { path: '', component: MainComponent },
+      { path: 'electronic-documents-scan', component: ScanComponent },
+      {
+        path: 'electronic-documents-get-information',
+        component: GetInformationComponent,
+      },
+      { path: 'electronic-documents-list', component: ListComponent },
+      { path: 'electronic-documents-add', component: AddComponent },
+      { path: 'electronic-documents-report', component: ReportComponent },
+      { path: 'customer-add', component: CustomerAddComponent },
+      { path: 'customer-list', component: CustomerListComponent },
+      { path: 'supplier-add', component: SupplierAddComponent },
+      { path: 'supplier-list', component: SupplierListComponent },
+      { path: 'document-type-add', component: DocumentTypeAddComponent },
+      { path: 'document-type-list', component: DocumentTypeListComponent },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class DashboardRoutingModule { }
+export class DashboardRoutingModule {}
