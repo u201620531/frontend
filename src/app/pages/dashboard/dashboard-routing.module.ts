@@ -13,6 +13,8 @@ import { SupplierAddComponent } from '../supplier/supplier-add/supplier-add.comp
 import { SupplierListComponent } from '../supplier/supplier-list/supplier-list.component';
 import { DocumentTypeAddComponent } from '../maintenance/document-type/document-type-add/document-type-add.component';
 import { DocumentTypeListComponent } from '../maintenance/document-type/document-type-list/document-type-list.component';
+import { FormatTypeAddComponent } from '../maintenance/format-type/format-type-add/format-type-add.component';
+import { FormatTypeListComponent } from '../maintenance/format-type/format-type-list/format-type-list.component';
 
 const routes: Routes = [
   {
@@ -34,6 +36,8 @@ const routes: Routes = [
       { path: 'supplier-list', component: SupplierListComponent },
       { path: 'document-type-add', component: DocumentTypeAddComponent },
       { path: 'document-type-list', component: DocumentTypeListComponent },
+      { path: 'format-type-add', component: FormatTypeAddComponent },
+      { path: 'format-type-list', component: FormatTypeListComponent },
     ],
   },
 ];

@@ -3,4 +3,6 @@ export interface WayPay {
   Description: string;
   Abbreviation?: string;
   State?: string; //A-Activo, I-Inactivo
+  CreationDate?: string;
+  CreationUser?: string;
 }

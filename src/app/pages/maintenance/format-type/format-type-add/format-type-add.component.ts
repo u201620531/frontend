@@ -3,28 +3,28 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DocumentType } from 'src/app/interfaces/document-type';
+import { FormatType } from 'src/app/interfaces/format-type';
 import { SupportTable } from 'src/app/interfaces/support-table';
 import { ConfirmationModalComponent } from 'src/app/pages/modals/confirmation-modal/confirmation-modal.component';
-import { DocumentTypeService } from 'src/app/services/document-type.service';
+import { FormatTypeService } from 'src/app/services/format-type.service';
 import { SupportTableService } from 'src/app/services/support-table.service';
 
 @Component({
-  selector: 'app-document-type-add',
-  templateUrl: './document-type-add.component.html',
-  styleUrls: ['./document-type-add.component.css'],
+  selector: 'app-format-type-add',
+  templateUrl: './format-type-add.component.html',
+  styleUrls: ['./format-type-add.component.css'],
 })
-export class DocumentTypeAddComponent implements OnInit {
+export class FormatTypeAddComponent implements OnInit {
   form: FormGroup;
-  listDocumentTypes: DocumentType[] = [];
+  listFormatTypes: FormatType[] = [];
   listSupportTables: SupportTable[] = [];
-  IdDocumentType: string = '';
+  IdFormatType: string = '';
   idType?: string[] = [];
   readonlyOption: boolean = false;
   confirmation: boolean = false;
 
   constructor(
-    private _documentTypeService: DocumentTypeService,
+    private _FormatTypeService: FormatTypeService,
     private _supportTableService: SupportTableService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
@@ -49,17 +49,15 @@ export class DocumentTypeAddComponent implements OnInit {
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
-        this.IdDocumentType = params['id'];
-        const documentType: DocumentType[] = this.getDocumentType(
-          this.IdDocumentType
-        );
-        this.idType = documentType[0].Type;
+        this.IdFormatType = params['id'];
+        const FormatType: FormatType[] = this.getFormatType(this.IdFormatType);
+        this.idType = FormatType[0].Type;
         this.form.setValue({
-          Id: documentType[0].Id,
-          Description: documentType[0].Description,
-          Abbreviation: documentType[0].Abbreviation,
-          Type: documentType[0].Type,
-          State: documentType[0].State,
+          Id: FormatType[0].Id,
+          Description: FormatType[0].Description,
+          Abbreviation: FormatType[0].Abbreviation,
+          Type: FormatType[0].Type,
+          State: FormatType[0].State,
         });
       }
       if (params && params['edit']) {
@@ -68,20 +66,20 @@ export class DocumentTypeAddComponent implements OnInit {
     });
   }
 
-  loadDocumentTypes() {
-    this.listDocumentTypes = this._documentTypeService.getDocumentTypes();
+  loadFormatTypes() {
+    this.listFormatTypes = this._FormatTypeService.getFormatTypes();
   }
 
   loadSupportTable() {
     this.listSupportTables = this._supportTableService.getSupportTables('TTD');
   }
 
-  getDocumentType(id: string) {
-    return this._documentTypeService.getDocumentTypeById(id);
+  getFormatType(id: string) {
+    return this._FormatTypeService.getFormatTypeById(id);
   }
 
-  addDocumentType() {
-    const documentType: DocumentType = {
+  addFormatType() {
+    const FormatType: FormatType = {
       Id: this.form.value.Id,
       Description: this.form.value.Description,
       Abbreviation: this.form.value.Abbreviation,
@@ -91,9 +89,9 @@ export class DocumentTypeAddComponent implements OnInit {
       CreationUser: this.form.value.CreationUser,
     };
 
-    this._documentTypeService.addDocumentType(documentType);
+    this._FormatTypeService.addFormatType(FormatType);
     this.back();
-    this._snackBar.open('El Tipo de documento fue registrado con éxito.', '', {
+    this._snackBar.open('El Tipo de formato fue registrado con éxito.', '', {
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       duration: 1500,
@@ -101,22 +99,22 @@ export class DocumentTypeAddComponent implements OnInit {
   }
 
   back() {
-    this._router.navigate(['/dashboard/document-type-list']);
+    this._router.navigate(['/dashboard/format-type-list']);
   }
 
-  deleteDocumentType(): void {
+  deleteFormatType(): void {
     const dialogRef = this._dialog.open(ConfirmationModalComponent, {
       width: '350px',
       data: {
         confirmation: this.confirmation,
-        question: `¿Está seguro que desea eliminar al Tipo de documento ${this.IdDocumentType}?`,
+        question: `¿Está seguro que desea eliminar al Tipo de formato ${this.IdFormatType}?`,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       this.confirmation = result;
       if (this.confirmation) {
-        //this._DocumentTypeService.deleteDocumentType(0);
+        //this._FormatTypeService.deleteFormatType(0);
         this.back();
       }
     });

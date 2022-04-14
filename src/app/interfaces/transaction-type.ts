@@ -4,4 +4,6 @@ export interface TransactionType {
   Abbreviation?: string;
   Type?: any; //R-Reporte
   State?: string; //A-Activo, I-Inactivo
+  CreationDate?: string;
+  CreationUser?: string;
 }
