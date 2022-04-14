@@ -25,8 +25,12 @@ import { DocumentTypeAddComponent } from './pages/maintenance/document-type/docu
 import { DocumentTypeListComponent } from './pages/maintenance/document-type/document-type-list/document-type-list.component';
 //*** Modals */
 import { ConfirmationModalComponent } from './pages/modals/confirmation-modal/confirmation-modal.component';
+//*** FormatType */
 import { FormatTypeAddComponent } from './pages/maintenance/format-type/format-type-add/format-type-add.component';
 import { FormatTypeListComponent } from './pages/maintenance/format-type/format-type-list/format-type-list.component';
+//*** TransactionType */
+import { TransactionTypeAddComponent } from './pages/maintenance/transaction-type/transaction-type-add/transaction-type-add.component';
+import { TransactionTypeListComponent } from './pages/maintenance/transaction-type/transaction-type-list/transaction-type-list.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +49,8 @@ import { FormatTypeListComponent } from './pages/maintenance/format-type/format-
     DocumentTypeAddComponent,
     FormatTypeAddComponent,
     FormatTypeListComponent,
+    TransactionTypeAddComponent,
+    TransactionTypeListComponent,
     ConfirmationModalComponent
   ],
   imports: [

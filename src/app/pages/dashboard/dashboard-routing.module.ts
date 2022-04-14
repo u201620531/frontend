@@ -15,6 +15,8 @@ import { DocumentTypeAddComponent } from '../maintenance/document-type/document-
 import { DocumentTypeListComponent } from '../maintenance/document-type/document-type-list/document-type-list.component';
 import { FormatTypeAddComponent } from '../maintenance/format-type/format-type-add/format-type-add.component';
 import { FormatTypeListComponent } from '../maintenance/format-type/format-type-list/format-type-list.component';
+import { TransactionTypeAddComponent } from '../maintenance/transaction-type/transaction-type-add/transaction-type-add.component';
+import { TransactionTypeListComponent } from '../maintenance/transaction-type/transaction-type-list/transaction-type-list.component';
 
 const routes: Routes = [
   {
@@ -38,6 +40,8 @@ const routes: Routes = [
       { path: 'document-type-list', component: DocumentTypeListComponent },
       { path: 'format-type-add', component: FormatTypeAddComponent },
       { path: 'format-type-list', component: FormatTypeListComponent },
+      { path: 'transaction-type-add', component: TransactionTypeAddComponent },
+      { path: 'transaction-type-list', component: TransactionTypeListComponent },
     ],
   },
 ];
