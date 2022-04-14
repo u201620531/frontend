@@ -19,7 +19,7 @@ export class DocumentTypeAddComponent implements OnInit {
   listDocumentTypes: DocumentType[] = [];
   listSupportTables: SupportTable[] = [];
   IdDocumentType: string = '';
-  idType: string | undefined = '';
+  idType?: string[] = [];
   readonlyOption: boolean = false;
   confirmation: boolean= false;
 
@@ -90,7 +90,7 @@ export class DocumentTypeAddComponent implements OnInit {
     };
 
     this._documentTypeService.addDocumentType(documentType);
-    this._router.navigate(['/dashboard/maintenance/document-type/document-type-list']);
+    this._router.navigate(['/dashboard/document-type-list']);
 
     this._snackBar.open('El Tipo de documento fue registrado con éxito.', '', {
       horizontalPosition: 'center',
@@ -100,7 +100,8 @@ export class DocumentTypeAddComponent implements OnInit {
   }
 
   back() {
-    this._router.navigate(['/dashboard/maintenance/document-type/document-type-list']);
+    console.log(this.idType);
+    this._router.navigate(['/dashboard/document-type-list']);
   }
 
   deleteDocumentType(): void {

@@ -6,10 +6,10 @@ import { DocumentType } from '../interfaces/document-type';
 })
 export class DocumentTypeService {
   listDocumentTypes: DocumentType[] = [
-    { Id: 'FAC', Description: 'Factura', Abbreviation: '', Type: 'R', State: '' },
-    { Id: 'BOL', Description: 'Boleta', Abbreviation: '', Type: 'R', State: '' },
-    { Id: 'NDC', Description: 'Nota de crédito', Abbreviation: '', Type: 'R', State: '' },
-    { Id: 'DNI', Description: 'Documento Nacional de Identidad', Abbreviation: '', Type: 'R', State: '' },
+    { Id: 'FAC', Description: 'Factura', Abbreviation: '', Type: ['R', 'V', 'C'], State: 'A' },
+    { Id: 'BOL', Description: 'Boleta', Abbreviation: '', Type: ['R', 'V', 'C'], State: 'A' },
+    { Id: 'NDC', Description: 'Nota de crédito', Abbreviation: '', Type: ['R', 'V', 'C'], State: 'I' },
+    { Id: 'DNI', Description: 'Documento Nacional de Identidad', Abbreviation: '', Type: ['R', 'P'], State: 'A' },
   ];
 
   constructor() {}

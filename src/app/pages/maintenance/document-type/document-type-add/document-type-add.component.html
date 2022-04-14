@@ -43,12 +43,13 @@
             [style.background]="'transparent'"
           >
             <div class="inputID">
-              <mat-form-field class="inputOptionMedium">
+              <mat-form-field appearance="fill" class="inputOptionMedium">
                 <mat-label>Tipo</mat-label>
                 <mat-select
                   formControlName="Type"
-                  [(value)]="idType"
+                  [(ngModel)]="idType"
                   [disabled]="readonlyOption"
+                  multiple
                 >
                   <mat-option>(Seleccione)</mat-option>
                   <mat-option
