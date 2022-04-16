@@ -17,6 +17,8 @@ import { FormatTypeAddComponent } from '../maintenance/format-type/format-type-a
 import { FormatTypeListComponent } from '../maintenance/format-type/format-type-list/format-type-list.component';
 import { TransactionTypeAddComponent } from '../maintenance/transaction-type/transaction-type-add/transaction-type-add.component';
 import { TransactionTypeListComponent } from '../maintenance/transaction-type/transaction-type-list/transaction-type-list.component';
+import { WayPayAddComponent } from '../maintenance/way-pay/way-pay-add/way-pay-add.component';
+import { WayPayListComponent } from '../maintenance/way-pay/way-pay-list/way-pay-list.component';
 
 const routes: Routes = [
   {
@@ -42,6 +44,8 @@ const routes: Routes = [
       { path: 'format-type-list', component: FormatTypeListComponent },
       { path: 'transaction-type-add', component: TransactionTypeAddComponent },
       { path: 'transaction-type-list', component: TransactionTypeListComponent },
+      { path: 'way-pay-add', component: WayPayAddComponent },
+      { path: 'way-pay-list', component: WayPayListComponent },
     ],
   },
 ];

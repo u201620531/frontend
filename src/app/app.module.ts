@@ -31,6 +31,9 @@ import { FormatTypeListComponent } from './pages/maintenance/format-type/format-
 //*** TransactionType */
 import { TransactionTypeAddComponent } from './pages/maintenance/transaction-type/transaction-type-add/transaction-type-add.component';
 import { TransactionTypeListComponent } from './pages/maintenance/transaction-type/transaction-type-list/transaction-type-list.component';
+//*** WayPay */
+import { WayPayAddComponent } from './pages/maintenance/way-pay/way-pay-add/way-pay-add.component';
+import { WayPayListComponent } from './pages/maintenance/way-pay/way-pay-list/way-pay-list.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,8 @@ import { TransactionTypeListComponent } from './pages/maintenance/transaction-ty
     FormatTypeListComponent,
     TransactionTypeAddComponent,
     TransactionTypeListComponent,
+    WayPayAddComponent,
+    WayPayListComponent,
     ConfirmationModalComponent
   ],
   imports: [
