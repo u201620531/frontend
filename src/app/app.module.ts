@@ -34,11 +34,16 @@ import { TransactionTypeListComponent } from './pages/maintenance/transaction-ty
 //*** WayPay */
 import { WayPayAddComponent } from './pages/maintenance/way-pay/way-pay-add/way-pay-add.component';
 import { WayPayListComponent } from './pages/maintenance/way-pay/way-pay-list/way-pay-list.component';
+//*** UserProfile */
+import { UserProfileAddComponent } from './pages/auth/user-profile/user-profile-add/user-profile-add.component';
+import { UserProfileListComponent } from './pages/auth/user-profile/user-profile-list/user-profile-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    UserProfileAddComponent,
+    UserProfileListComponent,
     AddComponent,
     ScanComponent,
     ListComponent,
