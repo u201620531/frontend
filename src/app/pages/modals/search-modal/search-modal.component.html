@@ -1,0 +1,68 @@
+<h1 mat-dialog-title>Confirmación</h1>
+<div mat-dialog-content>
+  <div *ngIf="listEmployees.length > 0">
+    <mat-form-field appearance="standard">
+      <mat-label>Filter</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilterEmployee($event)"
+        placeholder="Jose"
+        #input
+        autocomplete="off"
+      />
+    </mat-form-field>
+
+    <div class="mat-elevation-z8">
+      <table
+        mat-table
+        [dataSource]="dataSourceEmployees"
+        matSort
+        class="mat-elevation-z8"
+      >
+        <!-- Id Column -->
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.State === 'A' ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.Id }}
+          </td>
+        </ng-container>
+
+        <!-- Nombre Column -->
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.State === 'A' ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.FirstName }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let element; columns: displayedColumns"
+          [mat-dialog-close]="element.Id"
+          cdkFocusInitial
+          class="example-element-row"
+        ></tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        showFirstLastButtons
+        aria-label="Seleccionar Empleado"
+      ></mat-paginator>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions style="justify-content: center">
+  <button mat-button [mat-dialog-close]="false" (click)="onNoClick()">
+    Cancelar
+  </button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Aceptar</button>
+</div>
