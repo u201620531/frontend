@@ -25,6 +25,7 @@ import { DocumentTypeAddComponent } from './pages/maintenance/document-type/docu
 import { DocumentTypeListComponent } from './pages/maintenance/document-type/document-type-list/document-type-list.component';
 //*** Modals */
 import { ConfirmationModalComponent } from './pages/modals/confirmation-modal/confirmation-modal.component';
+import { SearchModalComponent } from './pages/modals/search-modal/search-modal.component';
 //*** FormatType */
 import { FormatTypeAddComponent } from './pages/maintenance/format-type/format-type-add/format-type-add.component';
 import { FormatTypeListComponent } from './pages/maintenance/format-type/format-type-list/format-type-list.component';
@@ -37,11 +38,16 @@ import { WayPayListComponent } from './pages/maintenance/way-pay/way-pay-list/wa
 //*** UserProfile */
 import { UserProfileAddComponent } from './pages/auth/user-profile/user-profile-add/user-profile-add.component';
 import { UserProfileListComponent } from './pages/auth/user-profile/user-profile-list/user-profile-list.component';
+/*** User */
+import { UserAddComponent } from './pages/auth/user/user-add/user-add.component';
+import { UserListComponent } from './pages/auth/user/user-list/user-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    UserAddComponent,
+    UserListComponent,
     UserProfileAddComponent,
     UserProfileListComponent,
     AddComponent,
@@ -61,7 +67,8 @@ import { UserProfileListComponent } from './pages/auth/user-profile/user-profile
     TransactionTypeListComponent,
     WayPayAddComponent,
     WayPayListComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    SearchModalComponent
   ],
   imports: [
     BrowserModule,
