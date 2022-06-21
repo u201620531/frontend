@@ -1,1 +1,204 @@
-<p>user-add works!</p>
+<div class="container">
+  <mat-toolbar
+    style="background: cornflowerblue; color: white; font-family: cursive"
+  >
+    <span>Agregar Usuario</span>
+  </mat-toolbar>
+
+  <mat-card class="cardOptions">
+    <form [formGroup]="form" (ngSubmit)="addUser()">
+      <mat-grid-list cols="6" rowHeight="70px">
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field>
+              <mat-label>Id</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                [readonly]="readonlyOption"
+                formControlName="Id"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="2"
+          [style.background]="'transparent'"
+        >
+          <img
+            src="../../../../assets/img/png/users.png"
+            alt="document type"
+            width="250"
+            height="120"
+          />
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field appearance="fill" class="inputOptionLarge">
+              <mat-label>Perfil</mat-label>
+              <mat-select
+                formControlName="UserProfile"
+                [(ngModel)]="idUserProfile"
+                [disabled]="readonlyOption"
+              >
+                <mat-option>(Seleccione)</mat-option>
+                <mat-option
+                  *ngFor="let userProfile of listUserProfiles"
+                  [value]="userProfile.Id"
+                >
+                  {{ userProfile.Description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="5"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field appearance="fill" class="inputOptionLarge">
+              <mat-label>Empleado</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                value="{{ nameEmployee }}"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <button
+            mat-raised-button
+            type="button"
+            style="margin-bottom: 16px"
+            (click)="searchEmployee()"
+            [disabled]="readonlyOption"
+          >
+            Buscar
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionLarge">
+              <mat-label>Nombre Usuario</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="UserName"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionLarge">
+              <mat-label>Password</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="Password"
+                [readonly]="readonlyOption"
+                type="password"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field appearance="fill">
+              <mat-label>Fecha inicio activación</mat-label>
+              <input
+                matInput
+                [matDatepicker]="pickerStartDate"
+                formControlName="ActivationStartDate"
+              />
+              <mat-hint>DD-MM-YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerStartDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerStartDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field appearance="fill">
+              <mat-label>Fecha fin activación</mat-label>
+              <input
+                matInput
+                [matDatepicker]="pickerEndDate"
+                formControlName="ActivationEndDate"
+              />
+              <mat-hint>DD-MM-YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerEndDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerEndDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="6"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="submit"
+            [disabled]="form.invalid"
+          >
+            Guardar
+          </button>
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="button"
+            [disabled]="form.invalid"
+            (click)="deleteUser()"
+          >
+            Eliminar
+          </button>
+          <button type="button" mat-raised-button (click)="back()">
+            Volver
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,18 @@
+.cardOptions {
+    margin-top: 10px;
+  }
+  
+  .inputOptionLarge {
+    width: 300%;
+  }
+  
+  .inputOptionMedium {
+    width: 200%;
+  }
+  
+  .inputID {
+      width: 100%;
+    position: absolute;
+    left: 5px;
+  }
+  
