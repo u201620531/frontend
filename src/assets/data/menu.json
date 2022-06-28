@@ -1,22 +1,60 @@
 [
     {
         "Name": "Home",
-        "Redirect": "/dashboard"
+        "Redirect": "/dashboard",
+        "HasItems": "0"
     },
     {
-        "Name": "Escanear Comprobantes electrónicos",
-        "Redirect": "/dashboard/electronic-documents-scan"
+        "Name": "Comprobantes electrónicos",
+        "Redirect": "",
+        "HasItems": "1",
+        "SubMenu": [ {
+            "Name": "Escanear",
+            "Redirect": "/dashboard/electronic-documents-scan"    
+        },
+        {
+            "Name": "Obtener información",
+            "Redirect": "/dashboard/electronic-documents-get-information"
+        },
+        {
+            "Name": "Listado de Comprobantes electónicos digitalizados",
+            "Redirect": "/dashboard/electronic-documents-list"
+        },
+        {
+            "Name": "Agregar",
+            "Redirect": "/dashboard/electronic-documents-add"
+        },
+        {
+            "Name": "Reporte de Comprobantes electónicos digitalizados",
+            "Redirect": "/dashboard/electronic-documents-report"
+        }]
     },
     {
-        "Name": "Obtener información de Comprobantes electrónicos",
-        "Redirect": "/dashboard/electronic-documents-get-information"
+        "Name": "Clientes",
+        "Redirect": "",
+        "HasItems": "1",
+        "SubMenu": [
+        {
+            "Name": "Agregar",
+            "Redirect": "/dashboard/customer-add"
+        },
+        {
+            "Name": "Listado",
+            "Redirect": "/dashboard/customer-list"
+        }]
     },
     {
-        "Name": "Listado de Comprobantes electónicos digitalizados",
-        "Redirect": "/dashboard/electronic-documents-list"
-    },
-    {
-        "Name": "Reporte de Comprobantes electónicos digitalizados",
-        "Redirect": "/dashboard/electronic-documents-report"
+        "Name": "Proveedores",
+        "Redirect": "",
+        "HasItems": "1",
+        "SubMenu": [
+        {
+            "Name": "Agregar",
+            "Redirect": "/dashboard/supplier-add"
+        },
+        {
+            "Name": "Listado",
+            "Redirect": "/dashboard/supplier-list"
+        }]
     }
 ]

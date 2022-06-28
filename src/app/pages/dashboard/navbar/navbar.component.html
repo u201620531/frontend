@@ -1,9 +1,29 @@
 <mat-toolbar color="primary">
+  <button mat-button [matMenuTriggerFor]="menuPrincipal">...</button>
   <span>SABFZT</span>
-  <span class="button-spacer"></span>
-  <button mat-button *ngFor="let item of menu" routerLink="{{ item.Redirect }}">
-    {{ item.Name }}
-  </button>
+  <mat-menu #menuPrincipal="matMenu">
+    <ng-container *ngFor="let mainItem of menu">
+      <div *ngIf="mainItem.HasItems === '0'">
+        <button mat-menu-item routerLink="{{ mainItem.Redirect }}">
+          {{ mainItem.Name }}
+        </button>
+      </div>
+      <div *ngIf="mainItem.HasItems === '1'">
+        <button mat-menu-item [matMenuTriggerFor]="sub_menu">
+          {{ mainItem.Name }}
+        </button>
+        <mat-menu #sub_menu="matMenu">
+          <button
+            *ngFor="let subItem of mainItem.SubMenu"
+            mat-menu-item
+            routerLink="{{ subItem.Redirect }}"
+          >
+            {{ subItem.Name }}
+          </button>
+        </mat-menu>
+      </div>
+    </ng-container>
+  </mat-menu>
   <span class="button-spacer"></span>
   <button
     mat-icon-button
