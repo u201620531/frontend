@@ -1,55 +1,51 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { TransactionType } from '../interfaces/transaction-type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionTypeService {
-  listTransactionTypes: TransactionType[] = [
-    {
-      Id: 'COM',
-      Description: 'Compra',
-      Abbreviation: '',
-      Type: ['R', 'C'],
-      State: 'A',
-    },
-    {
-      Id: 'VEN',
-      Description: 'Venta',
-      Abbreviation: 'VEN',
-      Type: ['R', 'V'],
-      State: 'I',
-    },
-  ];
+  baseURL: string = 'http://localhost:3000/api';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  getTransactionTypes() {
-    return this.listTransactionTypes.slice();
+  getTransactionTypes():Observable<any> {
+    return this.http.get(`${this.baseURL}/transactiontypes`);
   }
 
   getReportTransactionTypes() {
     const list = this.getTransactionTypes();
     let listReport: TransactionType[] = [];
-    for (var transactionType of list) {
-      if (transactionType.Type != undefined) {
-        for (var item of transactionType.Type) {
-          if (item === 'R') listReport.push(transactionType);
-        }
-      }
-    }
+    
+    list.subscribe({
+      next: value => console.log(value)
+    })
+
+    // for (var transactionType of list) {
+    //   if (transactionType.Type != undefined) {
+    //     for (var item of transactionType.Type) {
+    //       if (item === 'R') listReport.push(transactionType);
+    //     }
+    //   }
+    // }
     return listReport;
   }
 
   getTransactionTypeById(id: string) {
-    return this.listTransactionTypes.filter((d) => d.Id === id);
+    return this.http.get(`${this.baseURL}/transactiontypes/${id}`);
   }
 
-  deleteTransactionType(index: number) {
-    this.listTransactionTypes.splice(index, 1);
+  deleteTransactionType(id: string) {
+    this.http.delete(`${this.baseURL}/formattypes/${id}`);
   }
 
-  addTransactionType(TransactionType: TransactionType) {
-    this.listTransactionTypes.unshift(TransactionType);
+  addTransactionType(transactionType: TransactionType) {
+    return this.http.post(`${this.baseURL}/transactiontypes`, transactionType);
+  }
+
+  editTransactionType(transactionType: TransactionType) {
+    return this.http.put(`${this.baseURL}/transactiontypes`, transactionType);
   }
 }

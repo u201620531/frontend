@@ -1,31 +1,32 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { WayPay } from '../interfaces/way-pay';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WayPayService {
-  listWayPays: WayPay[] = [
-    { Id: 'CON', Description: 'Contado', Abbreviation: 'Contado', State: 'A' },
-    { Id: 'CRE', Description: 'Crédito', Abbreviation: 'Cred', State: 'A' },
-    { Id: 'DIV', Description: 'Diversos', Abbreviation: 'Div', State: 'I' },
-  ];
-
-  constructor() {}
-
-  getWayPays() {
-    return this.listWayPays.slice();
+  constructor(private http:HttpClient) {}
+  
+  getWayPays():Observable<any> {
+    return this.http.get(`${environment.apiURL}/waypays`);
   }
 
   getWayPayById(id: string) {
-    return this.listWayPays.filter((d) => d.Id === id);
+    return this.http.get(`${environment.apiURL}/waypays/${id}`);
   }
 
-  deleteWayPay(index: number) {
-    this.listWayPays.splice(index, 1);
+  deleteWayPay(id: string) {
+    this.http.delete(`${environment.apiURL}/waypays/${id}`);
   }
 
-  addWayPay(WayPay: WayPay) {
-    this.listWayPays.unshift(WayPay);
+  addWayPay(wayPay: WayPay) {
+    return this.http.post(`${environment.apiURL}/waypays`, wayPay);
+  }
+
+  editWayPay(wayPay: WayPay) {
+    return this.http.put(`${environment.apiURL}/waypays`, wayPay);
   }
 }

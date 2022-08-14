@@ -24,3 +24,20 @@
   .submenu-item {
     padding: 0.3rem 0.8rem;
   }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: transparent;
+  }
+
+  li {
+    float: left;
+  }
+
+  .menu-item {
+    color: white;
+    font-weight: bold;
+  }

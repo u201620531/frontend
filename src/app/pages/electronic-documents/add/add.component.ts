@@ -14,6 +14,7 @@ import { FormatType } from 'src/app/interfaces/format-type';
 import { Money } from 'src/app/interfaces/money';
 import { WayPayService } from 'src/app/services/way-pay.service';
 import { WayPay } from 'src/app/interfaces/way-pay';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add',
@@ -23,11 +24,14 @@ import { WayPay } from 'src/app/interfaces/way-pay';
 export class AddComponent implements OnInit {
   form: FormGroup;
   listDocumentTypes: DocumentType[] = [];
-  listTransactionTypes: TransactionType[] = [];
+  listTransactionTypes: any = [];
   listFormatTypes: FormatType[] = [];
   listMoneys: Money[] = [];
   listWayPays: WayPay[] = [];
   transactionTypeId: string = '';
+
+  subscription = new Subscription();
+  typeList: any = [{}];
 
   constructor(
     private _documentTypeService: DocumentTypeService,
@@ -66,16 +70,31 @@ export class AddComponent implements OnInit {
   }
 
   loadDocumentType() {
-    this.listDocumentTypes = this._documentTypeService.getDocumentTypes();
+    this._documentTypeService.getDocumentTypes().subscribe((res) => {
+      this.listDocumentTypes = res;
+    });
   }
 
   loadTransactionType() {
-    this.listTransactionTypes =
-      this._transactionTypeService.getTransactionTypes();
+    this._transactionTypeService.getTransactionTypes().subscribe(
+      (res) => {
+        this.listTransactionTypes = res;
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
   }
 
   loadFormatType() {
-    this.listFormatTypes = this._formatTypeService.getFormatTypes();
+    this.subscription.add(
+      this._formatTypeService.getFormatTypes().subscribe((res) => {
+        console.log(res);
+        this.listFormatTypes = res;
+        console.log(this.listFormatTypes);
+      })
+    );
+    //this.listFormatTypes = this._formatTypeService.getFormatTypes();
   }
 
   loadMoney() {
@@ -83,7 +102,9 @@ export class AddComponent implements OnInit {
   }
 
   loadWayPay() {
-    this.listWayPays = this._wayPayService.getWayPays();
+    this._wayPayService.getWayPays().subscribe((res) => {
+      this.listWayPays = res;
+    });
   }
 
   addElectronicDocument() {

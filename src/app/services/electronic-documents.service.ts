@@ -14,8 +14,9 @@ export class ElectronicDocumentsService {
         Id: 'C0000001',
         CustomerType: 'J',
         DocumentType: {
-          Id: 'RUC',
-          Description: 'RUC'
+          id: 'RUC',
+          description: 'RUC',
+          status: 'A'
         },
         DocumentNumber: '12345678910',
         BusinessName: 'Logistic Peru SAC',
@@ -24,20 +25,24 @@ export class ElectronicDocumentsService {
         CreationUser: 'jlre'
       },
       DocumentType: {
-        Id: 'FAC',
-        Description: 'Factura'
+        id: 'FAC',
+        description: 'Factura',
+        status: 'A'
       },
       TransactionType: {
-        Id: 'V',
-        Description: 'Venta'
+        id: 'V',
+        description: 'Venta',
+        status: 'A'
       },
       FormatType: {
-        Id: 'PDF',
-        Description: 'Documento PDF'
+        id: 'PDF',
+        description: 'Documento PDF',
+        status: 'A'
       },
       WayPay: {
-        Id: 'CON',
-        Description: 'Contado'
+        id: 'CON',
+        description: 'Contado',
+        status: 'A'
       },
       Total: 25.12,
       Money: {
@@ -56,8 +61,9 @@ export class ElectronicDocumentsService {
         Id: 'S0000001',
         SupplierType: 'J',
         DocumentType: {
-          Id: 'RUC',
-          Description: 'RUC'
+          id: 'RUC',
+          description: 'RUC',
+          status: 'A'
         },
         DocumentNumber: '23456789101',
         BusinessName: 'Andamios Prado SRL',
@@ -66,21 +72,25 @@ export class ElectronicDocumentsService {
         CreationUser: 'jlre'
       },
       DocumentType: {
-        Id: 'FAC',
-        Description: 'Factura'
+        id: 'FAC',
+        description: 'Factura',
+        status: 'A'
       },
       
       TransactionType: {
-        Id: 'C',
-        Description: 'Compra'
+        id: 'C',
+        description: 'Compra',
+        status: 'A'
       },
       FormatType: {
-        Id: 'XML',
-        Description: 'Documento XML'
+        id: 'XML',
+        description: 'Documento XML',
+        status: 'A'
       },
       WayPay: {
-        Id: 'CRE90',
-        Description: 'Crédito 90 días'
+        id: 'CRE90',
+        description: 'Crédito 90 días',
+        status: 'A'
       },
       Total: 25.12,
       Money: {
@@ -92,15 +102,16 @@ export class ElectronicDocumentsService {
       ScanUser: 'JLRE'
     },
     {
-      Id: 3,
+      Id: 3,  
       Serie: '999',
       Number: '236545',
       Customer: {
         Id: 'C0000002',
         CustomerType: 'N',
         DocumentType: {
-          Id: 'DNI',
-          Description: 'DNI'
+          id: 'DNI',
+          description: 'DNI',
+          status: 'A'
         },
         DocumentNumber: '12345678',
         BusinessName: 'Manuel Juarez',
@@ -109,20 +120,24 @@ export class ElectronicDocumentsService {
         CreationUser: 'jlre'
       },
       DocumentType: {
-        Id: 'FAC',
-        Description: 'Factura'
+        id: 'FAC',
+        description: 'Factura',
+        status: 'A'
       },
       TransactionType: {
-        Id: 'V',
-        Description: 'Venta'
+        id: 'V',
+        description: 'Venta',
+        status: 'A'
       },
       FormatType: {
-        Id: 'PDF',
-        Description: 'Documento PDF'
+        id: 'PDF',
+        description: 'Documento PDF',
+        status: 'A'
       },
       WayPay: {
-        Id: 'CON',
-        Description: 'Contado'
+        id: 'CON',
+        description: 'Contado',
+        status: 'A'
       },
       Total: 25.12,
       Money: {

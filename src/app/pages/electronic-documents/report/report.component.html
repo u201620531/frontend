@@ -89,9 +89,9 @@
             <mat-option>(Seleccione)</mat-option>
             <mat-option
               *ngFor="let documentType of listDocumentTypes"
-              [value]="documentType.Id"
+              [value]="documentType.id"
             >
-              {{ documentType.Description }}
+              {{ documentType.description }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -113,9 +113,9 @@
             <mat-option>(Seleccione)</mat-option>
             <mat-option
               *ngFor="let formatType of listFormatTypes"
-              [value]="formatType.Id"
+              [value]="formatType.id"
             >
-              {{ formatType.Description }}
+              {{ formatType.description }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -156,8 +156,8 @@
         <mat-form-field class="inputOptionShort">
           <mat-select>
             <mat-option>(Seleccione)</mat-option>
-            <mat-option *ngFor="let wayPay of listWayPays" [value]="wayPay.Id">
-              {{ wayPay.Description }}
+            <mat-option *ngFor="let wayPay of listWayPays" [value]="wayPay.id">
+              {{ wayPay.description }}
             </mat-option>
           </mat-select>
         </mat-form-field>

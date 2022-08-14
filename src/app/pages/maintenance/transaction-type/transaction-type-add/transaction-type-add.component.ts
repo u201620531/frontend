@@ -22,7 +22,16 @@ export class TransactionTypeAddComponent implements OnInit {
   idType?: string[] = [];
   readonlyOption: boolean = false;
   confirmation: boolean = false;
-
+edit:boolean=false;
+transactionType: TransactionType = {
+  id: '',
+  description: '',
+  abbreviation: '',
+  status: 'A',
+  type: [],
+  creationDate: new Date().toLocaleDateString(),
+  creationUser: '',
+};
   constructor(
     private _TransactionTypeService: TransactionTypeService,
     private _supportTableService: SupportTableService,
@@ -37,7 +46,7 @@ export class TransactionTypeAddComponent implements OnInit {
       Description: ['', Validators.required],
       Abbreviation: ['', Validators.required],
       Type: ['', Validators.required],
-      State: [''],
+      Status: [''],
     });
   }
 
@@ -50,26 +59,25 @@ export class TransactionTypeAddComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
         this.IdTransactionType = params['id'];
-        const TransactionType: TransactionType[] = this.getTransactionType(
-          this.IdTransactionType
-        );
-        this.idType = TransactionType[0].Type;
-        this.form.setValue({
-          Id: TransactionType[0].Id,
-          Description: TransactionType[0].Description,
-          Abbreviation: TransactionType[0].Abbreviation,
-          Type: TransactionType[0].Type,
-          State: TransactionType[0].State,
-        });
+        this._TransactionTypeService
+          .getTransactionTypeById(this.IdTransactionType)
+          .subscribe((res: any) => {
+            const listTypes = res.type.split(',');
+            this.idType = listTypes;
+            this.form.setValue({
+              Id: res.id,
+              Description: res.description,
+              Abbreviation: res.abbreviation,
+              Type: listTypes,
+              Status: res.status,
+            });
+            this.edit = true;
+          });
       }
       if (params && params['edit']) {
         this.readonlyOption = params['edit'] !== '1' ? true : false;
       }
     });
-  }
-
-  loadTransactionTypes() {
-    this.listTransactionTypes = this._TransactionTypeService.getTransactionTypes();
   }
 
   loadSupportTable() {
@@ -81,23 +89,53 @@ export class TransactionTypeAddComponent implements OnInit {
   }
 
   addTransactionType() {
-    const TransactionType: TransactionType = {
-      Id: this.form.value.Id,
-      Description: this.form.value.Description,
-      Abbreviation: this.form.value.Abbreviation,
-      Type: this.form.value.Type,
-      State: this.form.value.State,
-      CreationDate: new Date().toLocaleDateString(),
-      CreationUser: this.form.value.CreationUser,
+    const creationUser = 'jlre';
+    const FormatType: TransactionType = {
+      id: this.form.value.Id,
+      description: this.form.value.Description,
+      abbreviation: this.form.value.Abbreviation,
+      type: this.form.value.Type.toString(),
+      status: 'A',
+      creationDate: new Date().toLocaleDateString(),
+      creationUser: creationUser,
     };
 
-    this._TransactionTypeService.addTransactionType(TransactionType);
-    this.back();
-    this._snackBar.open('El Tipo de transacción fue registrado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    try {
+      if (this.edit) {
+        this._TransactionTypeService.editTransactionType(FormatType).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else {
+        console.log('add');
+        this._TransactionTypeService.addTransactionType(FormatType).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   back() {

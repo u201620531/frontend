@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+// import { dateInputsHaveChanged } from '@angular/material/datepicker/datepicker-input-base';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +23,17 @@ export class FormatTypeAddComponent implements OnInit {
   idType?: string[] = [];
   readonlyOption: boolean = false;
   confirmation: boolean = false;
+  formatType: FormatType = {
+    id: '',
+    description: '',
+    abbreviation: '',
+    status: 'A',
+    type: [],
+    creationDate: new Date().toLocaleDateString(),
+    creationUser: '',
+  };
+
+  edit: boolean = false;
 
   constructor(
     private _FormatTypeService: FormatTypeService,
@@ -33,11 +45,11 @@ export class FormatTypeAddComponent implements OnInit {
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({
-      Id: ['', Validators.required],
-      Description: ['', Validators.required],
-      Abbreviation: ['', Validators.required],
-      Type: ['', Validators.required],
-      State: [''],
+      id: ['', Validators.required],
+      description: ['', Validators.required],
+      abbreviation: ['', Validators.required],
+      type: ['', Validators.required],
+      status: [''],
     });
   }
 
@@ -50,24 +62,25 @@ export class FormatTypeAddComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
         this.IdFormatType = params['id'];
-        const FormatType: FormatType[] = this.getFormatType(this.IdFormatType);
-        this.idType = FormatType[0].Type;
-        this.form.setValue({
-          Id: FormatType[0].Id,
-          Description: FormatType[0].Description,
-          Abbreviation: FormatType[0].Abbreviation,
-          Type: FormatType[0].Type,
-          State: FormatType[0].State,
-        });
+        this._FormatTypeService
+          .getFormatTypeById(this.IdFormatType)
+          .subscribe((res: any) => {
+            const listTypes = res.type.split(',');
+            this.idType = listTypes;
+            this.form.setValue({
+              id: res.id,
+              description: res.description,
+              abbreviation: res.abbreviation,
+              type: listTypes,
+              status: res.status,
+            });
+            this.edit = true;
+          });
       }
       if (params && params['edit']) {
         this.readonlyOption = params['edit'] !== '1' ? true : false;
       }
     });
-  }
-
-  loadFormatTypes() {
-    this.listFormatTypes = this._FormatTypeService.getFormatTypes();
   }
 
   loadSupportTable() {
@@ -79,23 +92,56 @@ export class FormatTypeAddComponent implements OnInit {
   }
 
   addFormatType() {
+    const creationUser = 'jlre';
     const FormatType: FormatType = {
-      Id: this.form.value.Id,
-      Description: this.form.value.Description,
-      Abbreviation: this.form.value.Abbreviation,
-      Type: this.form.value.Type,
-      State: this.form.value.State,
-      CreationDate: new Date().toLocaleDateString(),
-      CreationUser: this.form.value.CreationUser,
+      id: this.form.value.id,
+      description: this.form.value.description,
+      abbreviation: this.form.value.abbreviation,
+      type: this.form.value.Ttype.toString(),
+      status: 'A',
+      creationDate: new Date().toLocaleDateString(),
+      creationUser: creationUser,
     };
 
-    this._FormatTypeService.addFormatType(FormatType);
-    this.back();
-    this._snackBar.open('El Tipo de formato fue registrado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    try {
+      if (this.edit) {
+        console.log('edit');
+        console.log(this.IdFormatType);
+        console.log(FormatType);
+        this._FormatTypeService.editFormatType(FormatType).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else {
+        console.log('add');
+        this._FormatTypeService.addFormatType(FormatType).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   back() {

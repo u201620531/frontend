@@ -16,10 +16,10 @@ export class WayPayListComponent implements OnInit {
   listWayPays: WayPay[] = [];
 
   displayedColumns: string[] = [
-    'Id',
-    'Descripcion',
-    'Abreviatura',
-    'Estado',
+    'id',
+    'description',
+    'abbreviation',
+    'status',
     'Acciones',
   ];
   dataSource!: MatTableDataSource<WayPay>;
@@ -37,14 +37,19 @@ export class WayPayListComponent implements OnInit {
     this.loadWayPays();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   loadWayPays() {
-    this.listWayPays = this._WayPayService.getWayPays();
-    this.dataSource = new MatTableDataSource(this.listWayPays);
+    this._WayPayService.getWayPays().subscribe(
+      (res) => {
+        this.listWayPays = res;
+        this.dataSource = new MatTableDataSource<WayPay>();
+        this.dataSource.data = res;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;    
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
   }
 
   applyFilter(event: Event) {
@@ -52,7 +57,7 @@ export class WayPayListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteWayPay(index: number) {
+  deleteWayPay(index: string) {
     this._WayPayService.deleteWayPay(index);
     this.loadWayPays();
 
@@ -69,7 +74,8 @@ export class WayPayListComponent implements OnInit {
         id: id,
         edit: edit
       },
-    };
+    };console.log(extras);
+    
     this._router.navigate(['/dashboard/way-pay-add'], extras);
   }
 }

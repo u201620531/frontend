@@ -18,6 +18,7 @@ export class WayPayAddComponent implements OnInit {
   IdWayPay: string = '';
   readonlyOption: boolean = false;
   confirmation: boolean = false;
+edit:boolean=false;
 
   constructor(
     private _WayPayService: WayPayService,
@@ -28,10 +29,12 @@ export class WayPayAddComponent implements OnInit {
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({
-      Id: ['', Validators.required],
-      Description: ['', Validators.required],
-      Abbreviation: ['', Validators.required],
-      State: [''],
+      id: ['', Validators.required],
+      description: ['', Validators.required],
+      abbreviation: ['', Validators.required],
+      status: [''],
+      creationDate: [''],
+      creationUser: ['']
     });
   }
 
@@ -43,13 +46,19 @@ export class WayPayAddComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
         this.IdWayPay = params['id'];
-        const WayPay: WayPay[] = this.getWayPay(this.IdWayPay);
-        this.form.setValue({
-          Id: WayPay[0].Id,
-          Description: WayPay[0].Description,
-          Abbreviation: WayPay[0].Abbreviation,
-          State: WayPay[0].State,
-        });
+        this._WayPayService
+          .getWayPayById(this.IdWayPay)
+          .subscribe((res: any) => {
+            this.form.setValue({
+              id: res.id,
+              description: res.description,
+              abbreviation: res.abbreviation,
+              status: res.status,
+              creationDate: res.creationDate,
+              creationUser: res.creationUser
+            });
+            this.edit = true;
+          });
       }
       if (params && params['edit']) {
         this.readonlyOption = params['edit'] !== '1' ? true : false;
@@ -57,31 +66,57 @@ export class WayPayAddComponent implements OnInit {
     });
   }
 
-  loadWayPays() {
-    this.listWayPays = this._WayPayService.getWayPays();
-  }
-
   getWayPay(id: string) {
     return this._WayPayService.getWayPayById(id);
   }
 
   addWayPay() {
-    const WayPay: WayPay = {
-      Id: this.form.value.Id,
-      Description: this.form.value.Description,
-      Abbreviation: this.form.value.Abbreviation,
-      State: this.form.value.State,
-      CreationDate: new Date().toLocaleDateString(),
-      CreationUser: this.form.value.CreationUser,
+    const creationUser = 'jlre';
+    const wayPay: WayPay = {
+      id: this.form.value.id,
+      description: this.form.value.description,
+      abbreviation: this.form.value.abbreviation,
+      status: 'A',
+      creationDate: new Date().toLocaleDateString(),
+      creationUser: creationUser,
     };
 
-    this._WayPayService.addWayPay(WayPay);
-    this.back();
-    this._snackBar.open('La Forma de pago fue registrada con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    try {
+      if (this.edit) {
+        this._WayPayService.editWayPay(wayPay).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else {
+        console.log('add');
+        this._WayPayService.addWayPay(wayPay).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   back() {

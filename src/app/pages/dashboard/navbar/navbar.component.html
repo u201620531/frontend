@@ -25,6 +25,20 @@
     </ng-container>
   </mat-menu>
   <span class="button-spacer"></span>
+  <div *ngFor="let men of menu">
+    <ul *ngIf="men.HasItems === '1'">
+      <li *ngFor="let subMen of men.SubMenu">
+        <div class="menu-item"
+          *ngIf="subMen.banner === '1'"
+          mat-menu-item
+          routerLink="{{ subMen.Redirect }}"
+        >
+          {{ subMen.Name }}
+        </div>
+      </li>
+    </ul>
+  </div>
+  <span class="button-spacer"></span>
   <button
     mat-icon-button
     routerLink="/login"

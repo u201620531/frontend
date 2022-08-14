@@ -16,11 +16,11 @@ export class DocumentTypeListComponent implements OnInit {
   listDocumentTypes: DocumentType[] = [];
 
   displayedColumns: string[] = [
-    'Id',
-    'Descripcion',
-    'Abreviatura',
-    'Tipo',
-    'Estado',
+    'id',
+    'description',
+    'abbreviation',
+    'type',
+    'status',
     'Acciones',
   ];
   dataSource!: MatTableDataSource<DocumentType>;
@@ -38,22 +38,26 @@ export class DocumentTypeListComponent implements OnInit {
     this.loadDocumentTypes();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   loadDocumentTypes() {
-    this.listDocumentTypes = this._documentTypeService.getDocumentTypes();
-    this.dataSource = new MatTableDataSource(this.listDocumentTypes);
-  }
+    this._documentTypeService.getDocumentTypes().subscribe(
+      (res) => {
+        this.listDocumentTypes = res;
+        this.dataSource = new MatTableDataSource<DocumentType>();
+        this.dataSource.data = res;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;    
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );}
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteDocumentType(index: number) {
+  deleteDocumentType(index: string) {
     this._documentTypeService.deleteDocumentType(index);
     this.loadDocumentTypes();
 

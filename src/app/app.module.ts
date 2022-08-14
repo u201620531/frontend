@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './pages/shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 //Components
 import { LoginComponent } from './pages/auth/login/login.component';
@@ -42,6 +43,12 @@ import { UserProfileListComponent } from './pages/auth/user-profile/user-profile
 import { UserAddComponent } from './pages/auth/user/user-add/user-add.component';
 import { UserListComponent } from './pages/auth/user/user-list/user-list.component';
 
+/** Services */
+import { FormatTypeService } from './services/format-type.service';
+import { TransactionTypeService } from './services/transaction-type.service';
+import { WayPayService } from './services/way-pay.service';
+import { DocumentTypeService } from './services/document-type.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,15 +75,21 @@ import { UserListComponent } from './pages/auth/user/user-list/user-list.compone
     WayPayAddComponent,
     WayPayListComponent,
     ConfirmationModalComponent,
-    SearchModalComponent
+    SearchModalComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    FormatTypeService,
+    TransactionTypeService,
+    WayPayService,
+    DocumentTypeService,
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

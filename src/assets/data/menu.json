@@ -1,60 +1,120 @@
 [
-    {
-        "Name": "Home",
-        "Redirect": "/dashboard",
-        "HasItems": "0"
-    },
-    {
-        "Name": "Comprobantes electrónicos",
-        "Redirect": "",
-        "HasItems": "1",
-        "SubMenu": [ {
-            "Name": "Escanear",
-            "Redirect": "/dashboard/electronic-documents-scan"    
-        },
-        {
-            "Name": "Obtener información",
-            "Redirect": "/dashboard/electronic-documents-get-information"
-        },
-        {
-            "Name": "Listado de Comprobantes electónicos digitalizados",
-            "Redirect": "/dashboard/electronic-documents-list"
-        },
-        {
-            "Name": "Agregar",
-            "Redirect": "/dashboard/electronic-documents-add"
-        },
-        {
-            "Name": "Reporte de Comprobantes electónicos digitalizados",
-            "Redirect": "/dashboard/electronic-documents-report"
-        }]
-    },
-    {
-        "Name": "Clientes",
-        "Redirect": "",
-        "HasItems": "1",
-        "SubMenu": [
-        {
-            "Name": "Agregar",
-            "Redirect": "/dashboard/customer-add"
-        },
-        {
-            "Name": "Listado",
-            "Redirect": "/dashboard/customer-list"
-        }]
-    },
-    {
-        "Name": "Proveedores",
-        "Redirect": "",
-        "HasItems": "1",
-        "SubMenu": [
-        {
-            "Name": "Agregar",
-            "Redirect": "/dashboard/supplier-add"
-        },
-        {
-            "Name": "Listado",
-            "Redirect": "/dashboard/supplier-list"
-        }]
-    }
+  {
+    "Name": "Home",
+    "Redirect": "/dashboard",
+    "HasItems": "0"
+  },
+  {
+    "Name": "Comprobantes electrónicos",
+    "Redirect": "",
+    "HasItems": "1",
+    "SubMenu": [
+      {
+        "Name": "Escanear",
+        "Redirect": "/dashboard/electronic-documents-scan",
+        "banner": "1"
+      },
+      {
+        "Name": "Obtener información",
+        "Redirect": "/dashboard/electronic-documents-get-information",
+        "banner": "1"
+      },
+      {
+        "Name": "Listado de Comprobantes electónicos digitalizados",
+        "Redirect": "/dashboard/electronic-documents-list",
+        "banner": "1"
+      },
+      {
+        "Name": "Agregar",
+        "Redirect": "/dashboard/electronic-documents-add",
+        "banner": "0"
+      },
+      {
+        "Name": "Reporte de Comprobantes electónicos digitalizados",
+        "Redirect": "/dashboard/electronic-documents-report",
+        "banner": "0"
+      }
+    ]
+  },
+  {
+    "Name": "Clientes",
+    "Redirect": "",
+    "HasItems": "1",
+    "SubMenu": [
+      {
+        "Name": "Agregar",
+        "Redirect": "/dashboard/customer-add",
+        "banner": "0"
+      },
+      {
+        "Name": "Listado",
+        "Redirect": "/dashboard/customer-list",
+        "banner": "0"
+      }
+    ]
+  },
+  {
+    "Name": "Proveedores",
+    "Redirect": "",
+    "HasItems": "1",
+    "SubMenu": [
+      {
+        "Name": "Agregar",
+        "Redirect": "/dashboard/supplier-add",
+        "banner": "0"
+      },
+      {
+        "Name": "Listado",
+        "Redirect": "/dashboard/supplier-list",
+        "banner": "0"
+      }
+    ]
+  },
+  {
+    "Name": "Mantenimiento",
+    "Redirect": "",
+    "HasItems": "1",
+    "SubMenu": [
+      {
+        "Name": "Agregar-Formato",
+        "Redirect": "/dashboard/format-type-add",
+        "banner": "0"
+      },
+      {
+        "Name": "Listador-Formato",
+        "Redirect": "/dashboard/format-type-list",
+        "banner": "0"
+      },
+      {
+        "Name": "Agregar-Transacción",
+        "Redirect": "/dashboard/transaction-type-add",
+        "banner": "0"
+      },
+      {
+        "Name": "Listado-Transacción",
+        "Redirect": "/dashboard/transaction-type-list",
+        "banner": "0"
+      },
+      {
+        "Name": "Agregar-Pago",
+        "Redirect": "/dashboard/way-pay-add",
+        "banner": "0"
+      },
+      {
+        "Name": "Listado-Pago",
+        "Redirect": "/dashboard/way-pay-list",
+        "banner": "0"
+      },
+      {
+        "Name": "Agregar-Documento",
+        "Redirect": "/dashboard/document-type-add",
+        "banner": "0"
+      },
+      {
+        "Name": "Listado-Documento",
+        "Redirect": "/dashboard/document-type-list",
+        "banner": "0"
+      }
+    ]
+  }
 ]

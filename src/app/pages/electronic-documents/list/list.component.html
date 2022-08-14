@@ -46,8 +46,8 @@
       <ng-container matColumnDef="Apellido(s) y Nombre(s)/Razon Social">
         <th mat-header-cell *matHeaderCellDef>Apellido(s) y Nombre(s)/Razon Social</th>
         <td mat-cell *matCellDef="let element">
-          <div  *ngIf="element.TransactionType.Id == 'C'">{{ element.Supplier.BusinessName }}</div>
-          <div  *ngIf="element.TransactionType.Id == 'V'">{{ element.Customer.BusinessName }}</div></td>
+          <div  *ngIf="element.TransactionType.id == 'C'">{{ element.Supplier.BusinessName }}</div>
+          <div  *ngIf="element.TransactionType.id == 'V'">{{ element.Customer.BusinessName }}</div></td>
       </ng-container>
 
       <!-- Estado Column -->
@@ -59,25 +59,25 @@
       <!-- Tipo de documento Column -->
       <ng-container matColumnDef="Tipo de documento">
         <th mat-header-cell *matHeaderCellDef>Tipo de documento</th>
-        <td mat-cell *matCellDef="let element">{{ element.DocumentType.Description }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.DocumentType.description }}</td>
       </ng-container>
 
       <!-- Tipo de transacción Column -->
       <ng-container matColumnDef="Tipo de transaccion">
         <th mat-header-cell *matHeaderCellDef>Tipo de transacción</th>
-        <td mat-cell *matCellDef="let element">{{ element.TransactionType.Description }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.TransactionType.description }}</td>
       </ng-container>
 
       <!-- Tipo de formato Column -->
       <ng-container matColumnDef="Tipo de formato">
         <th mat-header-cell *matHeaderCellDef>Tipo de formato</th>
-        <td mat-cell *matCellDef="let element">{{ element.FormatType.Description }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.FormatType.description }}</td>
       </ng-container>
 
       <!-- Forma de pago Column -->
       <ng-container matColumnDef="Forma de pago">
         <th mat-header-cell *matHeaderCellDef>Forma de pago</th>
-        <td mat-cell *matCellDef="let element">{{ element.WayPay.Description }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.WayPay.description }}</td>
       </ng-container>
 
       <!-- Total Column -->

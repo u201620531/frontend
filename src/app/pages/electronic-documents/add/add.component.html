@@ -53,9 +53,9 @@
               <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let transactionType of listTransactionTypes"
-                [value]="transactionType.Id"
+                [value]="transactionType.id"
               >
-                {{ transactionType.Description }}
+                {{ transactionType.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -124,9 +124,9 @@
               <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let formatType of listFormatTypes"
-                [value]="formatType.Id"
+                [value]="formatType.id"
               >
-                {{ formatType.Description }}
+                {{ formatType.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -142,9 +142,9 @@
               <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let documentType of listDocumentTypes"
-                [value]="documentType.Id"
+                [value]="documentType.id"
               >
-                {{ documentType.Description }}
+                {{ documentType.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -159,9 +159,9 @@
             <mat-select formControlName="FormatType">
               <mat-option
                 *ngFor="let formatType of listFormatTypes"
-                [value]="formatType.Id"
+                [value]="formatType.id"
               >
-                {{ formatType.Description }}
+                {{ formatType.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -177,9 +177,9 @@
               <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let wayPay of listWayPays"
-                [value]="wayPay.Id"
+                [value]="wayPay.id"
               >
-                {{ wayPay.Description }}
+                {{ wayPay.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>

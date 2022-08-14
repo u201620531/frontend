@@ -24,7 +24,7 @@ export class CustomerAddComponent implements OnInit {
   idDocumentType: string = '';
   idCustomerType: string = '';
   readonlyOption: boolean = false;
-  confirmation: boolean= false;
+  confirmation: boolean = false;
 
   constructor(
     private _documentTypeService: DocumentTypeService,
@@ -60,7 +60,7 @@ export class CustomerAddComponent implements OnInit {
       if (params && params['id']) {
         this.IdCustomer = params['id'];
         const customer: Customer[] = this.getCustomer(this.IdCustomer);
-        this.idDocumentType = customer[0].DocumentType.Id;
+        this.idDocumentType = customer[0].DocumentType.id;
         this.idCustomerType = customer[0].CustomerType;
         this.form.setValue({
           Id: customer[0].Id,
@@ -81,7 +81,9 @@ export class CustomerAddComponent implements OnInit {
   }
 
   loadDocumentTypes() {
-    this.listDocumentTypes = this._documentTypeService.getDocumentTypes();
+    this._documentTypeService.getDocumentTypes().subscribe((res) => {
+      this.listDocumentTypes = res;
+    });
   }
 
   loadCustomerTypes() {

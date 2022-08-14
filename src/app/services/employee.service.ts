@@ -9,8 +9,9 @@ export class EmployeeService {
     {
       Id: 'E000001',
       DocumentType: {
-        Id: 'DNI',
-        Description: 'Documento Nacional de Identidad',
+        id: 'DNI',
+        description: 'Documento Nacional de Identidad',
+        status:'A'
       },
       DocumentNumber: '12345678',
       FirstName: 'Jose',
@@ -23,8 +24,9 @@ export class EmployeeService {
     {
       Id: 'E000002',
       DocumentType: {
-        Id: 'DNI',
-        Description: 'Documento Nacional de Identidad',
+        id: 'DNI',
+        description: 'Documento Nacional de Identidad',
+        status:'A'
       },
       DocumentNumber: '45784512',
       FirstName: 'Rosa',
@@ -37,8 +39,9 @@ export class EmployeeService {
     {
       Id: 'E0000003',
       DocumentType: {
-        Id: 'DNI',
-        Description: 'Documento Nacional de Identidad',
+        id: 'DNI',
+        description: 'Documento Nacional de Identidad',
+        status:'A'
       },
       DocumentNumber: '123456789101',
       FirstName: 'Ana',

@@ -10,17 +10,17 @@ import { FormatTypeService } from 'src/app/services/format-type.service';
 @Component({
   selector: 'app-format-type-list',
   templateUrl: './format-type-list.component.html',
-  styleUrls: ['./format-type-list.component.css']
+  styleUrls: ['./format-type-list.component.css'],
 })
 export class FormatTypeListComponent implements OnInit {
-  listFormatTypes: FormatType[] = [];
+  listFormatTypes: any = [];
 
   displayedColumns: string[] = [
-    'Id',
-    'Descripcion',
-    'Abreviatura',
-    'Tipo',
-    'Estado',
+    'id',
+    'description',
+    'abbreviation',
+    'type',
+    'status',
     'Acciones',
   ];
   dataSource!: MatTableDataSource<FormatType>;
@@ -38,14 +38,19 @@ export class FormatTypeListComponent implements OnInit {
     this.loadFormatTypes();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   loadFormatTypes() {
-    this.listFormatTypes = this._FormatTypeService.getFormatTypes();
-    this.dataSource = new MatTableDataSource(this.listFormatTypes);
+    this._FormatTypeService.getFormatTypes().subscribe(
+      (res) => {
+        this.listFormatTypes = res;
+        this.dataSource = new MatTableDataSource<FormatType>();
+        this.dataSource.data = res;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;    
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
   }
 
   applyFilter(event: Event) {
@@ -53,8 +58,8 @@ export class FormatTypeListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteFormatType(index: number) {
-    this._FormatTypeService.deleteFormatType(index);
+  deleteFormatType(id: string) {
+    this._FormatTypeService.deleteFormatType(id);
     this.loadFormatTypes();
 
     this._snackBar.open('El Tipo de formato fue eliminado con éxito.', '', {
@@ -64,11 +69,11 @@ export class FormatTypeListComponent implements OnInit {
     });
   }
 
-  editFormatType(id: string, edit:number): void {
+  editFormatType(id: string, edit: number): void {
     const extras: NavigationExtras = {
       queryParams: {
         id: id,
-        edit: edit
+        edit: edit,
       },
     };
     this._router.navigate(['/dashboard/format-type-add'], extras);

@@ -23,6 +23,8 @@ export class DocumentTypeAddComponent implements OnInit {
   readonlyOption: boolean = false;
   confirmation: boolean = false;
 
+  edit: boolean = false;
+
   constructor(
     private _documentTypeService: DocumentTypeService,
     private _supportTableService: SupportTableService,
@@ -33,11 +35,13 @@ export class DocumentTypeAddComponent implements OnInit {
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({
-      Id: ['', Validators.required],
-      Description: ['', Validators.required],
-      Abbreviation: ['', Validators.required],
-      Type: ['', Validators.required],
-      State: [''],
+      id: ['', Validators.required],
+      description: ['', Validators.required],
+      abbreviation: ['', Validators.required],
+      type: ['', Validators.required],
+      status: [''],
+      creationDate: [''],
+      creationUser: [''],
     });
   }
 
@@ -50,26 +54,27 @@ export class DocumentTypeAddComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
         this.IdDocumentType = params['id'];
-        const documentType: DocumentType[] = this.getDocumentType(
-          this.IdDocumentType
-        );
-        this.idType = documentType[0].Type;
-        this.form.setValue({
-          Id: documentType[0].Id,
-          Description: documentType[0].Description,
-          Abbreviation: documentType[0].Abbreviation,
-          Type: documentType[0].Type,
-          State: documentType[0].State,
-        });
+        this._documentTypeService
+          .getDocumentTypeById(this.IdDocumentType)
+          .subscribe((res: any) => {
+            const listTypes = res.type.split(',');
+            this.idType = listTypes;
+            this.form.setValue({
+              id: res.id,
+              description: res.description,
+              abbreviation: res.abbreviation,
+              status: res.status,
+              type: listTypes,
+              creationDate: res.creationDate,
+              creationUser: res.creationUser,
+            });
+            this.edit = true;
+          });
       }
       if (params && params['edit']) {
         this.readonlyOption = params['edit'] !== '1' ? true : false;
       }
     });
-  }
-
-  loadDocumentTypes() {
-    this.listDocumentTypes = this._documentTypeService.getDocumentTypes();
   }
 
   loadSupportTable() {
@@ -81,23 +86,52 @@ export class DocumentTypeAddComponent implements OnInit {
   }
 
   addDocumentType() {
+    const creationUser = 'jlre';
     const documentType: DocumentType = {
-      Id: this.form.value.Id,
-      Description: this.form.value.Description,
-      Abbreviation: this.form.value.Abbreviation,
-      Type: this.form.value.Type,
-      State: this.form.value.State,
-      CreationDate: new Date().toLocaleDateString(),
-      CreationUser: this.form.value.CreationUser,
+      id: this.form.value.id,
+      description: this.form.value.description,
+      abbreviation: this.form.value.abbreviation,
+      type: this.form.value.type.toString(),
+      status: 'A',
+      creationDate: new Date().toLocaleDateString(),
+      creationUser: creationUser,
     };
 
-    this._documentTypeService.addDocumentType(documentType);
-    this.back();
-    this._snackBar.open('El Tipo de documento fue registrado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    try {
+      if (this.edit) {
+        this._documentTypeService.editDocumentType(documentType).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else {
+        this._documentTypeService.addDocumentType(documentType).subscribe(
+          (res) => {
+            const result: any = res;
+            this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   back() {

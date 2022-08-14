@@ -60,7 +60,7 @@ export class SupplierAddComponent implements OnInit {
       if (params && params['id']) {
         this.IdSupplier = params['id'];
         const supplier: Supplier[] = this.getSupplier(this.IdSupplier);
-        this.idDocumentType = supplier[0].DocumentType.Id;
+        this.idDocumentType = supplier[0].DocumentType.id;
         this.idSupplierType = supplier[0].SupplierType;
         this.form.setValue({
           Id: supplier[0].Id,
@@ -81,8 +81,9 @@ export class SupplierAddComponent implements OnInit {
   }
 
   loadDocumentTypes() {
-    this.listDocumentTypes = this._documentTypeService.getDocumentTypes();
-  }
+    this._documentTypeService.getDocumentTypes().subscribe((res) => {
+      this.listDocumentTypes = res;
+    })  }
 
   loadSupplierTypes() {
     this.listSupplierTypes = this._supplierTypeService.getCustomerTypes();

@@ -11,5 +11,6 @@ export interface Menu {
         Id: string;
         Name: string;
         Redirect: string;
+        banner: string
     }>
 }

@@ -10,8 +10,9 @@ export class CustomerService {
       Id: 'N001',
       CustomerType: 'N',
       DocumentType: {
-        Id: 'DNI',
-        Description: 'Documento Nacional de Identidad',
+        id: 'DNI',
+        description: 'Documento Nacional de Identidad',
+        status:'A'
       },
       DocumentNumber: '12345678',
       BusinessName: 'Jose Perez',
@@ -26,8 +27,9 @@ export class CustomerService {
       Id: 'N002',
       CustomerType: 'N',
       DocumentType: {
-        Id: 'DNI',
-        Description: 'Documento Nacional de Identidad',
+        id: 'DNI',
+        description: 'Documento Nacional de Identidad',
+        status:'A'
       },
       DocumentNumber: '45784512',
       BusinessName: 'Rosa Torres',
@@ -42,8 +44,9 @@ export class CustomerService {
       Id: 'J0001',
       CustomerType: 'J',
       DocumentType: {
-        Id: 'RUC',
-        Description: 'Registro Unico Contribuyente',
+        id: 'RUC',
+        description: 'Registro Unico Contribuyente',
+        status:'A'
       },
       DocumentNumber: '123456789101',
       BusinessName: 'Andamios SRL',

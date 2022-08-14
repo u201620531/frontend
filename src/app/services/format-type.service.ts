@@ -1,42 +1,33 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { FormatType } from '../interfaces/format-type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormatTypeService {
-  listFormatTypes: FormatType[] = [
-    {
-      Id: 'PDF',
-      Description: 'Documento PDF',
-      Abbreviation: '',
-      Type: ['R'],
-      State: 'A',
-    },
-    {
-      Id: 'XML',
-      Description: 'Documento XML',
-      Abbreviation: '',
-      Type: ['R', 'V', 'C'],
-      State: 'A',
-    },
-  ];
+  baseURL: string = 'http://localhost:3000/api';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  getFormatTypes() {
-    return this.listFormatTypes.slice();
+  getFormatTypes(): Observable<any> {
+    return this.http.get(`${this.baseURL}/formattypes`);
   }
 
   getFormatTypeById(id: string) {
-    return this.listFormatTypes.filter((d) => d.Id === id);
+    return this.http.get(`${this.baseURL}/formattypes/${id}`);
   }
 
-  deleteFormatType(index: number) {
-    this.listFormatTypes.splice(index, 1);
+  deleteFormatType(id: string) {
+    this.http.delete(`${this.baseURL}/formattypes/${id}`);
   }
 
-  addFormatType(FormatType: FormatType) {
-    this.listFormatTypes.unshift(FormatType);
+  addFormatType(formatType: FormatType) {
+    return this.http.post(`${this.baseURL}/formattypes`, formatType);
+  }
+
+  editFormatType(formatType: FormatType) {
+    return this.http.put(`${this.baseURL}/formattypes`, formatType);
   }
 }

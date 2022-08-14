@@ -13,15 +13,15 @@ import { TransactionTypeService } from 'src/app/services/transaction-type.servic
   styleUrls: ['./transaction-type-list.component.css']
 })
 export class TransactionTypeListComponent implements OnInit {
-  listTransactionTypes: TransactionType[] = [];
+  listTransactionTypes: any = [];
 
   displayedColumns: string[] = [
-    'Id',
-    'Descripcion',
-    'Abreviatura',
-    'Tipo',
-    'Estado',
-    'Acciones',
+    'id',
+    'description',
+    'abbreviation',
+    'type',
+    'status',
+   'Acciones',
   ];
   dataSource!: MatTableDataSource<TransactionType>;
 
@@ -38,12 +38,19 @@ export class TransactionTypeListComponent implements OnInit {
     this.loadTransactionTypes();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   loadTransactionTypes() {
+    this._TransactionTypeService.getTransactionTypes().subscribe(
+      (res) => {
+        this.listTransactionTypes = res;
+        this.dataSource = new MatTableDataSource<TransactionType>();
+        this.dataSource.data = res;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;    
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
     this.listTransactionTypes = this._TransactionTypeService.getTransactionTypes();
     this.dataSource = new MatTableDataSource(this.listTransactionTypes);
   }
@@ -53,7 +60,7 @@ export class TransactionTypeListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteTransactionType(index: number) {
+  deleteTransactionType(index: string) {
     this._TransactionTypeService.deleteTransactionType(index);
     this.loadTransactionTypes();
 

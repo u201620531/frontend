@@ -1,32 +1,33 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { DocumentType } from '../interfaces/document-type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentTypeService {
-  listDocumentTypes: DocumentType[] = [
-    { Id: 'FAC', Description: 'Factura', Abbreviation: '', Type: ['R', 'V', 'C'], State: 'A' },
-    { Id: 'BOL', Description: 'Boleta', Abbreviation: '', Type: ['R', 'V', 'C'], State: 'A' },
-    { Id: 'NDC', Description: 'Nota de crédito', Abbreviation: '', Type: ['R', 'V', 'C'], State: 'I' },
-    { Id: 'DNI', Description: 'Documento Nacional de Identidad', Abbreviation: '', Type: ['R', 'P'], State: 'A' },
-  ];
+  constructor(private http:HttpClient) {}
+  route='documenttypes';
 
-  constructor() {}
-
-  getDocumentTypes() {
-    return this.listDocumentTypes.slice();
+  getDocumentTypes():Observable<any> {
+    return this.http.get(`${environment.apiURL}/${this.route}`);
   }
 
   getDocumentTypeById(id: string) {
-    return this.listDocumentTypes.filter(d => d.Id === id);
+    return this.http.get(`${environment.apiURL}/${this.route}/${id}`);
   }
 
-  deleteDocumentType(index: number) {
-    this.listDocumentTypes.splice(index, 1);
+  deleteDocumentType(id: string) {
+    this.http.delete(`${environment.apiURL}/${this.route}/${id}`);
   }
 
   addDocumentType(documentType: DocumentType) {
-    this.listDocumentTypes.unshift(documentType);
+    return this.http.post(`${environment.apiURL}/${this.route}`, documentType);
+  }
+
+  editDocumentType(documentType: DocumentType) {
+    return this.http.put(`${environment.apiURL}/${this.route}`, documentType);
   }
 }

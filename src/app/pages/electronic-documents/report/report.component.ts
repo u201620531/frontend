@@ -14,7 +14,7 @@ import { WayPayService } from 'src/app/services/way-pay.service';
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
-  styleUrls: ['./report.component.css']
+  styleUrls: ['./report.component.css'],
 })
 export class ReportComponent implements OnInit {
   listDocumentTypes: DocumentType[] = [];
@@ -32,9 +32,9 @@ export class ReportComponent implements OnInit {
     private _transactionTypeService: TransactionTypeService,
     private _formatTypeService: FormatTypeService,
     private _moneyService: MoneyService,
-    private _wayPayService: WayPayService,
-    //private _electronicDocumentsService: ElectronicDocumentsService,
-    ) { }
+    private _wayPayService: WayPayService
+  ) //private _electronicDocumentsService: ElectronicDocumentsService,
+  {}
 
   ngOnInit(): void {
     this.loadTransactionType();
@@ -45,15 +45,17 @@ export class ReportComponent implements OnInit {
   }
 
   loadDocumentType() {
-    this.listDocumentTypes = this._documentTypeService.getDocumentTypes();
-  }
+    this._documentTypeService.getDocumentTypes().subscribe((res) => {
+      this.listDocumentTypes = res;
+    })  }
 
   loadTransactionType() {
-    this.listTransactionTypes = this._transactionTypeService.getReportTransactionTypes();
+    this.listTransactionTypes =
+      this._transactionTypeService.getReportTransactionTypes();
   }
 
   loadFormatType() {
-    this.listFormatTypes = this._formatTypeService.getFormatTypes();
+    //this.listFormatTypes = this._formatTypeService.getFormatTypes();
   }
 
   loadMoney() {
@@ -61,10 +63,10 @@ export class ReportComponent implements OnInit {
   }
 
   loadWayPay() {
-    this.listWayPays = this._wayPayService.getWayPays();
+    this._wayPayService.getWayPays().subscribe((res) => {
+      this.listWayPays = res;
+    });
   }
 
-  cleanFilters(): void {
-
-  }
+  cleanFilters(): void {}
 }

@@ -2,7 +2,7 @@
     <mat-toolbar
       style="background: cornflowerblue; color: white; font-family: cursive"
     >
-      <span>Agregar Tipo de docuformatomento</span>
+      <span>Agregar Tipo de formato</span>
     </mat-toolbar>
   
     <mat-card class="cardOptions">
@@ -20,7 +20,7 @@
                   matInput
                   autocomplete="off"
                   [readonly]="readonlyOption"
-                  formControlName="Id"
+                  formControlName="id"
                 />
               </mat-form-field>
             </div>
@@ -46,7 +46,7 @@
               <mat-form-field appearance="fill" class="inputOptionMedium">
                 <mat-label>Tipo</mat-label>
                 <mat-select
-                  formControlName="Type"
+                  formControlName="type"
                   [(ngModel)]="idType"
                   [disabled]="readonlyOption"
                   multiple
@@ -73,7 +73,7 @@
                 <input
                   matInput
                   autocomplete="off"
-                  formControlName="Description"
+                  formControlName="description"
                   [readonly]="readonlyOption"
                 />
               </mat-form-field>
@@ -90,7 +90,7 @@
                 <input
                   matInput
                   autocomplete="off"
-                  formControlName="Abbreviation"
+                  formControlName="abbreviation"
                   [readonly]="readonlyOption"
                 />
               </mat-form-field>

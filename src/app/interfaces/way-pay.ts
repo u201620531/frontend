@@ -1,8 +1,8 @@
 export interface WayPay {
-  Id: string;
-  Description: string;
-  Abbreviation?: string;
-  State?: string; //A-Activo, I-Inactivo
-  CreationDate?: string;
-  CreationUser?: string;
+  id: string;
+  description: string;
+  abbreviation?: string;
+  status: string; //A-Activo, I-Inactivo
+  creationDate?: string;
+  creationUser?: string;
 }
