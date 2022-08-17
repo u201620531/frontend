@@ -1,10 +1,10 @@
 export interface SupportTable {
-  Id: string;
-  Name: string;
-  Value: string;
-  Description: string;
-  Abbreviation?: string;
-  State?: string;
-  CreationDate?: string;
-  CreationUser?: string;
+  id: string;
+  name: string;
+  value: string;
+  description: string;
+  abbreviation?: string;
+  status?: string;
+  creationDate?: string;
+  creationUser?: string;
 }
