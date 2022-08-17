@@ -1,104 +1,129 @@
 <div class="container">
-    <mat-toolbar>
-      <span>Listado de Tipos de documento</span>
-      <div class="button-spacer"></div>
-      <button mat-button routerLink="/dashboard/document-type-add">Agregar</button>
-    </mat-toolbar>
-  
-    <div *ngIf="listDocumentTypes.length > 0">
-      <mat-form-field appearance="standard">
-        <mat-label>Filter</mat-label>
-        <input
-          matInput
-          (keyup)="applyFilter($event)"
-          placeholder="Ex. ium"
-          #input
-          autocomplete="off"
-        />
-      </mat-form-field>
-  
-      <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort>
-          <!--- Note that these columns can be defined in any order.
+  <mat-toolbar>
+    <span>Listado de Tipos de documento</span>
+    <div class="button-spacer"></div>
+    <button mat-button routerLink="/dashboard/document-type-add">
+      Agregar
+    </button>
+  </mat-toolbar>
+
+  <div *ngIf="listDocumentTypes.length > 0">
+    <mat-form-field appearance="standard">
+      <mat-label>Filtro (Ingrese descripción):</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="{{ placeholderValue }}"
+        #input
+        autocomplete="off"
+      />
+    </mat-form-field>
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
-  
-          <!-- Id Column -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'">{{ element.id }}</td>
-          </ng-container>
-  
-          <!-- Description Column -->
-          <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'">{{ element.description }}</td>
-          </ng-container>
-  
-          <!-- Abbreviation Column -->
-          <ng-container matColumnDef="abbreviation">
-            <th mat-header-cell *matHeaderCellDef>Abreviatura</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'">
-              {{ element.abbreviation }}
-            </td>
-          </ng-container>
-  
-          <!-- Tipo Column -->
-          <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Tipo
-            </th>
-            <td mat-cell *matCellDef="let element" [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'">
-              {{ element.type }}
-            </td>
-          </ng-container>
-  
-          <!-- Estado Column -->
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Estado</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'">{{ element.status }}</td>
-          </ng-container>
-  
-          <!-- Acciones Column -->
-          <ng-container matColumnDef="Acciones">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element" class="acctions">
-              <a
-                class="link-actions search"
-                matTooltip="Ver Tipo de documento"
-                (click)="editDocumentType(element.id, 0)"
-              >
-                <mat-icon>search</mat-icon>
-              </a>
-              <a
-                class="link-actions edit"
-                matTooltip="Editar Tipo de documento"
-                (click)="editDocumentType(element.id, 1)"
-              >
-                <mat-icon>edit</mat-icon>
-              </a>
-              <a
-                (click)="deleteDocumentType(element.id)"
-                class="link-actions delete"
-                matTooltip="Eliminar Tipo de documento"
-              >
-                <mat-icon>delete</mat-icon>
-              </a>
-            </td>
-          </ng-container>
-  
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-  
-        <mat-paginator
-          [pageSizeOptions]="[5, 10, 25, 100]"
-          showFirstLastButtons
-          aria-label="Select page of Document Type"
-        ></mat-paginator>
-      </div>
-    </div>
-    <div *ngIf="listDocumentTypes.length === 0">
-      <h2>No hay Tipos de documento para mostrar</h2>
+
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.id }}
+          </td>
+        </ng-container>
+
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.description }}
+          </td>
+        </ng-container>
+
+        <!-- Abbreviation Column -->
+        <ng-container matColumnDef="abbreviation">
+          <th mat-header-cell *matHeaderCellDef>Abreviatura</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.abbreviation }}
+          </td>
+        </ng-container>
+
+        <!-- Tipo Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.type }}
+          </td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.status === 'A' ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.status }}
+          </td>
+        </ng-container>
+
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="Acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element" class="acctions">
+            <a
+              class="link-actions search"
+              matTooltip="Ver Tipo de documento"
+              (click)="editDocumentType(element.id, 0)"
+            >
+              <mat-icon>search</mat-icon>
+            </a>
+            <a
+              class="link-actions edit"
+              matTooltip="Editar Tipo de documento"
+              (click)="editDocumentType(element.id, 1)"
+            >
+              <mat-icon>edit</mat-icon>
+            </a>
+            <a
+              (click)="deleteDocumentType(element.id)"
+              class="link-actions delete"
+              matTooltip="Eliminar Tipo de documento"
+            >
+              <mat-icon>delete</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        showFirstLastButtons
+        aria-label="Select page of Document Type"
+      ></mat-paginator>
     </div>
   </div>
-  
+  <div *ngIf="listDocumentTypes.length === 0">
+    <h2>No hay Tipos de documento para mostrar</h2>
+  </div>
+</div>

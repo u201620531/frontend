@@ -6,11 +6,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { DocumentType } from 'src/app/interfaces/document-type';
 import { DocumentTypeService } from 'src/app/services/document-type.service';
+import { filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-document-type-list',
   templateUrl: './document-type-list.component.html',
-  styleUrls: ['./document-type-list.component.css']
+  styleUrls: ['./document-type-list.component.css'],
 })
 export class DocumentTypeListComponent implements OnInit {
   listDocumentTypes: DocumentType[] = [];
@@ -24,6 +25,7 @@ export class DocumentTypeListComponent implements OnInit {
     'Acciones',
   ];
   dataSource!: MatTableDataSource<DocumentType>;
+  placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -35,6 +37,7 @@ export class DocumentTypeListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.placeholderValue = filters.placeholders.wayPay;
     this.loadDocumentTypes();
   }
 
@@ -45,34 +48,45 @@ export class DocumentTypeListComponent implements OnInit {
         this.dataSource = new MatTableDataSource<DocumentType>();
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;    
+        this.dataSource.sort = this.sort;
       },
       (err) => {
         console.log(err.message);
       }
-    );}
+    );
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteDocumentType(index: string) {
-    this._documentTypeService.deleteDocumentType(index);
-    this.loadDocumentTypes();
-
-    this._snackBar.open('El Tipo de documento fue eliminado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+  deleteDocumentType(id: string) {
+    this._documentTypeService.deleteDocumentType(id).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+        if (result.id === 1) this.loadDocumentTypes();
+      },
+      (err) => {
+        this._snackBar.open(err.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+      }
+    );
   }
 
-  editDocumentType(id: string, edit:number): void {
+  editDocumentType(id: string, edit: number): void {
     const extras: NavigationExtras = {
       queryParams: {
         id: id,
-        edit: edit
+        edit: edit,
       },
     };
     this._router.navigate(['/dashboard/document-type-add'], extras);

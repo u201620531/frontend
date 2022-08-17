@@ -8,6 +8,7 @@ import { SupportTable } from 'src/app/interfaces/support-table';
 import { ConfirmationModalComponent } from 'src/app/pages/modals/confirmation-modal/confirmation-modal.component';
 import { DocumentTypeService } from 'src/app/services/document-type.service';
 import { SupportTableService } from 'src/app/services/support-table.service';
+import { supportTables } from 'src/shared/config';
 
 @Component({
   selector: 'app-document-type-add',
@@ -17,12 +18,13 @@ import { SupportTableService } from 'src/app/services/support-table.service';
 export class DocumentTypeAddComponent implements OnInit {
   form: FormGroup;
   listDocumentTypes: DocumentType[] = [];
-  listSupportTables: SupportTable[] = [];
+  listSupportTables: any = [];
   IdDocumentType: string = '';
   idType?: string[] = [];
+  readonlyId: boolean = false;
   readonlyOption: boolean = false;
+  delete: boolean = true;
   confirmation: boolean = false;
-
   edit: boolean = false;
 
   constructor(
@@ -54,6 +56,7 @@ export class DocumentTypeAddComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
         this.IdDocumentType = params['id'];
+        this.readonlyId = this.IdDocumentType ? true : false;
         this._documentTypeService
           .getDocumentTypeById(this.IdDocumentType)
           .subscribe((res: any) => {
@@ -73,12 +76,17 @@ export class DocumentTypeAddComponent implements OnInit {
       }
       if (params && params['edit']) {
         this.readonlyOption = params['edit'] !== '1' ? true : false;
+        this.delete = params['edit'] !== '1' ? true : false;
       }
     });
   }
 
   loadSupportTable() {
-    this.listSupportTables = this._supportTableService.getSupportTables('TTD');
+    this._supportTableService
+      .getSupportTableById(supportTables.documentType)
+      .subscribe((res) => {
+        this.listSupportTables = res;
+      });
   }
 
   getDocumentType(id: string) {
@@ -97,12 +105,13 @@ export class DocumentTypeAddComponent implements OnInit {
       creationUser: creationUser,
     };
 
-    try {
-      if (this.edit) {
-        this._documentTypeService.editDocumentType(documentType).subscribe(
+    if (this.edit) {
+      this._documentTypeService
+        .editDocumentType(documentType, documentType.id)
+        .subscribe(
           (res) => {
             const result: any = res;
-            this.back();
+            if (result.id === 1) this.back();
             this._snackBar.open(result.message, '', {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
@@ -110,27 +119,32 @@ export class DocumentTypeAddComponent implements OnInit {
             });
           },
           (err) => {
-            console.log(err);
-          }
-        );
-      } else {
-        this._documentTypeService.addDocumentType(documentType).subscribe(
-          (res) => {
-            const result: any = res;
-            this.back();
-            this._snackBar.open(result.message, '', {
+            this._snackBar.open(err.message, '', {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
               duration: 1500,
             });
-          },
-          (err) => {
-            console.log(err);
           }
         );
-      }
-    } catch (error) {
-      console.log(error);
+    } else {
+      this._documentTypeService.addDocumentType(documentType).subscribe(
+        (res) => {
+          const result: any = res;
+          this._snackBar.open(result.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+          if (result.id === 1) this.back();
+        },
+        (err) => {
+          this._snackBar.open(err.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        }
+      );
     }
   }
 
@@ -150,8 +164,26 @@ export class DocumentTypeAddComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.confirmation = result;
       if (this.confirmation) {
-        //this._DocumentTypeService.deleteDocumentType(0);
-        this.back();
+        this._documentTypeService
+          .deleteDocumentType(this.form.value.id)
+          .subscribe(
+            (res) => {
+              const result: any = res;
+              if (result.id === 1) this.back();
+              this._snackBar.open(result.message, '', {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 1500,
+              });
+            },
+            (err) => {
+              this._snackBar.open(err.message, '', {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 1500,
+              });
+            }
+          );
       }
     });
   }

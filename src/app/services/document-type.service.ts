@@ -20,14 +20,14 @@ export class DocumentTypeService {
   }
 
   deleteDocumentType(id: string) {
-    this.http.delete(`${environment.apiURL}/${this.route}/${id}`);
+    return this.http.delete(`${environment.apiURL}/${this.route}/${id}`);
   }
 
   addDocumentType(documentType: DocumentType) {
     return this.http.post(`${environment.apiURL}/${this.route}`, documentType);
   }
 
-  editDocumentType(documentType: DocumentType) {
-    return this.http.put(`${environment.apiURL}/${this.route}`, documentType);
+  editDocumentType(documentType: DocumentType, id:string) {
+    return this.http.put(`${environment.apiURL}/${this.route}/${id}`, documentType);
   }
 }

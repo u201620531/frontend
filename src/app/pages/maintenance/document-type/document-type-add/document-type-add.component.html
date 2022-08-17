@@ -19,8 +19,9 @@
               <input
                 matInput
                 autocomplete="off"
-                [readonly]="readonlyOption"
+                [readonly]="readonlyId"
                 formControlName="id"
+                size="3"
               />
             </mat-form-field>
           </div>
@@ -54,9 +55,9 @@
                 <mat-option>(Seleccione)</mat-option>
                 <mat-option
                   *ngFor="let supportTable of listSupportTables"
-                  [value]="supportTable.Value"
+                  [value]="supportTable.value"
                 >
-                  {{ supportTable.Description }}
+                  {{ supportTable.description }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -127,7 +128,7 @@
             mat-raised-button
             style="margin-right: 20px"
             type="submit"
-            [disabled]="form.invalid"
+            [disabled]="readonlyOption"
           >
             Guardar
           </button>
@@ -135,7 +136,7 @@
             mat-raised-button
             style="margin-right: 20px"
             type="button"
-            [disabled]="form.invalid"
+            [disabled]="delete"
             (click)="deleteDocumentType()"
           >
             Eliminar
