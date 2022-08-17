@@ -16,12 +16,14 @@ export class WayPayAddComponent implements OnInit {
   form: FormGroup;
   listWayPays: WayPay[] = [];
   IdWayPay: string = '';
+  readonlyId: boolean = false;
   readonlyOption: boolean = false;
+  delete: boolean = true;
   confirmation: boolean = false;
-edit:boolean=false;
+  edit: boolean = false;
 
   constructor(
-    private _WayPayService: WayPayService,
+    private _wayPayService: WayPayService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
@@ -34,7 +36,7 @@ edit:boolean=false;
       abbreviation: ['', Validators.required],
       status: [''],
       creationDate: [''],
-      creationUser: ['']
+      creationUser: [''],
     });
   }
 
@@ -46,7 +48,8 @@ edit:boolean=false;
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
         this.IdWayPay = params['id'];
-        this._WayPayService
+        this.readonlyId = this.IdWayPay ? true : false;
+        this._wayPayService
           .getWayPayById(this.IdWayPay)
           .subscribe((res: any) => {
             this.form.setValue({
@@ -55,19 +58,20 @@ edit:boolean=false;
               abbreviation: res.abbreviation,
               status: res.status,
               creationDate: res.creationDate,
-              creationUser: res.creationUser
+              creationUser: res.creationUser,
             });
             this.edit = true;
           });
       }
       if (params && params['edit']) {
         this.readonlyOption = params['edit'] !== '1' ? true : false;
+        this.delete = params['edit'] !== '1' ? true : false;
       }
     });
   }
 
   getWayPay(id: string) {
-    return this._WayPayService.getWayPayById(id);
+    return this._wayPayService.getWayPayById(id);
   }
 
   addWayPay() {
@@ -81,41 +85,44 @@ edit:boolean=false;
       creationUser: creationUser,
     };
 
-    try {
-      if (this.edit) {
-        this._WayPayService.editWayPay(wayPay).subscribe(
-          (res) => {
-            const result: any = res;
-            this.back();
-            this._snackBar.open(result.message, '', {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 1500,
-            });
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
-      } else {
-        console.log('add');
-        this._WayPayService.addWayPay(wayPay).subscribe(
-          (res) => {
-            const result: any = res;
-            this.back();
-            this._snackBar.open(result.message, '', {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 1500,
-            });
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
-      }
-    } catch (error) {
-      console.log(error);
+    if (this.edit) {
+      this._wayPayService.editWayPay(wayPay, wayPay.id).subscribe(
+        (res) => {
+          const result: any = res;
+          if (result.id === 1) this.back();
+          this._snackBar.open(result.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        },
+        (err) => {
+          this._snackBar.open(err.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        }
+      );
+    } else {
+      this._wayPayService.addWayPay(wayPay).subscribe(
+        (res) => {
+          const result: any = res;
+          if (result.id === 1) this.back();
+          this._snackBar.open(result.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        },
+        (err) => {
+          this._snackBar.open(err.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        }
+      );
     }
   }
 
@@ -135,8 +142,24 @@ edit:boolean=false;
     dialogRef.afterClosed().subscribe((result) => {
       this.confirmation = result;
       if (this.confirmation) {
-        //this._WayPayService.deleteWayPay(0);
-        this.back();
+        this._wayPayService.deleteWayPay(this.form.value.id).subscribe(
+          (res) => {
+            const result: any = res;
+            if (result.id === 1) this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            this._snackBar.open(err.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          }
+        );
       }
     });
   }

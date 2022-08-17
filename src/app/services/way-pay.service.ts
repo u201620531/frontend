@@ -8,9 +8,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class WayPayService {
-  constructor(private http:HttpClient) {}
-  
-  getWayPays():Observable<any> {
+  constructor(private http: HttpClient) {}
+
+  getWayPays(): Observable<any> {
     return this.http.get(`${environment.apiURL}/waypays`);
   }
 
@@ -19,14 +19,14 @@ export class WayPayService {
   }
 
   deleteWayPay(id: string) {
-    this.http.delete(`${environment.apiURL}/waypays/${id}`);
+    return this.http.delete(`${environment.apiURL}/waypays/${id}`);
   }
 
   addWayPay(wayPay: WayPay) {
     return this.http.post(`${environment.apiURL}/waypays`, wayPay);
   }
 
-  editWayPay(wayPay: WayPay) {
-    return this.http.put(`${environment.apiURL}/waypays`, wayPay);
+  editWayPay(wayPay: WayPay, id: string) {
+    return this.http.put(`${environment.apiURL}/waypays/${id}`, wayPay);
   }
 }

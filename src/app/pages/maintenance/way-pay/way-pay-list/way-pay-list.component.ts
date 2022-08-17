@@ -6,15 +6,15 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { WayPay } from 'src/app/interfaces/way-pay';
 import { WayPayService } from 'src/app/services/way-pay.service';
+import { filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-way-pay-list',
   templateUrl: './way-pay-list.component.html',
-  styleUrls: ['./way-pay-list.component.css']
+  styleUrls: ['./way-pay-list.component.css'],
 })
 export class WayPayListComponent implements OnInit {
   listWayPays: WayPay[] = [];
-
   displayedColumns: string[] = [
     'id',
     'description',
@@ -23,28 +23,30 @@ export class WayPayListComponent implements OnInit {
     'Acciones',
   ];
   dataSource!: MatTableDataSource<WayPay>;
+  placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _WayPayService: WayPayService,
+    private _wayPayService: WayPayService,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
+    this.placeholderValue = filters.placeholders.wayPay;
     this.loadWayPays();
   }
 
   loadWayPays() {
-    this._WayPayService.getWayPays().subscribe(
+    this._wayPayService.getWayPays().subscribe(
       (res) => {
         this.listWayPays = res;
         this.dataSource = new MatTableDataSource<WayPay>();
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;    
+        this.dataSource.sort = this.sort;
       },
       (err) => {
         console.log(err.message);
@@ -57,25 +59,35 @@ export class WayPayListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteWayPay(index: string) {
-    this._WayPayService.deleteWayPay(index);
-    this.loadWayPays();
-
-    this._snackBar.open('La Forma de pago fue eliminada con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+  deleteWayPay(id: string) {
+    this._wayPayService.deleteWayPay(id).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+        if (result.id === 1) this.loadWayPays();
+      },
+      (err) => {
+        this._snackBar.open(err.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+      }
+    );
   }
 
-  editWayPay(id: string, edit:number): void {
+  editWayPay(id: string, edit: number): void {
     const extras: NavigationExtras = {
       queryParams: {
         id: id,
-        edit: edit
+        edit: edit,
       },
-    };console.log(extras);
-    
+    };
+
     this._router.navigate(['/dashboard/way-pay-add'], extras);
   }
 }

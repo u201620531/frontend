@@ -7,11 +7,11 @@
 
   <div *ngIf="listWayPays.length > 0">
     <mat-form-field appearance="standard">
-      <mat-label>Filter</mat-label>
+      <mat-label>Filtro (Ingrese descripción):</mat-label>
       <input
         matInput
         (keyup)="applyFilter($event)"
-        placeholder="Ex. ium"
+        placeholder="{{placeholderValue}}"
         #input
         autocomplete="off"
       />
