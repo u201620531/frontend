@@ -11,17 +11,17 @@ export class TransactionTypeService {
 
   constructor(private http: HttpClient) {}
 
-  getTransactionTypes():Observable<any> {
+  getTransactionTypes(): Observable<any> {
     return this.http.get(`${this.baseURL}/transactiontypes`);
   }
 
   getReportTransactionTypes() {
     const list = this.getTransactionTypes();
     let listReport: TransactionType[] = [];
-    
+
     list.subscribe({
-      next: value => console.log(value)
-    })
+      next: (value) => console.log(value),
+    });
 
     // for (var transactionType of list) {
     //   if (transactionType.Type != undefined) {
@@ -38,14 +38,17 @@ export class TransactionTypeService {
   }
 
   deleteTransactionType(id: string) {
-    this.http.delete(`${this.baseURL}/formattypes/${id}`);
+    return this.http.delete(`${this.baseURL}/formattypes/${id}`);
   }
 
   addTransactionType(transactionType: TransactionType) {
     return this.http.post(`${this.baseURL}/transactiontypes`, transactionType);
   }
 
-  editTransactionType(transactionType: TransactionType) {
-    return this.http.put(`${this.baseURL}/transactiontypes`, transactionType);
+  editTransactionType(transactionType: TransactionType, id: string) {
+    return this.http.put(
+      `${this.baseURL}/transactiontypes/${id}`,
+      transactionType
+    );
   }
 }

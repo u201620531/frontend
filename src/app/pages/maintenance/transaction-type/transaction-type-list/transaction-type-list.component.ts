@@ -6,11 +6,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { TransactionType } from 'src/app/interfaces/transaction-type';
 import { TransactionTypeService } from 'src/app/services/transaction-type.service';
+import { filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-transaction-type-list',
   templateUrl: './transaction-type-list.component.html',
-  styleUrls: ['./transaction-type-list.component.css']
+  styleUrls: ['./transaction-type-list.component.css'],
 })
 export class TransactionTypeListComponent implements OnInit {
   listTransactionTypes: any = [];
@@ -21,37 +22,40 @@ export class TransactionTypeListComponent implements OnInit {
     'abbreviation',
     'type',
     'status',
-   'Acciones',
+    'Acciones',
   ];
   dataSource!: MatTableDataSource<TransactionType>;
+  placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _TransactionTypeService: TransactionTypeService,
+    private _transactionTypeService: TransactionTypeService,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
+    this.placeholderValue = filters.placeholders.wayPay;
     this.loadTransactionTypes();
   }
 
   loadTransactionTypes() {
-    this._TransactionTypeService.getTransactionTypes().subscribe(
+    this._transactionTypeService.getTransactionTypes().subscribe(
       (res) => {
         this.listTransactionTypes = res;
         this.dataSource = new MatTableDataSource<TransactionType>();
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;    
+        this.dataSource.sort = this.sort;
       },
       (err) => {
         console.log(err.message);
       }
     );
-    this.listTransactionTypes = this._TransactionTypeService.getTransactionTypes();
+    this.listTransactionTypes =
+      this._transactionTypeService.getTransactionTypes();
     this.dataSource = new MatTableDataSource(this.listTransactionTypes);
   }
 
@@ -60,22 +64,32 @@ export class TransactionTypeListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteTransactionType(index: string) {
-    this._TransactionTypeService.deleteTransactionType(index);
-    this.loadTransactionTypes();
-
-    this._snackBar.open('El Tipo de transacción fue eliminado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+  deleteTransactionType(id: string) {
+    this._transactionTypeService.deleteTransactionType(id).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+        if (result.id === 1) this.loadTransactionTypes();
+      },
+      (err) => {
+        this._snackBar.open(err.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+      }
+    );
   }
 
-  editTransactionType(id: string, edit:number): void {
+  editTransactionType(id: string, edit: number): void {
     const extras: NavigationExtras = {
       queryParams: {
         id: id,
-        edit: edit
+        edit: edit,
       },
     };
     this._router.navigate(['/dashboard/transaction-type-add'], extras);
