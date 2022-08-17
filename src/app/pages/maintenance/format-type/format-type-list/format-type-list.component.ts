@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormatType } from 'src/app/interfaces/format-type';
 import { FormatTypeService } from 'src/app/services/format-type.service';
+import { filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-format-type-list',
@@ -24,28 +25,30 @@ export class FormatTypeListComponent implements OnInit {
     'Acciones',
   ];
   dataSource!: MatTableDataSource<FormatType>;
+  placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _FormatTypeService: FormatTypeService,
+    private _formatTypeService: FormatTypeService,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
+    this.placeholderValue = filters.placeholders.wayPay;
     this.loadFormatTypes();
   }
 
   loadFormatTypes() {
-    this._FormatTypeService.getFormatTypes().subscribe(
+    this._formatTypeService.getFormatTypes().subscribe(
       (res) => {
         this.listFormatTypes = res;
         this.dataSource = new MatTableDataSource<FormatType>();
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;    
+        this.dataSource.sort = this.sort;
       },
       (err) => {
         console.log(err.message);
@@ -59,14 +62,24 @@ export class FormatTypeListComponent implements OnInit {
   }
 
   deleteFormatType(id: string) {
-    this._FormatTypeService.deleteFormatType(id);
-    this.loadFormatTypes();
-
-    this._snackBar.open('El Tipo de formato fue eliminado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    this._formatTypeService.deleteFormatType(id).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+        if (result.id === 1) this.loadFormatTypes();
+      },
+      (err) => {
+        this._snackBar.open(err.message, '', {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+      }
+    );
   }
 
   editFormatType(id: string, edit: number): void {

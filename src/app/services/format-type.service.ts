@@ -20,14 +20,14 @@ export class FormatTypeService {
   }
 
   deleteFormatType(id: string) {
-    this.http.delete(`${this.baseURL}/formattypes/${id}`);
+    return this.http.delete(`${this.baseURL}/formattypes/${id}`);
   }
 
   addFormatType(formatType: FormatType) {
     return this.http.post(`${this.baseURL}/formattypes`, formatType);
   }
 
-  editFormatType(formatType: FormatType) {
-    return this.http.put(`${this.baseURL}/formattypes`, formatType);
+  editFormatType(formatType: FormatType, id: string) {
+    return this.http.put(`${this.baseURL}/formattypes/${id}`, formatType);
   }
 }
