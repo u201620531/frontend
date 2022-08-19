@@ -1,129 +1,131 @@
 <div class="container">
-    <mat-toolbar
-      style="background: cornflowerblue; color: white; font-family: cursive"
-    >
-      <span>Agregar Tipo de formato</span>
-    </mat-toolbar>
-  
-    <mat-card class="cardOptions">
-      <form [formGroup]="form" (ngSubmit)="addFormatType()">
-        <mat-grid-list cols="6" rowHeight="70px">
-          <mat-grid-tile
-            [colspan]="3"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <div class="inputID">
-              <mat-form-field>
-                <mat-label>Id</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  [readonly]="readonlyId"
-                  formControlName="id"
-                />
-              </mat-form-field>
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="3"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <img
-              src="../../../../assets/img/png/document-type.png"
-              alt="document type"
-              width="250"
-              height="70"
-            />
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="2"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <div class="inputID">
-              <mat-form-field appearance="fill" class="inputOptionMedium">
-                <mat-label>Tipo</mat-label>
-                <mat-select
-                  formControlName="type"
-                  [(ngModel)]="idType"
-                  [disabled]="readonlyOption"
-                  multiple
-                >
-                  <mat-option>(Seleccione)</mat-option>
-                  <mat-option
-                    *ngFor="let supportTable of listSupportTables"
-                    [value]="supportTable.value"
-                  >
-                    {{ supportTable.description }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="2"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <div class="inputID">
-              <mat-form-field class="inputOptionMedium">
-                <mat-label>Descripción</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="description"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="3"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
-                <mat-label>Abreviatura</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="abbreviation"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="6"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <button
-              mat-raised-button
-              style="margin-right: 20px"
-              type="submit"
-              [disabled]="readonlyOption"
+  <mat-toolbar
+    style="background: cornflowerblue; color: white; font-family: cursive"
+  >
+    <span>Agregar Tipo de formato</span>
+  </mat-toolbar>
+
+  <mat-card class="cardOptions">
+    <form [formGroup]="form" (ngSubmit)="addFormatType()">
+      <mat-grid-list cols="6" rowHeight="70px">
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field>
+              <mat-label>Id</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                [readonly]="readonlyId"
+                formControlName="id"
+                maxlength="3"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <img
+            src="../../../../assets/img/png/document-type.png"
+            alt="document type"
+            width="250"
+            height="70"
+          />
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field appearance="fill" class="inputOptionMedium">
+              <mat-label>Tipo</mat-label>
+              <mat-select
+                formControlName="type"
+                [(ngModel)]="idType"
+                [disabled]="readonlyOption"
+                multiple
               >
-              Guardar
-            </button>
-            <button
-              mat-raised-button
-              style="margin-right: 20px"
-              type="button"
-              [disabled]="delete"
-              (click)="deleteFormatType()"
-            >
-              Eliminar
-            </button>
-            <button type="button" mat-raised-button (click)="back()">
-              Volver
-            </button>
-          </mat-grid-tile>
-        </mat-grid-list>
-      </form>
-    </mat-card>
-  </div>
-  
+                <mat-option>(Seleccione)</mat-option>
+                <mat-option
+                  *ngFor="let supportTable of listSupportTables"
+                  [value]="supportTable.value"
+                >
+                  {{ supportTable.description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>Descripción</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="description"
+                [readonly]="readonlyOption"
+                maxlength="200"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionLarge">
+              <mat-label>Abreviatura</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="abbreviation"
+                [readonly]="readonlyOption"
+                maxlength="10"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="6"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="submit"
+            [disabled]="readonlyOption"
+          >
+            Guardar
+          </button>
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="button"
+            [disabled]="delete"
+            (click)="deleteFormatType()"
+          >
+            Eliminar
+          </button>
+          <button type="button" mat-raised-button (click)="back()">
+            Volver
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </mat-card>
+</div>

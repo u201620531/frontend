@@ -51,6 +51,7 @@
                 [(ngModel)]="idType"
                 [disabled]="readonlyOption"
                 multiple
+                maxlength="3"
               >
                 <mat-option>(Seleccione)</mat-option>
                 <mat-option
@@ -76,6 +77,7 @@
                 autocomplete="off"
                 formControlName="description"
                 [readonly]="readonlyOption"
+                maxlength="200"
               />
             </mat-form-field>
           </div>
@@ -93,6 +95,7 @@
                 autocomplete="off"
                 formControlName="abbreviation"
                 [readonly]="readonlyOption"
+                maxlength="10"
               />
             </mat-form-field>
           </div>
