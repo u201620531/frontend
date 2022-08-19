@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { Supplier } from 'src/app/interfaces/supplier';
 import { SupplierService } from 'src/app/services/supplier.service';
+import { filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-supplier-list',
@@ -16,17 +17,18 @@ export class SupplierListComponent implements OnInit {
   listSuppliers: Supplier[] = [];
 
   displayedColumns: string[] = [
-    'Id',
-    'Tipo',
-    'Tipo de documento',
-    'N° documento',
-    'Apellido(s) y Nombre(s)/Razon Social',
-    'Nombre comercial',
-    'Dirección',
-    'Estado',
+    'id',
+    'supplierType',
+    'documentType',
+    'documentNumber',
+    'businessName',
+    'comercialName',
+    'address',
+    'status',
     'Acciones',
   ];
   dataSource!: MatTableDataSource<Supplier>;
+  placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -38,17 +40,23 @@ export class SupplierListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.placeholderValue = filters.placeholders.supplier;
     this.loadSuppliers();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   loadSuppliers() {
-    this.listSuppliers = this._supplierService.getSuppliers();
-    this.dataSource = new MatTableDataSource(this.listSuppliers);
+    this._supplierService.getSuppliers().subscribe(
+      (res) => {
+        this.listSuppliers = res;
+        this.dataSource = new MatTableDataSource<Supplier>();
+        this.dataSource.data = res;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
   }
 
   applyFilter(event: Event) {
@@ -56,8 +64,8 @@ export class SupplierListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteSupplier(id: string) {
-    this._supplierService.deleteSupplier(id);
+  deleteSupplier(index: string) {
+    this._supplierService.deleteSupplier(index);
     this.loadSuppliers();
 
     this._snackBar.open('El Proveedor fue eliminado con éxito.', '', {
@@ -67,11 +75,11 @@ export class SupplierListComponent implements OnInit {
     });
   }
 
-  editSupplier(id: string, edit: number): void {
+  editSupplier(id: string, edit:number): void {
     const extras: NavigationExtras = {
       queryParams: {
         id: id,
-        edit: edit,
+        edit: edit
       },
     };
     this._router.navigate(['/dashboard/supplier-add'], extras);

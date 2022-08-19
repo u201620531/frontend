@@ -1,79 +1,33 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Supplier } from '../interfaces/supplier';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SupplierService {
-  listSuppliers: Supplier[] = [
-    {
-      Id: 'N001',
-      SupplierType: 'N',
-      DocumentType: {
-        id: 'DNI',
-        description: 'Documento Nacional de Identidad',
-        status:'A'
-      },
-      DocumentNumber: '12345678',
-      BusinessName: 'Jose Perez',
-      ComercialName: 'Jose Perez',
-      Address: 'Av. Las Flores 1245-Breña',
-      FiscalAddress: 'Av. Las Flores 1245-Breña',
-      State: 'Activo',
-      CreationDate: '01-03-2022',
-      CreationUser: 'JLRE',
-    },
-    {
-      Id: 'N002',
-      SupplierType: 'N',
-      DocumentType: {
-        id: 'DNI',
-        description: 'Documento Nacional de Identidad',
-        status:'A'
-      },
-      DocumentNumber: '45784512',
-      BusinessName: 'Rosa Torres',
-      ComercialName: 'Rosa Torres',
-      Address: 'Av. Gerundios Mz. E Lt. 25 - VES',
-      FiscalAddress: 'Av. Gerundios Mz. E Lt. 25 - VES',
-      State: 'Inactivo',
-      CreationDate: '24-01-2019',
-      CreationUser: 'JLRE',
-    },
-    {
-      Id: 'J0001',
-      SupplierType: 'J',
-      DocumentType: {
-        id: 'RUC',
-        description: 'Registro Unico Contribuyente',
-        status:'A'
-      },
-      DocumentNumber: '123456789101',
-      BusinessName: 'Andamios SRL',
-      ComercialName: 'Andamios SRL',
-      Address: 'Jr. Pachitea 10005 - Cercado de Lima',
-      FiscalAddress: 'Jr. Pachitea 10005 - Cercado de Lima',
-      State: 'Activo',
-      CreationDate: '15-04-2022',
-      CreationUser: 'JLRE',
-    },
-  ];
+  constructor(private http: HttpClient) {}
+  route = 'suppliers';
 
-  constructor() {}
-
-  getSuppliers() {
-    return this.listSuppliers.slice();
+  getSuppliers(): Observable<any> {
+    return this.http.get(`${environment.apiURL}/${this.route}`);
   }
-  
+
   getSupplierById(id: string) {
-    return this.listSuppliers.filter(s => s.Id === id);
+    return this.http.get(`${environment.apiURL}/${this.route}/${id}`);
   }
 
   deleteSupplier(id: string) {
-    this.listSuppliers.splice(1, 1);
+    return this.http.delete(`${environment.apiURL}/${this.route}/${id}`);
   }
 
   addSupplier(supplier: Supplier) {
-    this.listSuppliers.unshift(supplier);
+    return this.http.post(`${environment.apiURL}/${this.route}`, supplier);
+  }
+
+  editSupplier(supplier: Supplier, id: string) {
+    return this.http.put(`${environment.apiURL}/${this.route}/${id}`, supplier);
   }
 }
