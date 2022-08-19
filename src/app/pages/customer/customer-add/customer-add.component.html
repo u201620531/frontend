@@ -20,7 +20,7 @@
                 matInput
                 autocomplete="off"
                 readonly
-                formControlName="Id"
+                formControlName="id"
               />
             </mat-form-field>
           </div>
@@ -46,16 +46,16 @@
             <mat-form-field class="inputOptionMedium">
               <mat-label>Tipo de cliente</mat-label>
               <mat-select
-                formControlName="CustomerType"
+                formControlName="customerType"
                 [(value)]="idCustomerType"
                 [disabled]="readonlyOption"
               >
                 <mat-option>(Seleccione)</mat-option>
                 <mat-option
                   *ngFor="let customerType of listCustomerTypes"
-                  [value]="customerType.Id"
+                  [value]="customerType.value"
                 >
-                  {{ customerType.Description }}
+                  {{ customerType.description }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -70,17 +70,16 @@
             <mat-form-field class="inputOptionMedium">
               <mat-label>Tipo de documento</mat-label>
               <mat-select
-                id="documentType"
-                name="documentType"
+                formControlName="documentType"
                 [(value)]="idDocumentType"
                 [disabled]="readonlyOption"
               >
                 <mat-option>(Seleccione)</mat-option>
                 <mat-option
                   *ngFor="let documentType of listDocumentTypes"
-                  [value]="documentType.id"
+                  [value]="documentType.value"
                 >
-                  {{ documentType.description }}
+                  {{ documentType.abbreviation }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -97,7 +96,7 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="DocumentNumber"
+                formControlName="documentNumber"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -111,14 +110,14 @@
           <div class="inputID">
             <mat-form-field class="inputOptionLarge">
               <mat-label *ngIf="idCustomerType === ''"
-                >Seleccione tipo de cliente</mat-label
+                >Nombre(s)/Razón Social</mat-label
               >
               <mat-label *ngIf="idCustomerType === 'J'">Razón Social</mat-label>
               <mat-label *ngIf="idCustomerType === 'N'">Apellidos</mat-label>
               <input
                 matInput
                 autocomplete="off"
-                formControlName="BusinessName"
+                formControlName="businessName"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -135,7 +134,7 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="ComercialName"
+                formControlName="comercialName"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -152,7 +151,7 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="Address"
+                formControlName="address"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -169,7 +168,29 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="FiscalAddress"
+                formControlName="fiscalAddress"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="creationDate"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Usuario</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="creationUser"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -184,7 +205,7 @@
             mat-raised-button
             style="margin-right: 20px"
             type="submit"
-            [disabled]="form.invalid"
+            [disabled]="readonlyOption"
           >
             Guardar
           </button>
@@ -192,7 +213,7 @@
             mat-raised-button
             style="margin-right: 20px"
             type="button"
-            [disabled]="form.invalid"
+            [disabled]="delete"
             (click)="deleteCustomer()"
           >
             Eliminar

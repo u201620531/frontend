@@ -3,12 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Customer } from 'src/app/interfaces/customer';
-import { CustomerType } from 'src/app/interfaces/customer-type';
-import { DocumentType } from 'src/app/interfaces/document-type';
-import { CustomerTypeService } from 'src/app/services/customer-type.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { DocumentTypeService } from 'src/app/services/document-type.service';
+import { SupportTableService } from 'src/app/services/support-table.service';
+import { supportTables } from 'src/shared/config';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -18,17 +16,20 @@ import { ConfirmationModalComponent } from '../../modals/confirmation-modal/conf
 })
 export class CustomerAddComponent implements OnInit {
   form: FormGroup;
-  listDocumentTypes: DocumentType[] = [];
-  listCustomerTypes: CustomerType[] = [];
+  listDocumentTypes: any = [];
+  listCustomerTypes: any = [];
   IdCustomer = '';
   idDocumentType: string = '';
   idCustomerType: string = '';
+  readonlyId: boolean = false;
   readonlyOption: boolean = false;
+  delete: boolean = true;
   confirmation: boolean = false;
+  edit: boolean = false;
 
   constructor(
     private _documentTypeService: DocumentTypeService,
-    private _customerTypeService: CustomerTypeService,
+    private _supportTableService: SupportTableService,
     private _customerService: CustomerService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
@@ -37,15 +38,18 @@ export class CustomerAddComponent implements OnInit {
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({
-      Id: [''],
-      CustomerType: ['', Validators.required],
-      DocumentType: ['', Validators.required],
-      DocumentNumber: ['', Validators.required],
-      BusinessName: ['', Validators.required],
-      ComercialName: ['', Validators.required],
-      Address: ['', Validators.required],
-      FiscalAddress: ['', Validators.required],
-      State: [''],
+      id: [''],
+      customerType: ['', Validators.required],
+      documentType: ['', Validators.required],
+      documentNumber: ['', Validators.required],
+      businessName: ['', Validators.required],
+      comercialName: ['', Validators.required],
+      address: ['', Validators.required],
+      fiscalAddress: ['', Validators.required],
+      status: [''],
+      creationDate:[''],
+      creationUser:['']
+
     });
   }
 
@@ -59,35 +63,45 @@ export class CustomerAddComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       if (params && params['id']) {
         this.IdCustomer = params['id'];
-        const customer: Customer[] = this.getCustomer(this.IdCustomer);
-        this.idDocumentType = customer[0].DocumentType.id;
-        this.idCustomerType = customer[0].CustomerType;
-        this.form.setValue({
-          Id: customer[0].Id,
-          CustomerType: customer[0].CustomerType,
-          DocumentType: customer[0].DocumentType,
-          DocumentNumber: customer[0].DocumentNumber,
-          BusinessName: customer[0].BusinessName,
-          ComercialName: customer[0].ComercialName,
-          Address: customer[0].Address,
-          FiscalAddress: customer[0].FiscalAddress,
-          State: customer[0].State,
-        });
+        this.readonlyId = this.IdCustomer ? true : false;
+        this._customerService
+          .getCustomerById(this.IdCustomer)
+          .subscribe((res: any) => {
+            this.idDocumentType = res.documentType;
+            this.idCustomerType = res.customerType;
+            this.form.setValue({
+              id: res.id,
+              customerType: res.customerType,
+              documentType: res.documentType,
+              documentNumber: res.documentNumber,
+              businessName: res.businessName,
+              comercialName: res.comercialName,
+              address: res.address,
+              fiscalAddress: res.fiscalAddress,
+              status: res.status,
+              creationDate: res.creationDate,
+              creationUser: res.creationUser,
+            });
+            this.edit = true;
+          });
       }
       if (params && params['edit']) {
         this.readonlyOption = params['edit'] !== '1' ? true : false;
+        this.delete = params['edit'] !== '1' ? true : false;
       }
     });
   }
 
   loadDocumentTypes() {
-    this._documentTypeService.getDocumentTypes().subscribe((res) => {
+    this._supportTableService.getSupportTableById(supportTables.documentTypeCustomer).subscribe((res) => {
       this.listDocumentTypes = res;
     });
   }
 
   loadCustomerTypes() {
-    this.listCustomerTypes = this._customerTypeService.getCustomerTypes();
+    this._supportTableService.getSupportTableById(supportTables.customerType).subscribe((res) => {
+      this.listCustomerTypes = res;
+    });
   }
 
   getCustomer(id: string) {
@@ -95,28 +109,60 @@ export class CustomerAddComponent implements OnInit {
   }
 
   addCustomer() {
-    const customer: Customer = {
-      Id: this.form.value.Id,
-      CustomerType: this.form.value.CustomerType,
-      DocumentType: this.form.value.DocumentType,
-      DocumentNumber: this.form.value.DocumentNumber,
-      BusinessName: this.form.value.BusinessName,
-      ComercialName: this.form.value.ComercialName,
-      Address: this.form.value.Address,
-      FiscalAddress: this.form.value.FiscalAddress,
-      State: this.form.value.State,
-      CreationDate: this.form.value.CreationDate,
-      CreationUser: this.form.value.CreationUser,
+    const customer: any = {
+      id: this.edit ? this.form.value.Id : "",
+      customerType: this.form.value.customerType,
+      documentType: this.form.value.documentType,
+      documentNumber: this.form.value.documentNumber,
+      businessName: this.form.value.businessName,
+      comercialName: this.form.value.comercialName,
+      address: this.form.value.address,
+      fiscalAddress: this.form.value.fiscalAddress,
+      status: this.form.value.status,
+      creationDate: this.form.value.creationDate,
+      creationUser: this.form.value.creationUser,
     };
 
-    this._customerService.addCustomer(customer);
-    this._router.navigate(['/dashboard/customer-list']);
-
-    this._snackBar.open('El Cliente fue registrado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    if (this.edit) {
+      this._customerService.editCustomer(customer, customer.id).subscribe(
+        (res) => {
+          const result: any = res;
+          if (result.id === 1) this.back();
+          this._snackBar.open(result.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        },
+        (err) => {
+          this._snackBar.open(err.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        }
+      );
+    } else {
+      this._customerService.addCustomer(customer).subscribe(
+        (res) => {
+          const result: any = res;
+          this._snackBar.open(result.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+          if (result.id === 1) this.back();
+        },
+        (err) => {
+          console.log(err);
+          this._snackBar.open(err.message, '', {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 1500,
+          });
+        }
+      );
+   }
   }
 
   back() {
@@ -135,8 +181,24 @@ export class CustomerAddComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.confirmation = result;
       if (this.confirmation) {
-        //this._customerService.deleteCustomer(0);
-        this.back();
+        this._customerService.deleteCustomer(this.form.value.id).subscribe(
+          (res) => {
+            const result: any = res;
+            if (result.id === 1) this.back();
+            this._snackBar.open(result.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            this._snackBar.open(err.message, '', {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          }
+        );
       }
     });
   }

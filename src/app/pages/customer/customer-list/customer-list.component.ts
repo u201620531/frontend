@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { Customer } from 'src/app/interfaces/customer';
 import { CustomerService } from 'src/app/services/customer.service';
+import { filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-customer-list',
@@ -16,17 +17,18 @@ export class CustomerListComponent implements OnInit {
   listCustomers: Customer[] = [];
 
   displayedColumns: string[] = [
-    'Id',
-    'Tipo',
-    'Tipo de documento',
-    'N° documento',
-    'Apellido(s) y Nombre(s)/Razon Social',
-    'Nombre comercial',
-    'Dirección',
-    'Estado',
+    'id',
+    'customerType',
+    'documentType',
+    'documentNumber',
+    'businessName',
+    'comercialName',
+    'address',
+    'status',
     'Acciones',
   ];
   dataSource!: MatTableDataSource<Customer>;
+  placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -38,17 +40,23 @@ export class CustomerListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.placeholderValue = filters.placeholders.customer;
     this.loadCustomers();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   loadCustomers() {
-    this.listCustomers = this._customerService.getCustomers();
-    this.dataSource = new MatTableDataSource(this.listCustomers);
+    this._customerService.getCustomers().subscribe(
+      (res) => {
+        this.listCustomers = res;
+        this.dataSource = new MatTableDataSource<Customer>();
+        this.dataSource.data = res;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
   }
 
   applyFilter(event: Event) {
@@ -56,7 +64,7 @@ export class CustomerListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteCustomer(index: number) {
+  deleteCustomer(index: string) {
     this._customerService.deleteCustomer(index);
     this.loadCustomers();
 

@@ -11,18 +11,18 @@ export class ElectronicDocumentsService {
       Serie: 'XXX',
       Number: '12345678',
       Customer: {
-        Id: 'C0000001',
-        CustomerType: 'J',
-        DocumentType: {
+        id: 'C0000001',
+        customerType: 'J',
+        documentType: {
           id: 'RUC',
           description: 'RUC',
           status: 'A'
         },
-        DocumentNumber: '12345678910',
-        BusinessName: 'Logistic Peru SAC',
-        State: 'A',
-        CreationDate: '15-03-2022',
-        CreationUser: 'jlre'
+        documentNumber: '12345678910',
+        businessName: 'Logistic Peru SAC',
+        status: 'A',
+        creationDate: '15-03-2022',
+        creationUser: 'jlre'
       },
       DocumentType: {
         id: 'FAC',
@@ -58,18 +58,18 @@ export class ElectronicDocumentsService {
       Serie: '001',
       Number: '4578451',
       Supplier: {
-        Id: 'S0000001',
-        SupplierType: 'J',
-        DocumentType: {
+        id: 'S0000001',
+        supplierType: 'J',
+        documentType: {
           id: 'RUC',
           description: 'RUC',
           status: 'A'
         },
-        DocumentNumber: '23456789101',
-        BusinessName: 'Andamios Prado SRL',
-        State: 'A',
-        CreationDate: '15-03-2022',
-        CreationUser: 'jlre'
+        documentNumber: '23456789101',
+        businessName: 'Andamios Prado SRL',
+        status: 'A',
+        creationDate: '15-03-2022',
+        creationUser: 'jlre'
       },
       DocumentType: {
         id: 'FAC',
@@ -106,18 +106,18 @@ export class ElectronicDocumentsService {
       Serie: '999',
       Number: '236545',
       Customer: {
-        Id: 'C0000002',
-        CustomerType: 'N',
-        DocumentType: {
+        id: 'C0000002',
+        customerType: 'N',
+        documentType: {
           id: 'DNI',
           description: 'DNI',
           status: 'A'
         },
-        DocumentNumber: '12345678',
-        BusinessName: 'Manuel Juarez',
-        State: 'A',
-        CreationDate: '15-03-2022',
-        CreationUser: 'jlre'
+        documentNumber: '12345678',
+        businessName: 'Manuel Juarez',
+        status: 'A',
+        creationDate: '15-03-2022',
+        creationUser: 'jlre'
       },
       DocumentType: {
         id: 'FAC',
