@@ -1,6 +1,8 @@
 export interface Money {
-  Id: string;
-  Description: string;
-  Abbreviation?: string;
-  State?: string; //A-Activo, I-Inactivo
+  idMoney: string;
+  description: string;
+  signo?: string;
+  status?: string; //A-Activo, I-Inactivo
+  creationDate?: string;
+  creationUser?: string;
 }

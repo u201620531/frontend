@@ -1,18 +1,32 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Money } from '../interfaces/money';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MoneyService {
-  listMoney: Money[] = [
-    { Id: 'SOL', Description: 'Nuevos Soles', Abbreviation: 'S/.' },
-    { Id: 'DOL', Description: 'Dólares Americanos', Abbreviation: '$' },
-  ];
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
+  getMoneys(): Observable<any> {
+    return this.http.get(`${environment.apiURL}/moneys`);
+  }
 
-  getMoneys() {
-    return this.listMoney.slice();
+  getMoneyById(id: string) {
+    return this.http.get(`${environment.apiURL}/moneys/${id}`);
+  }
+
+  deleteMoney(id: string) {
+    return this.http.delete(`${environment.apiURL}/moneys/${id}`);
+  }
+
+  addMoney(money: Money) {
+    return this.http.post(`${environment.apiURL}/moneys`, money);
+  }
+
+  editMoney(money: Money, id: string) {
+    return this.http.put(`${environment.apiURL}/moneys/${id}`, money);
   }
 }
