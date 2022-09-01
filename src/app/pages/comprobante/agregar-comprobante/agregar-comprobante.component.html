@@ -1,0 +1,156 @@
+<div class="container">
+  <mat-toolbar>
+    <span>Agregar Comprobante electrónico</span>
+  </mat-toolbar>
+
+  <mat-card class="cardOptions">
+    <form [formGroup]="form" (ngSubmit)="agregarComprobante()">
+      <mat-grid-list cols="4" rowHeight="70px">
+        <!-- <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="11"
+            [style.background]="'lightblue'"
+          >
+            <img
+              src="../../../../assets/img/png/electronic_document.png"
+              alt="electronic document"
+              width="250"
+              height="250"
+            />
+          </mat-grid-tile> -->
+        <mat-grid-tile
+          [colspan]="4"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionShort">
+            <mat-label>Serie</mat-label>
+            <input matInput autocomplete="off" formControlName="serie" />
+          </mat-form-field>
+          <!-- </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="1"
+            [style.background]="'lightblue'"
+          > -->
+          <mat-form-field class="inputOptionMedium" style="margin-left: 20px">
+            <mat-label>Numero</mat-label>
+            <input matInput autocomplete="off" formControlName="correlativo" />
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="4"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionLarge">
+            <mat-label>Razon Social</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              formControlName="idProveedor"
+              readonly
+            />
+          </mat-form-field>
+          <button
+            type="button"
+            style="min-width: 25px; margin-left: 20px"
+            mat-raised-button
+          >
+            Buscar Proveedor
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionLarge">
+            <mat-label>Tipo de documento</mat-label>
+            <mat-select formControlName="idTipoDocumento">
+              <mat-option>(Seleccione)</mat-option>
+              <mat-option
+                *ngFor="let tipoDocumento of listaTipoDocumento"
+                [value]="tipoDocumento.idTipoDocumento"
+              >
+                {{ tipoDocumento.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionLarge">
+            <mat-label>Forma de Pago</mat-label>
+            <mat-select formControlName="idFormaPago">
+              <mat-option>(Seleccione)</mat-option>
+              <mat-option
+                *ngFor="let formaPago of listaFormaPago"
+                [value]="formaPago.idFormaPago"
+              >
+                {{ formaPago.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionLarge">
+            <mat-label>Moneda</mat-label>
+            <mat-select formControlName="idMoneda">
+              <mat-option>(Seleccione)</mat-option>
+              <mat-option
+                *ngFor="let moneda of listaMoneda"
+                [value]="moneda.idMoneda"
+              >
+                {{ moneda.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionLarge">
+            <mat-label>Total</mat-label>
+            <input matInput autocomplete="off" formControlName="importeTotal" />
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="4"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="submit"
+            [disabled]="readonlyOption"
+          >
+            Guardar
+          </button>
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="button"
+            [disabled]="eliminar"
+            (click)="eliminarComprobante()"
+          >
+            Eliminar
+          </button>
+          <button type="button" mat-raised-button (click)="back()">
+            Volver
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </mat-card>
+</div>

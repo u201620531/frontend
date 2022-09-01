@@ -10,44 +10,33 @@ import { HttpClientModule } from '@angular/common/http';
 
 //Components
 import { LoginComponent } from './pages/auth/login/login.component';
-import { ScanComponent } from './pages/electronic-documents/scan/scan.component';
-import { ListComponent } from './pages/electronic-documents/list/list.component';
-import { AddComponent } from './pages/electronic-documents/add/add.component';
-import { ReportComponent } from './pages/electronic-documents/report/report.component';
-import { GetInformationComponent } from './pages/electronic-documents/get-information/get-information.component';
-//*** Customer */
-import { CustomerAddComponent } from './pages/customer/customer-add/customer-add.component';
-import { CustomerListComponent } from './pages/customer/customer-list/customer-list.component';
-//*** Supplier */
-import { SupplierAddComponent } from './pages/supplier/supplier-add/supplier-add.component';
-import { SupplierListComponent } from './pages/supplier/supplier-list/supplier-list.component';
-//*** DocumentType */
-import { DocumentTypeAddComponent } from './pages/maintenance/document-type/document-type-add/document-type-add.component';
-import { DocumentTypeListComponent } from './pages/maintenance/document-type/document-type-list/document-type-list.component';
 //*** Modals */
 import { ConfirmationModalComponent } from './pages/modals/confirmation-modal/confirmation-modal.component';
 import { SearchModalComponent } from './pages/modals/search-modal/search-modal.component';
-//*** FormatType */
-import { FormatTypeAddComponent } from './pages/maintenance/format-type/format-type-add/format-type-add.component';
-import { FormatTypeListComponent } from './pages/maintenance/format-type/format-type-list/format-type-list.component';
-//*** TransactionType */
-import { TransactionTypeAddComponent } from './pages/maintenance/transaction-type/transaction-type-add/transaction-type-add.component';
-import { TransactionTypeListComponent } from './pages/maintenance/transaction-type/transaction-type-list/transaction-type-list.component';
-//*** WayPay */
-import { WayPayAddComponent } from './pages/maintenance/way-pay/way-pay-add/way-pay-add.component';
-import { WayPayListComponent } from './pages/maintenance/way-pay/way-pay-list/way-pay-list.component';
 //*** UserProfile */
 import { UserProfileAddComponent } from './pages/auth/user-profile/user-profile-add/user-profile-add.component';
 import { UserProfileListComponent } from './pages/auth/user-profile/user-profile-list/user-profile-list.component';
-/*** User */
+//*** User */
 import { UserAddComponent } from './pages/auth/user/user-add/user-add.component';
 import { UserListComponent } from './pages/auth/user/user-list/user-list.component';
 
-/** Services */
-import { FormatTypeService } from './services/format-type.service';
-import { TransactionTypeService } from './services/transaction-type.service';
-import { WayPayService } from './services/way-pay.service';
-import { DocumentTypeService } from './services/document-type.service';
+//*** Producto */
+//*** TipoDocumento */
+import { AgregarTipoDocumentoComponent } from './pages/tipo-documento/agregar-tipo-documento/agregar-tipo-documento.component';
+import { ListarTipoDocumentoComponent } from './pages/tipo-documento/listar-tipo-documento/listar-tipo-documento.component';
+import { AgregarComprobanteComponent } from './pages/comprobante/agregar-comprobante/agregar-comprobante.component';
+import { ListarComprobanteComponent } from './pages/comprobante/listar-comprobante/listar-comprobante.component';
+import { ReporteComprobanteComponent } from './pages/comprobante/reporte-comprobante/reporte-comprobante.component';
+import { PlantillaComprobanteComponent } from './pages/comprobante/plantilla-comprobante/plantilla-comprobante.component';
+import { AgregarFormaPagoComponent } from './pages/forma-pago/agregar-forma-pago/agregar-forma-pago.component';
+import { ListarFormaPagoComponent } from './pages/forma-pago/listar-forma-pago/listar-forma-pago.component';
+import { AgregarProductoComponent } from './pages/producto/agregar-producto/agregar-producto.component';
+import { ListarProductoComponent } from './pages/producto/listar-producto/listar-producto.component';
+import { AgregarEmpleadoComponent } from './pages/empleado/agregar-empleado/agregar-empleado.component';
+import { ListarEmpleadoComponent } from './pages/empleado/listar-empleado/listar-empleado.component';
+import { AgregarProveedorComponent } from './pages/proveedor/agregar-proveedor/agregar-proveedor.component';
+import { ListarProveedorComponent } from './pages/proveedor/listar-proveedor/listar-proveedor.component';
+import { CargarComprobanteComponent } from './pages/comprobante/cargar-comprobante/cargar-comprobante.component';
 
 @NgModule({
   declarations: [
@@ -57,25 +46,23 @@ import { DocumentTypeService } from './services/document-type.service';
     UserListComponent,
     UserProfileAddComponent,
     UserProfileListComponent,
-    AddComponent,
-    ScanComponent,
-    ListComponent,
-    ReportComponent,
-    GetInformationComponent,
-    CustomerAddComponent,
-    CustomerListComponent,
-    SupplierAddComponent,
-    SupplierListComponent,
-    DocumentTypeListComponent,
-    DocumentTypeAddComponent,
-    FormatTypeAddComponent,
-    FormatTypeListComponent,
-    TransactionTypeAddComponent,
-    TransactionTypeListComponent,
-    WayPayAddComponent,
-    WayPayListComponent,
     ConfirmationModalComponent,
     SearchModalComponent,
+    AgregarTipoDocumentoComponent,
+    ListarTipoDocumentoComponent,
+    AgregarComprobanteComponent,
+    CargarComprobanteComponent,
+    ListarComprobanteComponent,
+    ReporteComprobanteComponent,
+    PlantillaComprobanteComponent,
+    AgregarFormaPagoComponent,
+    ListarFormaPagoComponent,
+    AgregarProductoComponent,
+    ListarProductoComponent,
+    AgregarEmpleadoComponent,
+    ListarEmpleadoComponent,
+    AgregarProveedorComponent,
+    ListarProveedorComponent
   ],
   imports: [
     BrowserModule,
@@ -85,10 +72,6 @@ import { DocumentTypeService } from './services/document-type.service';
     HttpClientModule,
   ],
   providers: [
-    FormatTypeService,
-    TransactionTypeService,
-    WayPayService,
-    DocumentTypeService,
   ],
   bootstrap: [AppComponent],
 })

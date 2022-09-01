@@ -5,92 +5,101 @@
     "HasItems": "0"
   },
   {
-    "Name": "Comprobantes electrónicos",
+    "Name": "Comprobante electrónico",
     "Redirect": "",
     "HasItems": "1",
     "SubMenu": [
       {
-        "Name": "Cargar Comprobantes electónicos",
-        "Redirect": "/dashboard/electronic-documents-scan",
+        "Name": "Cargar comprobante electrónico",
+        "Redirect": "/dashboard/cargar-comprobante",
         "banner": "1"
       },
       {
         "Name": "Listado de Comprobantes electónicos",
-        "Redirect": "/dashboard/electronic-documents-list",
+        "Redirect": "/dashboard/listar-comprobante",
         "banner": "1"
       },
       {
         "Name": "Agregar",
-        "Redirect": "/dashboard/electronic-documents-add",
+        "Redirect": "/dashboard/agregar-comprobante",
         "banner": "0"
       },
       {
-        "Name": "Reporte de Comprobantes electónicos digitalizados",
-        "Redirect": "/dashboard/electronic-documents-report",
+        "Name": "Plantilla de Comprobantes electónicos",
+        "Redirect": "/dashboard/´plantilla-comprobante",
+        "banner": "0"
+      },
+      {
+        "Name": "Reporte de Comprobantes electónicos",
+        "Redirect": "/dashboard/reporte-comprobante",
         "banner": "0"
       }
     ]
   },
   {
-    "Name": "Proveedores",
+    "Name": "Proveedor",
     "Redirect": "",
     "HasItems": "1",
     "SubMenu": [
       {
         "Name": "Agregar",
-        "Redirect": "/dashboard/supplier-add",
+        "Redirect": "/dashboard/agregar-proveedor",
         "banner": "0"
       },
       {
         "Name": "Listado",
-        "Redirect": "/dashboard/supplier-list",
+        "Redirect": "/dashboard/listar-proveedor",
         "banner": "0"
       }
     ]
   },
   {
-    "Name": "Mantenimiento",
+    "Name": "Producto",
     "Redirect": "",
     "HasItems": "1",
     "SubMenu": [
       {
-        "Name": "Agregar-Formato",
-        "Redirect": "/dashboard/format-type-add",
+        "Name": "Agregar",
+        "Redirect": "/dashboard/agregar-producto",
         "banner": "0"
       },
       {
-        "Name": "Listador-Formato",
-        "Redirect": "/dashboard/format-type-list",
+        "Name": "Listado",
+        "Redirect": "/dashboard/listar-producto",
+        "banner": "0"
+      }
+    ]
+  },
+  {
+    "Name": "Forma de pago",
+    "Redirect": "",
+    "HasItems": "1",
+    "SubMenu": [
+      {
+        "Name": "Agregar",
+        "Redirect": "/dashboard/agregar-forma-pago",
         "banner": "0"
       },
       {
-        "Name": "Agregar-Transacción",
-        "Redirect": "/dashboard/transaction-type-add",
+        "Name": "Listar",
+        "Redirect": "/dashboard/listar-forma-pago",
+        "banner": "0"
+      }
+    ]
+  },
+  {
+    "Name": "Tipo de documento",
+    "Redirect": "",
+    "HasItems": "1",
+    "SubMenu": [
+      {
+        "Name": "Agregar",
+        "Redirect": "/dashboard/agregar-tipo-documento",
         "banner": "0"
       },
       {
-        "Name": "Listado-Transacción",
-        "Redirect": "/dashboard/transaction-type-list",
-        "banner": "0"
-      },
-      {
-        "Name": "Agregar-Pago",
-        "Redirect": "/dashboard/way-pay-add",
-        "banner": "0"
-      },
-      {
-        "Name": "Listado-Pago",
-        "Redirect": "/dashboard/way-pay-list",
-        "banner": "0"
-      },
-      {
-        "Name": "Agregar-Documento",
-        "Redirect": "/dashboard/document-type-add",
-        "banner": "0"
-      },
-      {
-        "Name": "Listado-Documento",
-        "Redirect": "/dashboard/document-type-list",
+        "Name": "Listar",
+        "Redirect": "/dashboard/listar-tipo-documento",
         "banner": "0"
       }
     ]

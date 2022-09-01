@@ -1,20 +1,21 @@
-export const supportTables = {
-  documentType: 'TTD',
-  formatType: 'TFD',
-  transactionType: 'TDT',
-  documentTypeCustomer: 'TDC',
-  documentTypeSupplier: 'TDS',
-  customerType: 'TCL',
-  supplierType: 'TSL',
+export const soporte = {
+  tipoDocumentoProveedor: 'TDP',
+  tipoProveedor: 'TPV',
+  categoriaProducto: 'CTP',
 };
 
 export const filters = {
   placeholders: {
-    customer: 'Clientes',
-    supplier: 'Proveedores',
-    documentType: 'Tipo de documento',
-    formatType: 'Tipo de formato',
-    transactionType: 'Tipo de transacción',
-    wayPay: 'Forma de pago',
+    comprobante: 'Comprobante electrónico de compra',
+    proveedor: 'Proveedores',
+    tipoDocumento: 'Tipo de documento',
+    producto: 'Productos',
+    formaPago: 'Forma de pago',
   },
+};
+
+export const nombre_servicios = {
+  soporte: 'soportes',
+  proveedor: 'proveedores',
+  producto: 'productos',
 };

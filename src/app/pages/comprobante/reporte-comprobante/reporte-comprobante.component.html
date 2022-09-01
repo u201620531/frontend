@@ -1,0 +1,171 @@
+<div class="container">
+    <mat-toolbar>
+      <span>Reporte de Comprobantes electrónicos digitalizados</span>
+    </mat-toolbar>
+    <mat-card class="cardOptions" [style.background]="'transparent'">
+      <mat-grid-list cols="3" rowHeight="50px">
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-label>Fecha:</mat-label>
+        </mat-grid-tile>
+        <!-- <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field appearance="fill" class="example-form-field">
+            <input matInput [matDatepicker]="datepicker" />
+            <mat-date-range-input [formGroup]="rangeDates" [rangePicker]="picker">
+              <input matStartDate formControlName="start" placeholder="Start date">
+              <input matEndDate formControlName="end" placeholder="End date">
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="datepicker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+            <mat-datepicker #datepicker>
+              <mat-datepicker-actions>
+                <button mat-button matDatepickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDatepickerApply>
+                  Apply
+                </button>
+              </mat-datepicker-actions>
+            </mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile> -->
+        <!-- <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-label>Fechas:</mat-label>
+        </mat-grid-tile> -->
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field appearance="fill" class="example-form-field">
+            <mat-date-range-input [rangePicker]="rangePicker">
+              <input matStartDate placeholder="Start date" />
+              <input matEndDate placeholder="End date" />
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="rangePicker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker>
+              <mat-date-range-picker-actions>
+                <button mat-button matDateRangePickerCancel>Cancel</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply>
+                  Apply
+                </button>
+              </mat-date-range-picker-actions>
+            </mat-date-range-picker>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-label>Tipo de documento:</mat-label>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionShort">
+            <mat-select>
+              <mat-option>(Seleccione)</mat-option>
+              <mat-option
+                *ngFor="let tipoDocumento of listaTipoDocumento"
+                [value]="tipoDocumento.idTipoDocumento"
+              >
+                {{ tipoDocumento.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-label>Tipo de moneda:</mat-label>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionShort">
+            <mat-select>
+              <mat-option>(Seleccione)</mat-option>
+              <mat-option
+                *ngFor="let moneda of listaMoneda"
+                [value]="moneda.idMoneda"
+              >
+                {{ moneda.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-label>Forma de pago:</mat-label>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <mat-form-field class="inputOptionShort">
+            <mat-select>
+              <mat-option>(Seleccione)</mat-option>
+              <mat-option
+                *ngFor="let formaPago of listaFormaPago"
+                [value]="formaPago.idFormaPago"
+              >
+                {{ formaPago.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'lightblue'"
+        >
+          <div style="margin: 10px">
+            <button
+              style="min-width: 25px; margin-right: 20px"
+              mat-raised-button
+              color="primary"
+            >
+              Procesar
+            </button>
+            <button
+              style="min-width: 25px"
+              mat-raised-button
+              color="warn"
+              (click)="cleanFilters()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card>
+  </div>
+  

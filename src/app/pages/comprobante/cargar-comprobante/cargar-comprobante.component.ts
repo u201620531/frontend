@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ScannedElectronicDocument } from 'src/app/interfaces/scanned-electronic-document';
+import { Comprobante } from 'src/app/interfaces/comprobante';
+
 
 @Component({
-  selector: 'app-scan',
-  templateUrl: './scan.component.html',
-  styleUrls: ['./scan.component.css']
+  selector: 'app-cargar-comprobante',
+  templateUrl: './cargar-comprobante.component.html',
+  styleUrls: ['./cargar-comprobante.component.css']
 })
-export class ScanComponent implements OnInit { 
-  listScannedElectronicDocument: ScannedElectronicDocument[] = [];
+export class CargarComprobanteComponent implements OnInit {
+  listScannedElectronicDocument: Comprobante[] = [];
 
   displayedColumns: string[] = [
     'Id',
@@ -19,7 +20,7 @@ export class ScanComponent implements OnInit {
     'Detail',
     'Actions',
   ];
-  dataSource!: MatTableDataSource<ScannedElectronicDocument>;
+  dataSource!: MatTableDataSource<Comprobante>;
   scannedElectronicDocument: any = [];
 
   constructor() { }
