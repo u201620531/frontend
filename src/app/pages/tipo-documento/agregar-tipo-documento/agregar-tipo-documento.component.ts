@@ -3,33 +3,28 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DocumentType } from 'src/app/interfaces/document-type';
-import { SupportTable } from 'src/app/interfaces/support-table';
+import { TipoDocumento } from 'src/app/interfaces/tipo-documento';
 import { ConfirmationModalComponent } from 'src/app/pages/modals/confirmation-modal/confirmation-modal.component';
-import { DocumentTypeService } from 'src/app/services/document-type.service';
-import { SupportTableService } from 'src/app/services/support-table.service';
-import { supportTables } from 'src/shared/config';
+import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 
 @Component({
-  selector: 'app-document-type-add',
-  templateUrl: './document-type-add.component.html',
-  styleUrls: ['./document-type-add.component.css'],
+  selector: 'app-agregar-tipo-documento',
+  templateUrl: './agregar-tipo-documento.component.html',
+  styleUrls: ['./agregar-tipo-documento.component.css']
 })
-export class DocumentTypeAddComponent implements OnInit {
+export class AgregarTipoDocumentoComponent implements OnInit {
   form: FormGroup;
-  listDocumentTypes: DocumentType[] = [];
+  listaTipoDocumento: TipoDocumento[] = [];
   listSupportTables: any = [];
-  IdDocumentType: string = '';
-  idType?: string[] = [];
+  IdTipoDocumento: string = '';
   readonlyId: boolean = false;
   readonlyOption: boolean = false;
-  delete: boolean = true;
+  eliminar: boolean = true;
   confirmation: boolean = false;
-  edit: boolean = false;
+  modificar: boolean = false;
 
   constructor(
-    private _documentTypeService: DocumentTypeService,
-    private _supportTableService: SupportTableService,
+    private _TipoDocumentoService: TipoDocumentoService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
@@ -37,77 +32,63 @@ export class DocumentTypeAddComponent implements OnInit {
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({
-      id: ['', Validators.required],
-      description: ['', Validators.required],
-      abbreviation: ['', Validators.required],
-      type: ['', Validators.required],
-      status: [''],
-      creationDate: [''],
-      creationUser: [''],
+      idTipoDocumento: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      abreviatura: ['', Validators.required],
+      estado: [''],
+      fechaCreacion: [''],
+      usuarioCreacion: [''],
     });
   }
 
   ngOnInit(): void {
-    this.loadSupportTable();
     this.initParams();
   }
 
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
-      if (params && params['id']) {
-        this.IdDocumentType = params['id'];
-        this.readonlyId = this.IdDocumentType ? true : false;
-        this._documentTypeService
-          .getDocumentTypeById(this.IdDocumentType)
+      if (params && params['idTipoDocumento']) {
+        this.IdTipoDocumento = params['idTipoDocumento'];
+        this.readonlyId = this.IdTipoDocumento ? true : false;
+        this._TipoDocumentoService
+          .listarTipoDocumentoPorId(this.IdTipoDocumento)
           .subscribe((res: any) => {
-            const listTypes = res.type.split(',');
-            this.idType = listTypes;
             this.form.setValue({
-              id: res.id,
-              description: res.description,
-              abbreviation: res.abbreviation,
-              status: res.status,
-              type: listTypes,
-              creationDate: res.creationDate,
-              creationUser: res.creationUser,
+              idTipoDocumento: res.idTipoDocumento,
+              descripcion: res.descripcion,
+              abreviatura: res.abreviatura,
+              estado: res.estado,
+              fechaCreacion: res.fechaCreacion,
+              usuarioCreacion: res.usuarioCreacion,
             });
-            this.edit = true;
+            this.modificar = true;
           });
       }
-      if (params && params['edit']) {
-        this.readonlyOption = params['edit'] !== '1' ? true : false;
-        this.delete = params['edit'] !== '1' ? true : false;
+      if (params && params['modificar']) {
+        this.readonlyOption = params['modificar'] !== '1' ? true : false;
+        this.eliminar = params['modificar'] !== '1' ? true : false;
       }
     });
   }
 
-  loadSupportTable() {
-    this._supportTableService
-      .getSupportTableById(supportTables.documentType)
-      .subscribe((res) => {
-        this.listSupportTables = res;
-      });
+  consultarTipoDocumento(id: string) {
+    return this._TipoDocumentoService.listarTipoDocumentoPorId(id);
   }
 
-  getDocumentType(id: string) {
-    return this._documentTypeService.getDocumentTypeById(id);
-  }
-
-  addDocumentType() {
+  agregarTipoDocumento() {
     const creationUser = 'jlre';
-    const documentType: DocumentType = {
-      id: this.form.value.id,
-      description: this.form.value.description,
-      abbreviation: this.form.value.abbreviation,
-      type: this.form.value.type.toString(),
-      status: 'A',
-      creationDate: new Date().toLocaleDateString(),
-      creationUser: creationUser,
+    const TipoDocumento: TipoDocumento = {
+      idTipoDocumento: this.form.value.idTipoDocumento,
+      descripcion: this.form.value.descripcion,
+      abreviatura: this.form.value.abreviatura,
+      estado: 'A',
+      fechaCreacion: new Date().toLocaleDateString(),
+      usuarioCreacion: creationUser
     };
 
-    if (this.edit) {
-      this._documentTypeService
-        .editDocumentType(documentType, documentType.id)
+    if (this.modificar) {
+      this._TipoDocumentoService
+        .actualizarTipoDocumento(TipoDocumento, TipoDocumento.idTipoDocumento)
         .subscribe(
           (res) => {
             const result: any = res;
@@ -127,7 +108,7 @@ export class DocumentTypeAddComponent implements OnInit {
           }
         );
     } else {
-      this._documentTypeService.addDocumentType(documentType).subscribe(
+      this._TipoDocumentoService.agegarTipoDocumento(TipoDocumento).subscribe(
         (res) => {
           const result: any = res;
           this._snackBar.open(result.message, '', {
@@ -149,23 +130,23 @@ export class DocumentTypeAddComponent implements OnInit {
   }
 
   back() {
-    this._router.navigate(['/dashboard/document-type-list']);
+    this._router.navigate(['/dashboard/listar-tipo-documento']);
   }
 
-  deleteDocumentType(): void {
+  eliminarTipoDocumento(): void {
     const dialogRef = this._dialog.open(ConfirmationModalComponent, {
       width: '350px',
       data: {
         confirmation: this.confirmation,
-        question: `¿Está seguro que desea eliminar al Tipo de documento ${this.IdDocumentType}?`,
+        question: `¿Está seguro que desea eliminar al Tipo de documento ${this.IdTipoDocumento}?`,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       this.confirmation = result;
       if (this.confirmation) {
-        this._documentTypeService
-          .deleteDocumentType(this.form.value.id)
+        this._TipoDocumentoService
+          .eliminarTipoDocumento(this.form.value.idTipoDocumento)
           .subscribe(
             (res) => {
               const result: any = res;

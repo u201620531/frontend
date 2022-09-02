@@ -4,27 +4,26 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
-import { DocumentType } from 'src/app/interfaces/document-type';
-import { DocumentTypeService } from 'src/app/services/document-type.service';
+import { TipoDocumento } from 'src/app/interfaces/tipo-documento';
+import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 import { filters } from 'src/shared/config';
 
 @Component({
-  selector: 'app-document-type-list',
-  templateUrl: './document-type-list.component.html',
-  styleUrls: ['./document-type-list.component.css'],
+  selector: 'app-listar-tipo-documento',
+  templateUrl: './listar-tipo-documento.component.html',
+  styleUrls: ['./listar-tipo-documento.component.css']
 })
-export class DocumentTypeListComponent implements OnInit {
-  listDocumentTypes: DocumentType[] = [];
+export class ListarTipoDocumentoComponent implements OnInit {
+  listaTipoDocumento: TipoDocumento[] = [];
 
   displayedColumns: string[] = [
-    'id',
-    'description',
-    'abbreviation',
-    'type',
-    'status',
-    'Acciones',
+    'idTipoDocumento',
+    'descripcion',
+    'abreviatura',
+    'estado',
+    'acciones',
   ];
-  dataSource!: MatTableDataSource<DocumentType>;
+  dataSource!: MatTableDataSource<TipoDocumento>;
   placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -32,21 +31,22 @@ export class DocumentTypeListComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _documentTypeService: DocumentTypeService,
+    private _TipoDocumentoService: TipoDocumentoService,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
-    this.placeholderValue = filters.placeholders.wayPay;
-    this.loadDocumentTypes();
+    this.placeholderValue = filters.placeholders.tipoDocumento;
+    this.listarTipoDocumento();
   }
 
-  loadDocumentTypes() {
-    this._documentTypeService.getDocumentTypes().subscribe(
+  listarTipoDocumento() {
+    this._TipoDocumentoService.listarTipoDocumento().subscribe(
       (res) => {
-        this.listDocumentTypes = res;
-        this.dataSource = new MatTableDataSource<DocumentType>();
+        this.listaTipoDocumento = res;
+        this.dataSource = new MatTableDataSource<TipoDocumento>();
         this.dataSource.data = res;
+        console.log(this.dataSource.data),
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
@@ -56,13 +56,13 @@ export class DocumentTypeListComponent implements OnInit {
     );
   }
 
-  applyFilter(event: Event) {
+  aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteDocumentType(id: string) {
-    this._documentTypeService.deleteDocumentType(id).subscribe(
+  eliminarTipoDocumento(idTipoDocumento: string) {
+    this._TipoDocumentoService.eliminarTipoDocumento(idTipoDocumento).subscribe(
       (res) => {
         const result: any = res;
         this._snackBar.open(result.message, '', {
@@ -70,7 +70,7 @@ export class DocumentTypeListComponent implements OnInit {
           verticalPosition: 'bottom',
           duration: 1500,
         });
-        if (result.id === 1) this.loadDocumentTypes();
+        if (result.id === 1) this.listarTipoDocumento();
       },
       (err) => {
         this._snackBar.open(err.message, '', {
@@ -82,13 +82,13 @@ export class DocumentTypeListComponent implements OnInit {
     );
   }
 
-  editDocumentType(id: string, edit: number): void {
+  modificarTipoDocumento(idTipoDocumento: string, modificar: number): void {
     const extras: NavigationExtras = {
       queryParams: {
-        id: id,
-        edit: edit,
+        idTipoDocumento: idTipoDocumento,
+        modificar: modificar,
       },
     };
-    this._router.navigate(['/dashboard/document-type-add'], extras);
+    this._router.navigate(['/dashboard/agregar-tipo-documento'], extras);
   }
 }
