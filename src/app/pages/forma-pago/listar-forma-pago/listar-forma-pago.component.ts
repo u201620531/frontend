@@ -4,25 +4,25 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
-import { WayPay } from 'src/app/interfaces/way-pay';
-import { WayPayService } from 'src/app/services/way-pay.service';
+import { FormaPago } from 'src/app/interfaces/forma-pago';
+import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { filters } from 'src/shared/config';
 
 @Component({
-  selector: 'app-way-pay-list',
-  templateUrl: './way-pay-list.component.html',
-  styleUrls: ['./way-pay-list.component.css'],
+  selector: 'app-listar-forma-pago',
+  templateUrl: './listar-forma-pago.component.html',
+  styleUrls: ['./listar-forma-pago.component.css'],
 })
-export class WayPayListComponent implements OnInit {
-  listWayPays: WayPay[] = [];
+export class ListarFormaPagoComponent implements OnInit {
+  listaFormaPago: FormaPago[] = [];
   displayedColumns: string[] = [
-    'id',
-    'description',
-    'abbreviation',
-    'status',
-    'Acciones',
+    'idFormaPago',
+    'descripcion',
+    'abreviatura',
+    'estado',
+    'acciones',
   ];
-  dataSource!: MatTableDataSource<WayPay>;
+  dataSource!: MatTableDataSource<FormaPago>;
   placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -30,20 +30,20 @@ export class WayPayListComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _wayPayService: WayPayService,
+    private _FormaPagoService: FormaPagoService,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
-    this.placeholderValue = filters.placeholders.wayPay;
-    this.loadWayPays();
+    this.placeholderValue = filters.placeholders.formaPago;
+    this.listarFormasPago();
   }
 
-  loadWayPays() {
-    this._wayPayService.getWayPays().subscribe(
+  listarFormasPago() {
+    this._FormaPagoService.listarFormaPago().subscribe(
       (res) => {
-        this.listWayPays = res;
-        this.dataSource = new MatTableDataSource<WayPay>();
+        this.listaFormaPago = res;
+        this.dataSource = new MatTableDataSource<FormaPago>();
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -54,13 +54,13 @@ export class WayPayListComponent implements OnInit {
     );
   }
 
-  applyFilter(event: Event) {
+  aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteWayPay(id: string) {
-    this._wayPayService.deleteWayPay(id).subscribe(
+  eliminarFormaPago(idFormaPago: string) {
+    this._FormaPagoService.eliminarFormaPago(idFormaPago).subscribe(
       (res) => {
         const result: any = res;
         this._snackBar.open(result.message, '', {
@@ -68,7 +68,7 @@ export class WayPayListComponent implements OnInit {
           verticalPosition: 'bottom',
           duration: 1500,
         });
-        if (result.id === 1) this.loadWayPays();
+        if (result.id === 1) this.listarFormasPago();
       },
       (err) => {
         this._snackBar.open(err.message, '', {
@@ -80,14 +80,14 @@ export class WayPayListComponent implements OnInit {
     );
   }
 
-  editWayPay(id: string, edit: number): void {
+  modificarFormaPago(idFormaPago: string, edit: number): void {
     const extras: NavigationExtras = {
       queryParams: {
-        id: id,
+        idFormaPago: idFormaPago,
         edit: edit,
       },
     };
 
-    this._router.navigate(['/dashboard/way-pay-add'], extras);
+    this._router.navigate(['/dashboard/agregar-forma-pago'], extras);
   }
 }

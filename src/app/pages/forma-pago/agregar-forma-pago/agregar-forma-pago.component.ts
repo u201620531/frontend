@@ -3,27 +3,28 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WayPay } from 'src/app/interfaces/way-pay';
+import { FormaPago } from 'src/app/interfaces/forma-pago';
 import { ConfirmationModalComponent } from 'src/app/pages/modals/confirmation-modal/confirmation-modal.component';
-import { WayPayService } from 'src/app/services/way-pay.service';
+import { FormaPagoService } from 'src/app/services/forma-pago.service';
+
 
 @Component({
-  selector: 'app-way-pay-add',
-  templateUrl: './way-pay-add.component.html',
-  styleUrls: ['./way-pay-add.component.css'],
+  selector: 'app-agregar-forma-pago',
+  templateUrl: './agregar-forma-pago.component.html',
+  styleUrls: ['./agregar-forma-pago.component.css']
 })
-export class WayPayAddComponent implements OnInit {
-  form: FormGroup;
-  listWayPays: WayPay[] = [];
-  IdWayPay: string = '';
+export class AgregarFormaPagoComponent implements OnInit {
+    form: FormGroup;
+  listaFormaPago: FormaPago[] = [];
+  idFormaPago: string = '';
   readonlyId: boolean = false;
   readonlyOption: boolean = false;
-  delete: boolean = true;
+  eliminar: boolean = true;
   confirmation: boolean = false;
-  edit: boolean = false;
+  modificar: boolean = false;
 
   constructor(
-    private _wayPayService: WayPayService,
+    private _formaPagoService: FormaPagoService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
@@ -31,12 +32,12 @@ export class WayPayAddComponent implements OnInit {
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({
-      id: ['', Validators.required],
-      description: ['', Validators.required],
-      abbreviation: ['', Validators.required],
-      status: [''],
-      creationDate: [''],
-      creationUser: [''],
+      idFormaPago: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      abreviatura: ['', Validators.required],
+      estado: [''],
+      fechaCreacion: [''],
+      usuarioCreacion: [''],
     });
   }
 
@@ -46,47 +47,43 @@ export class WayPayAddComponent implements OnInit {
 
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
-      if (params && params['id']) {
-        this.IdWayPay = params['id'];
-        this.readonlyId = this.IdWayPay ? true : false;
-        this._wayPayService
-          .getWayPayById(this.IdWayPay)
+      if (params && params['idFormaPago']) {
+        this.idFormaPago = params['idFormaPago'];
+        this.readonlyId = this.idFormaPago ? true : false;
+        this._formaPagoService
+          .listarFormaPagoPorId(this.idFormaPago)
           .subscribe((res: any) => {
             this.form.setValue({
-              id: res.id,
-              description: res.description,
-              abbreviation: res.abbreviation,
-              status: res.status,
-              creationDate: res.creationDate,
-              creationUser: res.creationUser,
+              idFormaPago: res.idFormaPago,
+              descripcion: res.descripcion,
+              abreviatura: res.abreviatura,
+              estado: res.estado,
+              fechaCreacion: res.fechaCreacion,
+              usuarioCreacion: res.usuarioCreacion,
             });
-            this.edit = true;
+            this.modificar = true;
           });
       }
-      if (params && params['edit']) {
-        this.readonlyOption = params['edit'] !== '1' ? true : false;
-        this.delete = params['edit'] !== '1' ? true : false;
+      if (params && params['modificar']) {
+        this.readonlyOption = params['modificar'] !== '1' ? true : false;
+        this.eliminar = params['modificar'] !== '1' ? true : false;
       }
     });
   }
 
-  getWayPay(id: string) {
-    return this._wayPayService.getWayPayById(id);
-  }
-
-  addWayPay() {
+  agregarFormaPago() {
     const creationUser = 'jlre';
-    const wayPay: WayPay = {
-      id: this.form.value.id,
-      description: this.form.value.description,
-      abbreviation: this.form.value.abbreviation,
-      status: 'A',
-      creationDate: new Date().toLocaleDateString(),
-      creationUser: creationUser,
+    const formaPago: FormaPago = {
+      idFormaPago: this.form.value.idFormaPago,
+      descripcion: this.form.value.descripcion,
+      abreviatura: this.form.value.abreviatura,
+      estado: 'A',
+      fechaCreacion: new Date().toLocaleDateString(),
+      usuarioCreacion: creationUser,
     };
 
-    if (this.edit) {
-      this._wayPayService.editWayPay(wayPay, wayPay.id).subscribe(
+    if (this.modificar) {
+      this._formaPagoService.actualizarFormaPago(formaPago, formaPago.idFormaPago).subscribe(
         (res) => {
           const result: any = res;
           if (result.id === 1) this.back();
@@ -105,7 +102,7 @@ export class WayPayAddComponent implements OnInit {
         }
       );
     } else {
-      this._wayPayService.addWayPay(wayPay).subscribe(
+      this._formaPagoService.agregarFormaPago(formaPago).subscribe(
         (res) => {
           const result: any = res;
           if (result.id === 1) this.back();
@@ -127,22 +124,22 @@ export class WayPayAddComponent implements OnInit {
   }
 
   back() {
-    this._router.navigate(['/dashboard/way-pay-list']);
+    this._router.navigate(['/dashboard/listar-forma-pago']);
   }
 
-  deleteWayPay(): void {
+  eliminarformaPago(): void {
     const dialogRef = this._dialog.open(ConfirmationModalComponent, {
       width: '350px',
       data: {
         confirmation: this.confirmation,
-        question: `¿Está seguro que desea eliminar la Forma de pago ${this.IdWayPay}?`,
+        question: `¿Está seguro que desea eliminar la Forma de pago '${this.idFormaPago}'?`,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       this.confirmation = result;
       if (this.confirmation) {
-        this._wayPayService.deleteWayPay(this.form.value.id).subscribe(
+        this._formaPagoService.eliminarFormaPago(this.form.value.idFormaPago).subscribe(
           (res) => {
             const result: any = res;
             if (result.id === 1) this.back();

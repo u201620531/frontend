@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WayPayListComponent } from './way-pay-list.component';
+import { AgregarFormaPagoComponent } from './agregar-forma-pago.component';
 
-describe('WayPayListComponent', () => {
-  let component: WayPayListComponent;
-  let fixture: ComponentFixture<WayPayListComponent>;
+describe('AgregarFormaPagoComponent', () => {
+  let component: AgregarFormaPagoComponent;
+  let fixture: ComponentFixture<AgregarFormaPagoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WayPayListComponent ]
+      declarations: [ AgregarFormaPagoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WayPayListComponent);
+    fixture = TestBed.createComponent(AgregarFormaPagoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
