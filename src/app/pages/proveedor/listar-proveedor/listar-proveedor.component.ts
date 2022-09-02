@@ -4,30 +4,29 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
-import { Supplier } from 'src/app/interfaces/supplier';
-import { SupplierService } from 'src/app/services/supplier.service';
+import { Proveedor } from 'src/app/interfaces/proveedor';
+import { ProveedorService } from 'src/app/services/proveedor.service';
 import { filters } from 'src/shared/config';
 
 @Component({
-  selector: 'app-supplier-list',
-  templateUrl: './supplier-list.component.html',
-  styleUrls: ['./supplier-list.component.css'],
+  selector: 'app-listar-proveedor',
+  templateUrl: './listar-proveedor.component.html',
+  styleUrls: ['./listar-proveedor.component.css'],
 })
-export class SupplierListComponent implements OnInit {
-  listSuppliers: Supplier[] = [];
-
+export class ListarProveedorComponent implements OnInit {
+  listaProveedores: Proveedor[] = [];
   displayedColumns: string[] = [
-    'id',
-    'supplierType',
-    'documentType',
-    'documentNumber',
-    'businessName',
-    'comercialName',
-    'address',
-    'status',
-    'Acciones',
+    'idProveedor',
+    'idTipoProveedor',
+    'idTipoDocumento',
+    'nroDocumento',
+    'razonSocial',
+    'nombreComercial',
+    'direccion',
+    'estado',
+    'acciones',
   ];
-  dataSource!: MatTableDataSource<Supplier>;
+  dataSource!: MatTableDataSource<Proveedor>;
   placeholderValue: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -35,20 +34,20 @@ export class SupplierListComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _supplierService: SupplierService,
+    private _proveedorService: ProveedorService,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
-    this.placeholderValue = filters.placeholders.supplier;
-    this.loadSuppliers();
+    this.placeholderValue = filters.placeholders.proveedor;
+    this.listarProveedores();
   }
 
-  loadSuppliers() {
-    this._supplierService.getSuppliers().subscribe(
+  listarProveedores() {
+    this._proveedorService.listarPoveedores().subscribe(
       (res) => {
-        this.listSuppliers = res;
-        this.dataSource = new MatTableDataSource<Supplier>();
+        this.listaProveedores = res;
+        this.dataSource = new MatTableDataSource<Proveedor>();
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -59,14 +58,14 @@ export class SupplierListComponent implements OnInit {
     );
   }
 
-  applyFilter(event: Event) {
+  aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  deleteSupplier(index: string) {
-    this._supplierService.deleteSupplier(index);
-    this.loadSuppliers();
+  eliminarProveedor(idProveedor: string) {
+    this._proveedorService.eliminarProveedor(idProveedor);
+    this.listarProveedores();
 
     this._snackBar.open('El Proveedor fue eliminado con éxito.', '', {
       horizontalPosition: 'center',
@@ -75,13 +74,13 @@ export class SupplierListComponent implements OnInit {
     });
   }
 
-  editSupplier(id: string, edit:number): void {
+  modificarProveedor(idProveedor: string, modificar: number): void {
     const extras: NavigationExtras = {
       queryParams: {
-        id: id,
-        edit: edit
+        idProveedor: idProveedor,
+        modificar: modificar,
       },
     };
-    this._router.navigate(['/dashboard/supplier-add'], extras);
+    this._router.navigate(['/dashboard/agregar-proveedor'], extras);
   }
 }

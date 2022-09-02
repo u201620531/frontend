@@ -6,10 +6,10 @@
   </mat-toolbar>
 
   <mat-card class="cardOptions">
-    <form [formGroup]="form" (ngSubmit)="addsupplier()">
+    <form [formGroup]="form" (ngSubmit)="agregarProveedor()">
       <mat-grid-list cols="6" rowHeight="70px">
         <mat-grid-tile
-          [colspan]="3"
+          [colspan]="2"
           [rowspan]="1"
           [style.background]="'transparent'"
         >
@@ -20,19 +20,19 @@
                 matInput
                 autocomplete="off"
                 readonly
-                formControlName="id"
+                formControlName="idProveedor"
               />
             </mat-form-field>
           </div>
         </mat-grid-tile>
         <mat-grid-tile
-          [colspan]="3"
+          [colspan]="4"
           [rowspan]="1"
           [style.background]="'transparent'"
         >
           <img
-            src="../../../../assets/img/png/suppliers.png"
-            alt="suppliers"
+            src="../../../../assets/img/png/proveedor.png"
+            alt="proveedor"
             width="350"
             height="70"
           />
@@ -46,16 +46,16 @@
             <mat-form-field class="inputOptionMedium">
               <mat-label>Tipo de cliente</mat-label>
               <mat-select
-                formControlName="supplierType"
-                [(value)]="idsupplierType"
+                formControlName="idTipoProveedor"
+                [(value)]="idTipoProveedor"
                 [disabled]="readonlyOption"
               >
                 <mat-option>(Seleccione)</mat-option>
                 <mat-option
-                  *ngFor="let supplierType of listsupplierTypes"
-                  [value]="supplierType.value"
+                  *ngFor="let tipoProveedor of listaTiposProveedor"
+                  [value]="tipoProveedor.valor"
                 >
-                  {{ supplierType.description }}
+                  {{ tipoProveedor.descripcion }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -70,16 +70,16 @@
             <mat-form-field class="inputOptionMedium">
               <mat-label>Tipo de documento</mat-label>
               <mat-select
-                formControlName="documentType"
-                [(value)]="idDocumentType"
+                formControlName="idTipoDocumento"
+                [(value)]="idTipoDocumento"
                 [disabled]="readonlyOption"
               >
                 <mat-option>(Seleccione)</mat-option>
                 <mat-option
-                  *ngFor="let documentType of listDocumentTypes"
-                  [value]="documentType.value"
+                  *ngFor="let tipoDocumento of listaTiposDocumento"
+                  [value]="tipoDocumento.valor"
                 >
-                  {{ documentType.abbreviation }}
+                  {{ tipoDocumento.abreviatura }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -96,7 +96,7 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="documentNumber"
+                formControlName="nroDocumento"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -109,15 +109,17 @@
         >
           <div class="inputID">
             <mat-form-field class="inputOptionLarge">
-              <mat-label *ngIf="idsupplierType === ''"
+              <mat-label *ngIf="idTipoProveedor === ''"
                 >Nombre(s)/Razón Social</mat-label
               >
-              <mat-label *ngIf="idsupplierType === 'J'">Razón Social</mat-label>
-              <mat-label *ngIf="idsupplierType === 'N'">Apellidos</mat-label>
+              <mat-label *ngIf="idTipoProveedor === 'J'"
+                >Razón Social</mat-label
+              >
+              <mat-label *ngIf="idTipoProveedor === 'N'">Apellidos</mat-label>
               <input
                 matInput
                 autocomplete="off"
-                formControlName="businessName"
+                formControlName="razonSocial"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -134,7 +136,41 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="comercialName"
+                formControlName="nombreComercial"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID" >
+            <mat-form-field class="inputOptionLarge">
+              <mat-label>Dirección</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="direccion"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID" >
+            <mat-form-field class="inputOptionLarge">
+              <mat-label>Dirección fiscal</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="direccionFiscal"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -147,11 +183,11 @@
         >
           <div class="inputID">
             <mat-form-field class="inputOptionLarge">
-              <mat-label>Dirección</mat-label>
+              <mat-label>Email 1</mat-label>
               <input
                 matInput
                 autocomplete="off"
-                formControlName="address"
+                formControlName="email1"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -162,13 +198,24 @@
           [rowspan]="1"
           [style.background]="'transparent'"
         >
-          <div class="inputID" style="width: 100%">
+          <div class="inputID">
             <mat-form-field class="inputOptionLarge">
-              <mat-label>Dirección fiscal</mat-label>
+              <mat-label>Email 2</mat-label>
               <input
                 matInput
                 autocomplete="off"
-                formControlName="fiscalAddress"
+                formControlName="email2"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Estado</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="estado"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -179,7 +226,7 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="creationDate"
+                formControlName="fechaCreacion"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -190,7 +237,7 @@
               <input
                 matInput
                 autocomplete="off"
-                formControlName="creationUser"
+                formControlName="usuarioCreacion"
                 [readonly]="readonlyOption"
               />
             </mat-form-field>
@@ -213,8 +260,8 @@
             mat-raised-button
             style="margin-right: 20px"
             type="button"
-            [disabled]="delete"
-            (click)="deleteSupplier()"
+            [disabled]="eliminar"
+            (click)="eliminarProveedor()"
           >
             Eliminar
           </button>
