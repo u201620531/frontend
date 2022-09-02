@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SupportTableService } from './support-table.service';
+import { MonedaService } from './moneda.service';
 
-describe('SupportTableService', () => {
-  let service: SupportTableService;
+describe('MonedaService', () => {
+  let service: MonedaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SupportTableService);
+    service = TestBed.inject(MonedaService);
   });
 
   it('should be created', () => {
