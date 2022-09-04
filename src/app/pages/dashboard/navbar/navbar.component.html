@@ -2,7 +2,7 @@
   <button mat-button [matMenuTriggerFor]="menuPrincipal">...</button>
   <span>SABFZT</span>
   <mat-menu #menuPrincipal="matMenu">
-    <ng-container *ngFor="let mainItem of menu">
+    <!-- <ng-container *ngFor="let mainItem of menu">
       <div *ngIf="mainItem.HasItems === '0'">
         <button mat-menu-item routerLink="{{ mainItem.Redirect }}">
           {{ mainItem.Name }}
@@ -20,6 +20,42 @@
           >
             {{ subItem.Name }}
           </button>
+        </mat-menu>
+      </div>
+    </ng-container> -->
+    <ng-container *ngFor="let mainItem of menu">
+      <div *ngIf="mainItem.HasItems === '0'">
+        <button mat-menu-item routerLink="{{ mainItem.Redirect }}">
+          {{ mainItem.Name }}
+        </button>
+      </div>
+      <div *ngIf="mainItem.HasItems === '1'">
+        <button mat-menu-item [matMenuTriggerFor]="sub_menu">
+          {{ mainItem.Name }}
+        </button>
+          <mat-menu #sub_menu="matMenu">
+        <div *ngFor="let sme of mainItem.SubMenu">
+          <div *ngIf="sme.HasChild === '0'">
+            
+            <button mat-menu-item routerLink="{{ sme.Redirect }}">
+              {{ sme.Name }}
+            </button>
+          </div>
+          <div *ngIf="sme.HasChild === '1'">
+                      <button mat-menu-item [matMenuTriggerFor]="sume">
+              {{ sme.Name }}
+            </button>
+            <mat-menu #sume="matMenu">
+              <button
+                *ngFor="let sItem of sme.Items"
+                mat-menu-item
+                routerLink="{{ sItem.Redirect }}"
+              >
+                {{ sItem.Name }}
+              </button>
+            </mat-menu>
+        </div>
+      </div>
         </mat-menu>
       </div>
     </ng-container>

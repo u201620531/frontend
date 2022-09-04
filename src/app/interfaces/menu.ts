@@ -11,6 +11,12 @@ export interface Menu {
         Id: string;
         Name: string;
         Redirect: string;
-        banner: string
+        banner: string,
+        HasChild: string,
+        Items: Array<{
+            Name:string,
+            Redirect:string,
+            banner:string
+        }>
     }>
 }
