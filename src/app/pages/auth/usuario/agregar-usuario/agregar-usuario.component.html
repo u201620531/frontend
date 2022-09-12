@@ -1,0 +1,187 @@
+<div class="container">
+  <mat-toolbar
+    style="background: cornflowerblue; color: white; font-family: cursive"
+  >
+    <span>Agregar Usuario</span>
+  </mat-toolbar>
+
+  <mat-card class="cardOptions">
+    <form [formGroup]="form" (ngSubmit)="agregarUsuario()">
+      <mat-grid-list cols="6" rowHeight="70px">
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>Empleado</mat-label>
+              <mat-select
+                formControlName="idEmpleado"
+                [(value)]="idEmpleado"
+                [disabled]="readonlyOption"
+              >
+                <mat-option>(Seleccione)</mat-option>
+                <mat-option
+                  *ngFor="let empleado of listaEmpleados"
+                  [value]="empleado.idEmpleado"
+                  (click)="consultarEmpleado();"
+                >
+                  {{ empleado.nombre }} {{ empleado.apellido }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="4"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <img
+            src="../../../../assets/img/png/empleado.png"
+            alt="Usuario"
+            width="350"
+            height="70"
+          />
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field>
+              <mat-label>Código usuario</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                readonly
+                formControlName="codigoUsuario"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>Perfil</mat-label>
+              <mat-select
+                formControlName="idPerfilUsuario"
+                [(value)]="idPerfilUsuario"
+                [disabled]="readonlyOption"
+              >
+                <mat-option>(Seleccione)</mat-option>
+                <mat-option
+                  *ngFor="let perfilUsuario of listaPerfilesUsuario"
+                  [value]="perfilUsuario.idPerfilUsuario"
+                >
+                  {{ perfilUsuario.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <div class="inputID" style="display:none;">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>Contraseña</mat-label>
+              <input
+                type="password"
+                matInput
+                autocomplete="off"
+                formControlName="contrasena"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+        <!-- </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        > -->
+          <div style="display:none;" class="inputID">
+            <mat-form-field class="inputOptionMedium">
+              <mat-label>Confirmar Contraseña</mat-label>
+              <input
+                type="password"
+                matInput
+                autocomplete="off"
+                formControlName="confirmarContrasena"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Estado</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="estado"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="fechaCreacion"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Usuario</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="usuarioCreacion"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="6"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="submit"
+            [disabled]="readonlyOption"
+          >
+            Guardar
+          </button>
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="button"
+            [disabled]="eliminar"
+            (click)="eliminarUsuario()"
+          >
+            Eliminar
+          </button>
+          <button type="button" mat-raised-button (click)="back()">
+            Volver
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+  </mat-card>
+</div>
