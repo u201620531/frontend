@@ -1,83 +1,70 @@
 <mat-toolbar color="primary">
   <button mat-button [matMenuTriggerFor]="menuPrincipal">...</button>
-  <span>SABFZT</span>
+  <span>{{nombreEmpresa}}</span>
   <mat-menu #menuPrincipal="matMenu">
-    <!-- <ng-container *ngFor="let mainItem of menu">
-      <div *ngIf="mainItem.HasItems === '0'">
-        <button mat-menu-item routerLink="{{ mainItem.Redirect }}">
-          {{ mainItem.Name }}
+    <ng-container *ngFor="let modulo of modulos">
+      <div *ngIf="modulo.esPrincipal === 1">
+        <button mat-menu-item routerLink="{{ modulo.vistaModulo }}">
+          {{ modulo.nombreModulo }}
         </button>
       </div>
-      <div *ngIf="mainItem.HasItems === '1'">
-        <button mat-menu-item [matMenuTriggerFor]="sub_menu">
-          {{ mainItem.Name }}
+      <div *ngIf="modulo.esPrincipal === 0">
+        <button mat-menu-item [matMenuTriggerFor]="menu_trigger">
+          {{ modulo.nombreModulo }}
         </button>
-        <mat-menu #sub_menu="matMenu">
-          <button
-            *ngFor="let subItem of mainItem.SubMenu"
-            mat-menu-item
-            routerLink="{{ subItem.Redirect }}"
-          >
-            {{ subItem.Name }}
-          </button>
-        </mat-menu>
-      </div>
-    </ng-container> -->
-    <ng-container *ngFor="let mainItem of menu">
-      <div *ngIf="mainItem.HasItems === '0'">
-        <button mat-menu-item routerLink="{{ mainItem.Redirect }}">
-          {{ mainItem.Name }}
-        </button>
-      </div>
-      <div *ngIf="mainItem.HasItems === '1'">
-        <button mat-menu-item [matMenuTriggerFor]="sub_menu">
-          {{ mainItem.Name }}
-        </button>
-          <mat-menu #sub_menu="matMenu">
-        <div *ngFor="let sme of mainItem.SubMenu">
-          <div *ngIf="sme.HasChild === '0'">
-            
-            <button mat-menu-item routerLink="{{ sme.Redirect }}">
-              {{ sme.Name }}
-            </button>
-          </div>
-          <div *ngIf="sme.HasChild === '1'">
-                      <button mat-menu-item [matMenuTriggerFor]="sume">
-              {{ sme.Name }}
-            </button>
-            <mat-menu #sume="matMenu">
-              <button
-                *ngFor="let sItem of sme.Items"
-                mat-menu-item
-                routerLink="{{ sItem.Redirect }}"
-              >
-                {{ sItem.Name }}
+        <mat-menu #menu_trigger="matMenu">
+          <div *ngFor="let menu of modulo.menu">
+            <div *ngIf="menu.esPadre === 0">
+              <button mat-menu-item routerLink="{{ menu.vistaMenu }}">
+                {{ menu.nombreMenu }}
               </button>
-            </mat-menu>
-        </div>
-      </div>
+            </div>
+            <div *ngIf="menu.esPadre === 1">
+              <button mat-menu-item [matMenuTriggerFor]="submenu_trigger">
+                {{ menu.nombreMenu }}
+              </button>
+              <mat-menu #submenu_trigger="matMenu">
+                <button
+                  *ngFor="let submenu of menu.subMenu"
+                  mat-menu-item
+                  routerLink="{{ submenu.vistaSubMenu }}"
+                >
+                  {{ submenu.nombreSubMenu }}
+                </button>
+              </mat-menu>
+            </div>
+          </div>
         </mat-menu>
       </div>
     </ng-container>
   </mat-menu>
   <span class="button-spacer"></span>
-  <div *ngFor="let men of menu">
-    <ul *ngIf="men.HasItems === '1'">
-      <li *ngFor="let subMen of men.SubMenu">
-        <div class="menu-item"
-          *ngIf="subMen.banner === '1'"
-          mat-menu-item
-          routerLink="{{ subMen.Redirect }}"
-        >
-          {{ subMen.Name }}
-        </div>
-      </li>
-    </ul>
+  <div *ngFor="let modulo of modulos">
+    <div *ngIf="modulo.esPrincipal === 1">
+      <div *ngFor="let menu of modulo.menu">
+        <ul>
+          <li *ngFor="let subMenu of menu.subMenu">
+            <div
+              class="menu-item"
+              *ngIf="subMenu.banner === 1"
+              mat-menu-item
+              routerLink="{{ subMenu.vistaSubMenu }}"
+            >
+              {{ subMenu.nombreSubMenu }}
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
+  <div></div>
   <span class="button-spacer"></span>
-  <button
+  <label *ngIf="currentUsuario !== undefined">{{
+    currentUsuario.codigoUsuario
+  }}</label
+  ><button
     mat-icon-button
-    routerLink="/login"
+    (click)="logout()"
     class="example-icon"
     aria-label="menu icon"
   >

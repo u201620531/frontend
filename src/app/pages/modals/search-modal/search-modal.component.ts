@@ -15,8 +15,8 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Employee } from 'src/app/interfaces/employee';
-import { EmployeeService } from 'src/app/services/employee.service';
+import { Empleado } from 'src/app/interfaces/empleado';
+import { EmpleadoService } from 'src/app/services/empleado.service';
 import {
   animate,
   state,
@@ -26,7 +26,7 @@ import {
 } from '@angular/animations';
 
 export interface DialogData {
-  idEmployee: string;
+  idEmpleado: string;
 }
 
 @Component({
@@ -47,17 +47,17 @@ export interface DialogData {
 export class SearchModalComponent implements OnInit, AfterViewInit {
   @Output() idSelected: EventEmitter<string> = new EventEmitter<string>();
 
-  listEmployees: Employee[] = [];
+  listaEmpleados: Empleado[] = [];
 
   displayedColumns: string[] = ['Id', 'Name'];
-  dataSourceEmployees!: MatTableDataSource<Employee>;
+  dataSourceEmpleados!: MatTableDataSource<Empleado>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     public dialogRef: MatDialogRef<SearchModalComponent>,
-    private _employeeService: EmployeeService,
+    private _EmpleadoService: EmpleadoService,
     public _dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
@@ -72,17 +72,17 @@ export class SearchModalComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSourceEmployees.paginator = this.paginator;
-    this.dataSourceEmployees.sort = this.sort;
+    this.dataSourceEmpleados.paginator = this.paginator;
+    this.dataSourceEmpleados.sort = this.sort;
   }
 
   loadDocumentTypes() {
-    this.listEmployees = this._employeeService.getEmployees();
-    this.dataSourceEmployees = new MatTableDataSource(this.listEmployees);
+    // this.listarEmpleados = this._EmpleadoService.listarEmpleados();
+    this.dataSourceEmpleados = new MatTableDataSource(this.listaEmpleados);
   }
 
-  applyFilterEmployee(event: Event) {
+  aplicarFiltroEmpleado(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceEmployees.filter = filterValue.trim().toLowerCase();
+    this.dataSourceEmpleados.filter = filterValue.trim().toLowerCase();
   }
 }

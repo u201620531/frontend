@@ -1,129 +1,142 @@
 [
   {
-    "Name": "Home",
-    "Redirect": "/dashboard",
-    "HasItems": "0"
+    "nombre": "Home",
+    "redirect": "/dashboard",
+    "esPrincipal": 1
   },
   {
-    "Name": "Comprobante electrónico",
-    "Redirect": "",
-    "HasItems": "1",
-    "SubMenu": [
+    "nombre": "Administración",
+    "redirect": "",
+    "esPrincipal": 0,
+    "menu": [
       {
-        "Name": "Cargar comprobante electrónico",
-        "Redirect": "/dashboard/cargar-comprobante",
-        "banner": "1",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Listado de Comprobantes electónicos",
-        "Redirect": "/dashboard/listar-comprobante",
-        "banner": "1",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Agregar",
-        "Redirect": "/dashboard/agregar-comprobante",
-        "banner": "0",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Plantilla de Comprobantes electónicos",
-        "Redirect": "/dashboard/´plantilla-comprobante",
-        "banner": "0",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Reporte de Comprobantes electónicos",
-        "Redirect": "/dashboard/reporte-comprobante",
-        "banner": "0",
-        "HasChild":"0"
-      }
-    ]
-  },
-  {
-    "Name": "Proveedor",
-    "Redirect": "",
-    "HasItems": "1",
-    "SubMenu": [
-      {
-        "Name": "Agregar",
-        "Redirect": "/dashboard/agregar-proveedor",
-        "banner": "0",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Listado",
-        "Redirect": "/dashboard/listar-proveedor",
-        "banner": "0",
-        "HasChild":"0"
-      }
-    ]
-  },
-  {
-    "Name": "Producto",
-    "Redirect": "",
-    "HasItems": "1",
-    "SubMenu": [
-      {
-        "Name": "Agregar",
-        "Redirect": "/dashboard/agregar-producto",
-        "banner": "0",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Listado",
-        "Redirect": "/dashboard/listar-producto",
-        "banner": "0",
-        "HasChild":"0"
-      }
-    ]
-  },
-  {
-    "Name": "Forma de pago",
-    "Redirect": "",
-    "HasItems": "1",
-    "SubMenu": [
-      {
-        "Name": "Agregar",
-        "Redirect": "/dashboard/agregar-forma-pago",
-        "banner": "0",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Listar",
-        "Redirect": "/dashboard/listar-forma-pago",
-        "banner": "0",
-        "HasChild":"0"
-      }
-    ]
-  },
-  {
-    "Name": "Tipo de documento",
-    "Redirect": "",
-    "HasItems": "1",
-    "SubMenu": [
-      {
-        "Name": "Agregar",
-        "Redirect": "/dashboard/agregar-tipo-documento",
-        "banner": "0",
-        "HasChild":"0"
-      },
-      {
-        "Name": "Listar",
-        "Redirect": "/dashboard/listar-tipo-documento",
-        "banner": "0",
-        "HasChild":"1",
-        "Items":[
+        "nombre": "Usuario",
+        "redirect": "",
+        "esPadre": "1",
+        "subMenu": [
           {
-            "Name": "opcion 1",
-        "Redirect": "/dashboard/agregar-tipo-documento",
-        "banner": "0"
+            "nombre": "Agregar",
+            "redirect": "/dashboard/agregar-usuario",
+            "banner": "0"
           },
           {
-            "Name": "opcion 2",
-        "Redirect": "/dashboard/agregar-tipo-documento",
-        "banner": "0"
+            "nombre": "Listado",
+            "redirect": "/dashboard/listar-usuario",
+            "banner": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "Contabilidad",
+    "redirect": "",
+    "esPrincipal": 0,
+    "menu": [
+      {
+        "nombre": "Comprobante electrónico",
+        "redirect": "",
+        "esPadre": "1",
+        "subMenu": [
+          {
+            "nombre": "Cargar comprobante electrónico",
+            "redirect": "/dashboard/cargar-comprobante",
+            "banner": "1"
+          },
+          {
+            "nombre": "Listado de Comprobantes electónicos",
+            "redirect": "/dashboard/listar-comprobante",
+            "banner": "1"
+          },
+          {
+            "nombre": "Agregar",
+            "redirect": "/dashboard/agregar-comprobante",
+            "banner": "0"
+          },
+          {
+            "nombre": "Plantilla de Comprobantes electónicos",
+            "redirect": "/dashboard/´plantilla-comprobante",
+            "banner": "0"
+          },
+          {
+            "nombre": "Reporte de Comprobantes electónicos",
+            "redirect": "/dashboard/reporte-comprobante",
+            "banner": "0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "nombre": "General",
+    "redirect": "",
+    "esPrincipal": 0,
+    "menu": [
+      {
+        "nombre": "Proveedor",
+        "redirect": "",
+        "esPadre": "1",
+        "subMenu": [
+          {
+            "nombre": "Agregar",
+            "redirect": "/dashboard/agregar-proveedor",
+            "banner": "0"
+          },
+          {
+            "nombre": "Listado",
+            "redirect": "/dashboard/listar-proveedor",
+            "banner": "0"
+          }
+        ]
+      },
+      {
+        "nombre": "Producto",
+        "redirect": "",
+        "esPadre": "1",
+        "subMenu": [
+          {
+            "nombre": "Agregar",
+            "redirect": "/dashboard/agregar-producto",
+            "banner": "0"
+          },
+          {
+            "nombre": "Listado",
+            "redirect": "/dashboard/listar-producto",
+            "banner": "0"
+          }
+        ]
+      },
+      {
+        "nombre": "Forma de pago",
+        "redirect": "",
+        "esPadre": "1",
+        "subMenu": [
+          {
+            "nombre": "Agregar",
+            "redirect": "/dashboard/agregar-forma-pago",
+            "banner": "0"
+          },
+          {
+            "nombre": "Listar",
+            "redirect": "/dashboard/listar-forma-pago",
+            "banner": "0"
+          }
+        ]
+      },
+      {
+        "nombre": "Tipo de documento",
+        "redirect": "",
+        "esPadre": "1",
+        "subMenu": [
+          {
+            "nombre": "Agregar",
+            "redirect": "/dashboard/agregar-tipo-documento",
+            "banner": "0"
+          },
+          {
+            "nombre": "Listar",
+            "redirect": "/dashboard/listar-tipo-documento",
+            "banner": "0"
           }
         ]
       }
