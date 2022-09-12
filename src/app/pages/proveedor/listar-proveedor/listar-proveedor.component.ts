@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { Proveedor } from 'src/app/interfaces/proveedor';
 import { ProveedorService } from 'src/app/services/proveedor.service';
-import { filters } from 'src/shared/config';
+import { accion_mensaje, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-proveedor',
@@ -64,14 +64,24 @@ export class ListarProveedorComponent implements OnInit {
   }
 
   eliminarProveedor(idProveedor: string) {
-    this._proveedorService.eliminarProveedor(idProveedor);
-    this.listarProveedores();
-
-    this._snackBar.open('El Proveedor fue eliminado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    this._proveedorService.eliminarProveedor(idProveedor).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+        if (result.id === 1) this.listarProveedores();
+      },
+      (err) => {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 1500,
+        });
+      }
+    );
   }
 
   modificarProveedor(idProveedor: string, modificar: number): void {

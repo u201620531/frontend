@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Proveedor } from 'src/app/interfaces/proveedor';
 import { ProveedorService } from 'src/app/services/proveedor.service';
 import { SoporteService } from 'src/app/services/soporte.service';
-import { soporte } from 'src/shared/config';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { accion_mensaje, estado_inicial, soporte } from 'src/shared/config';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -28,6 +29,7 @@ export class AgregarProveedorComponent implements OnInit {
   modificar: boolean = false;
 
   constructor(
+    private _usuarioService: UsuarioService,
     private _soporteService: SoporteService,
     private _proveedorService: ProveedorService,
     private _formBuilder: FormBuilder,
@@ -122,9 +124,13 @@ export class AgregarProveedorComponent implements OnInit {
       direccionFiscal: this.form.value.direccionFiscal,
       email1: this.form.value.email1,
       email2: this.form.value.email2,
-      estado: this.form.value.estado,
-      fechaCreacion: this.form.value.fechaCreacion,
-      usuarioCreacion: this.form.value.usuarioCreacion,
+      estado: this.modificar ? this.form.value.estado : estado_inicial,
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : new Date().toLocaleDateString(),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
     };
 
     if (this.modificar) {
@@ -134,14 +140,14 @@ export class AgregarProveedorComponent implements OnInit {
           (res) => {
             const result: any = res;
             if (result.id === 1) this.back();
-            this._snackBar.open(result.message, '', {
+            this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
               duration: 1500,
             });
           },
           (err) => {
-            this._snackBar.open(err.message, '', {
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
               duration: 1500,
@@ -152,7 +158,7 @@ export class AgregarProveedorComponent implements OnInit {
       this._proveedorService.agregarProveedor(proveedor).subscribe(
         (res) => {
           const result: any = res;
-          this._snackBar.open(result.message, '', {
+          this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 1500,
@@ -160,7 +166,7 @@ export class AgregarProveedorComponent implements OnInit {
           if (result.id === 1) this.back();
         },
         (err) => {
-          this._snackBar.open(err.message, '', {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 1500,
@@ -192,14 +198,14 @@ export class AgregarProveedorComponent implements OnInit {
             (res) => {
               const result: any = res;
               if (result.id === 1) this.back();
-              this._snackBar.open(result.message, '', {
+              this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
                 duration: 1500,
               });
             },
             (err) => {
-              this._snackBar.open(err.message, '', {
+              this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
                 duration: 1500,
