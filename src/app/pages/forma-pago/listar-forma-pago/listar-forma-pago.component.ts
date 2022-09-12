@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormaPago } from 'src/app/interfaces/forma-pago';
 import { FormaPagoService } from 'src/app/services/forma-pago.service';
-import { filters } from 'src/shared/config';
+import { accion_mensaje, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-forma-pago',
@@ -63,7 +63,7 @@ export class ListarFormaPagoComponent implements OnInit {
     this._FormaPagoService.eliminarFormaPago(idFormaPago).subscribe(
       (res) => {
         const result: any = res;
-        this._snackBar.open(result.message, '', {
+        this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
           duration: 1500,
@@ -71,7 +71,7 @@ export class ListarFormaPagoComponent implements OnInit {
         if (result.id === 1) this.listarFormasPago();
       },
       (err) => {
-        this._snackBar.open(err.message, '', {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
           duration: 1500,

@@ -15,6 +15,8 @@ import { ListarProveedorComponent } from '../proveedor/listar-proveedor/listar-p
 import { AgregarProductoComponent } from '../producto/agregar-producto/agregar-producto.component';
 import { ListarProductoComponent } from '../producto/listar-producto/listar-producto.component';
 import { CargarComprobanteComponent } from '../comprobante/cargar-comprobante/cargar-comprobante.component';
+import { AgregarUsuarioComponent } from '../auth/usuario/agregar-usuario/agregar-usuario.component';
+import { ListarUsuarioComponent } from '../auth/usuario/listar-usuario/listar-usuario.component';
 
 const routes: Routes = [
   {
@@ -35,6 +37,8 @@ const routes: Routes = [
       { path: 'listar-tipo-documento', component: ListarTipoDocumentoComponent },
       { path: 'agregar-forma-pago', component: AgregarFormaPagoComponent },
       { path: 'listar-forma-pago', component: ListarFormaPagoComponent },
+      { path: 'agregar-usuario', component: AgregarUsuarioComponent },
+      { path: 'listar-usuario', component: ListarUsuarioComponent },
     ],
   },
 ];

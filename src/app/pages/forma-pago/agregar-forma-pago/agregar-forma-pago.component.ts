@@ -6,15 +6,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormaPago } from 'src/app/interfaces/forma-pago';
 import { ConfirmationModalComponent } from 'src/app/pages/modals/confirmation-modal/confirmation-modal.component';
 import { FormaPagoService } from 'src/app/services/forma-pago.service';
-
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { accion_mensaje, estado_inicial } from 'src/shared/config';
 
 @Component({
   selector: 'app-agregar-forma-pago',
   templateUrl: './agregar-forma-pago.component.html',
-  styleUrls: ['./agregar-forma-pago.component.css']
+  styleUrls: ['./agregar-forma-pago.component.css'],
 })
 export class AgregarFormaPagoComponent implements OnInit {
-    form: FormGroup;
+  form: FormGroup;
   listaFormaPago: FormaPago[] = [];
   idFormaPago: string = '';
   readonlyId: boolean = false;
@@ -25,6 +26,7 @@ export class AgregarFormaPagoComponent implements OnInit {
 
   constructor(
     private _formaPagoService: FormaPagoService,
+    private _usuarioService: UsuarioService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
@@ -72,48 +74,53 @@ export class AgregarFormaPagoComponent implements OnInit {
   }
 
   agregarFormaPago() {
-    const creationUser = 'jlre';
     const formaPago: FormaPago = {
       idFormaPago: this.form.value.idFormaPago,
       descripcion: this.form.value.descripcion,
       abreviatura: this.form.value.abreviatura,
-      estado: 'A',
-      fechaCreacion: new Date().toLocaleDateString(),
-      usuarioCreacion: creationUser,
+      estado: this.modificar ? this.form.value.estado : estado_inicial,
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : new Date().toLocaleDateString(),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
     };
 
     if (this.modificar) {
-      this._formaPagoService.actualizarFormaPago(formaPago, formaPago.idFormaPago).subscribe(
-        (res) => {
-          const result: any = res;
-          if (result.id === 1) this.back();
-          this._snackBar.open(result.message, '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 1500,
-          });
-        },
-        (err) => {
-          this._snackBar.open(err.message, '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 1500,
-          });
-        }
-      );
+      this._formaPagoService
+        .actualizarFormaPago(formaPago, formaPago.idFormaPago)
+        .subscribe(
+          (res) => {
+            const result: any = res;
+            if (result.id === 1) this.back();
+            this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          },
+          (err) => {
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 1500,
+            });
+          }
+        );
     } else {
       this._formaPagoService.agregarFormaPago(formaPago).subscribe(
         (res) => {
           const result: any = res;
           if (result.id === 1) this.back();
-          this._snackBar.open(result.message, '', {
+          this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 1500,
           });
         },
         (err) => {
-          this._snackBar.open(err.message, '', {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 1500,
@@ -139,24 +146,26 @@ export class AgregarFormaPagoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.confirmation = result;
       if (this.confirmation) {
-        this._formaPagoService.eliminarFormaPago(this.form.value.idFormaPago).subscribe(
-          (res) => {
-            const result: any = res;
-            if (result.id === 1) this.back();
-            this._snackBar.open(result.message, '', {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 1500,
-            });
-          },
-          (err) => {
-            this._snackBar.open(err.message, '', {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 1500,
-            });
-          }
-        );
+        this._formaPagoService
+          .eliminarFormaPago(this.form.value.idFormaPago)
+          .subscribe(
+            (res) => {
+              const result: any = res;
+              if (result.id === 1) this.back();
+              this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 1500,
+              });
+            },
+            (err) => {
+              this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 1500,
+              });
+            }
+          );
       }
     });
   }
