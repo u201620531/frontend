@@ -1,13 +1,33 @@
-<div class="body">
+<div class="body-login">
   <div class="login">
     <mat-spinner *ngIf="loading" diameter="50" class="spinner"></mat-spinner>
-
-    <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="login()" action="">
+    <form
+      *ngIf="!loading"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      action=""
+    >
       <img src="../../../../assets/img/png/login.png" alt="login" />
       <h1>Login</h1>
       <mat-form-field class="input" appearance="fill">
         <mat-label>Usuario</mat-label>
-        <input matInput type="text" autocomplete="off" formControlName="user" />
+        <input
+          matInput
+          type="text"
+          autocomplete="off"
+          formControlName="codigoUsuario"
+          [ngClass]="{
+            'is-invalid': submitted && loginForm.value.codigoUsuario.errors
+          }"
+        />
+        <div
+          *ngIf="submitted && loginForm.value.codigoUsuario.errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="loginForm.value.codigoUsuario.errors.required">
+            Usuario obligatorio
+          </div>
+        </div>
       </mat-form-field>
       <mat-form-field class="input" appearance="fill">
         <mat-label>Contraseña</mat-label>
@@ -15,8 +35,19 @@
           matInput
           type="password"
           autocomplete="off"
-          formControlName="pass"
+          formControlName="contrasena"
+          [ngClass]="{
+            'is-invalid': submitted && loginForm.value.contrasena.errors
+          }"
         />
+        <div
+          *ngIf="submitted && loginForm.value.contrasena.errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="loginForm.value.contrasena.errors.required">
+            contrasena is obligatoria
+          </div>
+        </div>
       </mat-form-field>
       <br />
       <button
@@ -24,10 +55,43 @@
         mat-raised-button
         class="input button"
         color="primary"
-        [disabled]="form.invalid"
+        [disabled]="loginForm.invalid"
       >
         Ingresar
       </button>
     </form>
   </div>
 </div>
+
+<!-- <div class="col-md-6 offset-md-3 mt-5">
+  <div class="alert alert-info">
+      codigoUsuario: test<br />
+      contrasena: test
+  </div>
+  <div class="card">
+      <h4 class="card-header">Angular 8 JWT Login Example</h4>
+      <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" action="">
+              <div class="form-group">
+                  <label for="codigoUsuario">codigoUsuario</label>
+                  <input type="text" formControlName="codigoUsuario" class="form-control" [ngClass]="{ 'is-invalid': submitted && loginForm.value.codigoUsuario.errors }" />
+                  <div *ngIf="submitted && loginForm.value.codigoUsuario.errors" class="invalid-feedback">
+                      <div *ngIf="loginForm.value.codigoUsuario.errors.required">codigoUsuario is required</div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="contrasena">contrasena</label>
+                  <input type="contrasena" formControlName="contrasena" class="form-control" [ngClass]="{ 'is-invalid': submitted && loginForm.value.contrasena.errors }" />
+                  <div *ngIf="submitted && loginForm.value.contrasena.errors" class="invalid-feedback">
+                      <div *ngIf="loginForm.value.contrasena.errors.required">contrasena is required</div>
+                  </div>
+              </div>
+              <button [disabled]="loading" class="btn btn-primary">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                  Login
+              </button>
+              <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+          </form>
+      </div>
+  </div>
+</div> -->
