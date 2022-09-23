@@ -7,7 +7,8 @@ import { Producto } from 'src/app/interfaces/producto';
 import { ConfirmationModalComponent } from 'src/app/pages/modals/confirmation-modal/confirmation-modal.component';
 import { ProductoService } from 'src/app/services/producto.service';
 import { SoporteService } from 'src/app/services/soporte.service';
-import { soporte } from 'src/shared/config';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { accion_mensaje, estado_inicial, soporte } from 'src/shared/config';
 
 @Component({
   selector: 'app-agregar-producto',
@@ -30,6 +31,7 @@ export class AgregarProductoComponent implements OnInit {
     private _productoService: ProductoService,
     private _soporteService: SoporteService,
     private _formBuilder: FormBuilder,
+    private _usuarioService: UsuarioService,
     private _snackBar: MatSnackBar,
     private _router: Router,
     private _route: ActivatedRoute,
@@ -88,15 +90,18 @@ export class AgregarProductoComponent implements OnInit {
   }
 
   agregarProducto() {
-    const usuarioCreacion = 'jlre';
     const product: Producto = {
       idProducto: this.form.value.idProducto,
       idCategoriaProducto: this.form.value.idCategoriaProducto,
       descripcion: this.form.value.descripcion,
       abreviatura: this.form.value.abreviatura,
-      estado: 'A',
-      fechaCreacion: new Date().toLocaleDateString(),
-      usuarioCreacion: usuarioCreacion,
+      estado: this.modificar ? this.form.value.estado : estado_inicial,
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : new Date().toLocaleDateString(),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
     };
 
     if (this.modificar) {
@@ -106,17 +111,21 @@ export class AgregarProductoComponent implements OnInit {
           (res) => {
             const result: any = res;
             if (result.id === 1) this.back();
-            this._snackBar.open(result.message, '', {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 1500,
-            });
+            this._snackBar.open(
+              result.message,
+              accion_mensaje.registro_correcto,
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              }
+            );
           },
           (err) => {
-            this._snackBar.open(err.message, '', {
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           }
         );
@@ -124,18 +133,22 @@ export class AgregarProductoComponent implements OnInit {
       this._productoService.agregarProducto(product).subscribe(
         (res) => {
           const result: any = res;
-          this._snackBar.open(result.message, '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 1500,
-          });
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            }
+          );
           if (result.id === 1) this.back();
         },
         (err) => {
-          this._snackBar.open(err.message, '', {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
         }
       );
@@ -164,17 +177,21 @@ export class AgregarProductoComponent implements OnInit {
             (res) => {
               const result: any = res;
               if (result.id === 1) this.back();
-              this._snackBar.open(result.message, '', {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 1500,
-              });
+              this._snackBar.open(
+                result.message,
+                accion_mensaje.registro_correcto,
+                {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'bottom',
+                  duration: 5000,
+                }
+              );
             },
             (err) => {
-              this._snackBar.open(err.message, '', {
+              this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             }
           );

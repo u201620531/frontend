@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { Producto } from 'src/app/interfaces/producto';
 import { ProductoService } from 'src/app/services/producto.service';
-import { filters } from 'src/shared/config';
+import { accion_mensaje, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-producto',
@@ -24,11 +24,31 @@ export class ListarProductoComponent implements OnInit {
     'estado',
     'acciones',
   ];
-  dataSource!: MatTableDataSource<Producto>;
+  dataSource!: MatTableDataSource<Producto[]>;
   placeholderValue: string = '';
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  viewOptions: boolean = false;
+  private paginator!: MatPaginator;
+  private sort: MatSort;
+
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -45,10 +65,8 @@ export class ListarProductoComponent implements OnInit {
     this._productoService.listarProductos().subscribe(
       (res) => {
         this.listaProductos = res;
-        this.dataSource = new MatTableDataSource<Producto>();
-        this.dataSource.data = res;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.viewOptions = this.listaProductos.length > 0;
+        this.dataSource = new MatTableDataSource<Producto[]>(res);
       },
       (err) => {
         console.log(err.message);
@@ -62,21 +80,31 @@ export class ListarProductoComponent implements OnInit {
   }
 
   eliminarProducto(idProducto: string) {
-    this._productoService.eliminarProducto(idProducto);
-    this.listarProductos();
-
-    this._snackBar.open('El Producto fue eliminado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 1500,
-    });
+    this._productoService.eliminarProducto(idProducto).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+        if (result.id === 1) this.listarProductos();
+      },
+      (err) => {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+      }
+    );
   }
 
-  modificarProducto(idProducto: string, modificar:number): void {
+  modificarProducto(idProducto: string, modificar: number): void {
     const extras: NavigationExtras = {
       queryParams: {
         idProducto: idProducto,
-        modificar: modificar
+        modificar: modificar,
       },
     };
     this._router.navigate(['/dashboard/agregar-producto'], extras);
