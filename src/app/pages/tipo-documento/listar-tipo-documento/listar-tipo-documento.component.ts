@@ -6,12 +6,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { TipoDocumento } from 'src/app/interfaces/tipo-documento';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
-import { filters } from 'src/shared/config';
+import { accion_mensaje, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-tipo-documento',
   templateUrl: './listar-tipo-documento.component.html',
-  styleUrls: ['./listar-tipo-documento.component.css']
+  styleUrls: ['./listar-tipo-documento.component.css'],
 })
 export class ListarTipoDocumentoComponent implements OnInit {
   listaTipoDocumento: TipoDocumento[] = [];
@@ -23,11 +23,30 @@ export class ListarTipoDocumentoComponent implements OnInit {
     'estado',
     'acciones',
   ];
-  dataSource!: MatTableDataSource<TipoDocumento>;
+  dataSource!: MatTableDataSource<TipoDocumento[]>;
   placeholderValue: string = '';
+  viewOptions: boolean = false;
+  private paginator!: MatPaginator;
+  private sort: MatSort;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -44,11 +63,8 @@ export class ListarTipoDocumentoComponent implements OnInit {
     this._TipoDocumentoService.listarTipoDocumento().subscribe(
       (res) => {
         this.listaTipoDocumento = res;
-        this.dataSource = new MatTableDataSource<TipoDocumento>();
-        this.dataSource.data = res;
-        console.log(this.dataSource.data),
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.viewOptions = this.listaTipoDocumento.length > 0;
+        this.dataSource = new MatTableDataSource<TipoDocumento[]>(res);
       },
       (err) => {
         console.log(err.message);
@@ -65,18 +81,18 @@ export class ListarTipoDocumentoComponent implements OnInit {
     this._TipoDocumentoService.eliminarTipoDocumento(idTipoDocumento).subscribe(
       (res) => {
         const result: any = res;
-        this._snackBar.open(result.message, '', {
+        this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 1500,
+          duration: 5000,
         });
         if (result.id === 1) this.listarTipoDocumento();
       },
       (err) => {
-        this._snackBar.open(err.message, '', {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 1500,
+          duration: 5000,
         });
       }
     );
