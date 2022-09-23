@@ -21,16 +21,34 @@ export class ListarProveedorComponent implements OnInit {
     'idTipoDocumento',
     'nroDocumento',
     'razonSocial',
-    'nombreComercial',
     'direccion',
     'estado',
     'acciones',
   ];
-  dataSource!: MatTableDataSource<Proveedor>;
+  dataSource!: MatTableDataSource<Proveedor[]>;
   placeholderValue: string = '';
+  viewOptions: boolean = false;
+  private paginator!: MatPaginator;
+  private sort: MatSort;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -38,19 +56,17 @@ export class ListarProveedorComponent implements OnInit {
     private _router: Router
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.placeholderValue = filters.placeholders.proveedor;
-    this.listarProveedores();
+   this.listarProveedores();
   }
 
-  listarProveedores() {
+  async listarProveedores() {
     this._proveedorService.listarPoveedores().subscribe(
       (res) => {
         this.listaProveedores = res;
-        this.dataSource = new MatTableDataSource<Proveedor>();
-        this.dataSource.data = res;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.viewOptions = this.listaProveedores.length > 0;
+        this.dataSource = new MatTableDataSource<Proveedor[]>(res);
       },
       (err) => {
         console.log(err.message);
@@ -70,7 +86,7 @@ export class ListarProveedorComponent implements OnInit {
         this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 1500,
+          duration: 5000,
         });
         if (result.id === 1) this.listarProveedores();
       },
@@ -78,7 +94,7 @@ export class ListarProveedorComponent implements OnInit {
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 1500,
+          duration: 5000,
         });
       }
     );

@@ -56,7 +56,7 @@ export class AgregarProveedorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listaTiposDocumento();
+    this.listarTiposDocumento();
     this.listarTiposProveedor();
     this.initParams();
   }
@@ -143,25 +143,26 @@ export class AgregarProveedorComponent implements OnInit {
             this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           },
           (err) => {
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           }
         );
     } else {
+      console.log('prov',proveedor);
       this._proveedorService.agregarProveedor(proveedor).subscribe(
         (res) => {
           const result: any = res;
           this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
           if (result.id === 1) this.back();
         },
@@ -169,7 +170,7 @@ export class AgregarProveedorComponent implements OnInit {
           this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
         }
       );
@@ -201,14 +202,14 @@ export class AgregarProveedorComponent implements OnInit {
               this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             },
             (err) => {
               this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             }
           );
