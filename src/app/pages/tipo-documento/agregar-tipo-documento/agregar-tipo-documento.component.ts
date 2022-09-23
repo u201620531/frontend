@@ -6,11 +6,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TipoDocumento } from 'src/app/interfaces/tipo-documento';
 import { ConfirmationModalComponent } from 'src/app/pages/modals/confirmation-modal/confirmation-modal.component';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { accion_mensaje, estado_inicial } from 'src/shared/config';
 
 @Component({
   selector: 'app-agregar-tipo-documento',
   templateUrl: './agregar-tipo-documento.component.html',
-  styleUrls: ['./agregar-tipo-documento.component.css']
+  styleUrls: ['./agregar-tipo-documento.component.css'],
 })
 export class AgregarTipoDocumentoComponent implements OnInit {
   form: FormGroup;
@@ -25,6 +27,7 @@ export class AgregarTipoDocumentoComponent implements OnInit {
 
   constructor(
     private _TipoDocumentoService: TipoDocumentoService,
+    private _usuarioService: UsuarioService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
@@ -76,14 +79,17 @@ export class AgregarTipoDocumentoComponent implements OnInit {
   }
 
   agregarTipoDocumento() {
-    const creationUser = 'jlre';
     const TipoDocumento: TipoDocumento = {
       idTipoDocumento: this.form.value.idTipoDocumento,
       descripcion: this.form.value.descripcion,
       abreviatura: this.form.value.abreviatura,
-      estado: 'A',
-      fechaCreacion: new Date().toLocaleDateString(),
-      usuarioCreacion: creationUser
+      estado: this.modificar ? this.form.value.estado : estado_inicial,
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : new Date().toLocaleDateString(),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
     };
 
     if (this.modificar) {
@@ -93,17 +99,21 @@ export class AgregarTipoDocumentoComponent implements OnInit {
           (res) => {
             const result: any = res;
             if (result.id === 1) this.back();
-            this._snackBar.open(result.message, '', {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 1500,
-            });
+            this._snackBar.open(
+              result.message,
+              accion_mensaje.registro_correcto,
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              }
+            );
           },
           (err) => {
-            this._snackBar.open(err.message, '', {
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           }
         );
@@ -111,18 +121,22 @@ export class AgregarTipoDocumentoComponent implements OnInit {
       this._TipoDocumentoService.agegarTipoDocumento(TipoDocumento).subscribe(
         (res) => {
           const result: any = res;
-          this._snackBar.open(result.message, '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 1500,
-          });
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            }
+          );
           if (result.id === 1) this.back();
         },
         (err) => {
-          this._snackBar.open(err.message, '', {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
         }
       );
@@ -151,17 +165,21 @@ export class AgregarTipoDocumentoComponent implements OnInit {
             (res) => {
               const result: any = res;
               if (result.id === 1) this.back();
-              this._snackBar.open(result.message, '', {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 1500,
-              });
+              this._snackBar.open(
+                result.message,
+                accion_mensaje.registro_correcto,
+                {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'bottom',
+                  duration: 5000,
+                }
+              );
             },
             (err) => {
-              this._snackBar.open(err.message, '', {
+              this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             }
           );
