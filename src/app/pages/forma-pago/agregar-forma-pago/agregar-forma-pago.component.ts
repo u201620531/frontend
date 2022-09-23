@@ -97,14 +97,14 @@ export class AgregarFormaPagoComponent implements OnInit {
             this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           },
           (err) => {
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           }
         );
@@ -116,14 +116,14 @@ export class AgregarFormaPagoComponent implements OnInit {
           this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
         },
         (err) => {
           this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
         }
       );
@@ -155,14 +155,14 @@ export class AgregarFormaPagoComponent implements OnInit {
               this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             },
             (err) => {
               this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             }
           );

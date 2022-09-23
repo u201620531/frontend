@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-toolbar>
+  <mat-toolbar class="toolbar">
     <span>Listado de Formas de pago</span>
     <div class="button-spacer"></div>
     <button mat-button routerLink="/dashboard/agregar-forma-pago">
@@ -7,9 +7,9 @@
     </button>
   </mat-toolbar>
 
-  <div *ngIf="listaFormaPago.length > 0">
+  <div class="form-controls" *ngIf="viewOptions">
     <mat-form-field appearance="standard">
-      <mat-label>Filtro (Ingrese descripción):</mat-label>
+      <mat-label>Filtro (Ingrese aquí el filtro)</mat-label>
       <input
         matInput
         (keyup)="aplicarFiltro($event)"
@@ -103,15 +103,17 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-
       <mat-paginator
+        [pageSize]="5"
         [pageSizeOptions]="[5, 10, 25, 100]"
         showFirstLastButtons
-        aria-label="Seleccionar página"
+        aria-label="Seleccionar página de formas de pago"
       ></mat-paginator>
     </div>
   </div>
-  <div *ngIf="listaFormaPago.length === 0">
-    <h2>No hay Formas de pago para mostrar</h2>
+  <div *ngIf="viewOptions">
+    <div *ngIf="listaFormaPago.length === 0" class="empty-list">
+      <h2>No hay Formas de pago para mostrar</h2>
+    </div>
   </div>
 </div>
