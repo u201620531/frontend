@@ -1,43 +1,57 @@
 .submenu-container {
-    position: absolute;
-    left: 160px;
-    display: flex;
-    height: 0;
-    overflow-y: hidden;
-    transition: height 0.5s ease-out;
-    overflow: hidden;
-    flex-direction: column;
-    align-items: stretch;
-    box-sizing: border-box;
-    width: auto;
-    word-break: keep-all;
-    z-index: 1;
-    background-color: #2d3a85;
-  }
-  
-  a:hover .submenu-container {
-    border: 2px solid gray;
-    height: 128px;
-    transition: height 0.25s linear;
-  }
-  
-  .submenu-item {
-    padding: 0.3rem 0.8rem;
-  }
+  position: absolute;
+  left: 160px;
+  display: flex;
+  height: 0;
+  overflow-y: hidden;
+  transition: height 0.5s ease-out;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: auto;
+  word-break: keep-all;
+  z-index: 1;
+  background-color: #2d3a85;
+}
 
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: transparent;
-  }
+a:hover .submenu-container {
+  border: 2px solid gray;
+  height: 128px;
+  transition: height 0.25s linear;
+}
 
-  li {
-    float: left;
-  }
+.submenu-item {
+  padding: 0.3rem 0.8rem;
+}
 
-  .menu-item {
-    color: white;
-    font-weight: bold;
-  }
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+li {
+  float: left;
+}
+
+.menu-item {
+  color: white;
+  font-weight: bold;
+}
+
+.toolbarDashboard {
+  background-color: white;
+  background-image: url("../../../../assets/img/png/documentacion.jpg");
+  background-repeat: no-repeat;
+  background-size: 40% 100%;
+  background-position: right;
+  width: 100%;
+  color: rgb(33, 39, 210);
+  font-weight: bold;
+  font-size: x-large;
+  position:fixed; top: 0px; left: 0px;
+  border-bottom: solid 2px blue;
+}

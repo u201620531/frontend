@@ -14,7 +14,7 @@ export class MonedaService {
     return this.http.get(`${environment.apiURL}/monedas`);
   }
 
-  listaMonedaPorId(id: string) {
+  listaMonedaPorIdMoneda(id: string) {
     return this.http.get(`${environment.apiURL}/monedas/${id}`);
   }
 

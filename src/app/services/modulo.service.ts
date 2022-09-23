@@ -20,10 +20,14 @@ export class ModuloService {
     return this.http.get(`${environment.apiURL}/${this.route}/${idModulo}`);
   }
 
-  eliminarModulo(idModulo: string) {
-    return this.http.delete(
-      `${environment.apiURL}/${this.route}/${idModulo}`
+  listarModulosPorIdPerfilUsuario(idPerfilUsuario: string, estado: string) {
+    return this.http.get(
+      `${environment.apiURL}/${this.route}/${idPerfilUsuario}/${estado}`
     );
+  }
+
+  eliminarModulo(idModulo: string) {
+    return this.http.delete(`${environment.apiURL}/${this.route}/${idModulo}`);
   }
 
   agregarModulo(modulo: Modulo) {

@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 // import { Router } from 'express';
 import { Modulo } from 'src/app/interfaces/modulo';
@@ -63,7 +57,7 @@ export class NavbarComponent implements OnInit {
     private _moduloService: ModuloService,
     private router: Router,
     private _usuarioService: UsuarioService
-    ) {
+  ) {
     this._usuarioService.currentUsuario.subscribe(
       (x) => (this.currentUsuario = x)
     );
@@ -75,70 +69,78 @@ export class NavbarComponent implements OnInit {
   }
 
   loadModulo() {
-    this._moduloService.listarModulos().subscribe(
-      (res) => {
-        this.listaModulo = res;
-        this.listaModulo.forEach((modul: any) => {
-          if (this.modulos.length > 0 && this.modulo.idModulo != modul.idModulo)
-            this.modulos.push(this.modulo);
-          if (this.modulos.length === 0) this.modulos.push(this.modulo);
-          this.modulo = {
-            idModulo: modul.idModulo,
-            nombreModulo: modul.nombreModulo,
-            vistaModulo: modul.vistaModulo,
-            esPrincipal: modul.esPrincipal,
-            menu: [],
-          };
-        });
+    this._moduloService
+      .listarModulosPorIdPerfilUsuario(
+        this._usuarioService.currentUsuarioValue.idPerfilUsuario===''?'P01':this._usuarioService.currentUsuarioValue.idPerfilUsuario,
+        'A'
+      )
+      .subscribe(
+        (res) => {
+          this.listaModulo = res;
+          this.listaModulo.forEach((modul: any) => {
+            if (
+              this.modulos.length > 0 &&
+              this.modulo.idModulo != modul.idModulo
+            )
+              this.modulos.push(this.modulo);
+            if (this.modulos.length === 0) this.modulos.push(this.modulo);
+            this.modulo = {
+              idModulo: modul.idModulo,
+              nombreModulo: modul.nombreModulo,
+              vistaModulo: modul.vistaModulo,
+              esPrincipal: modul.esPrincipal,
+              menu: [],
+            };
+          });
 
-        this.modulos.push(this.modulo);
-        this.modulos.splice(0, 1);
+          this.modulos.push(this.modulo);
+          this.modulos.splice(0, 1);
 
-        this.listaModulo.forEach((modul: any) => {
-          if (modul.idMenu != '') {
-            if (this.menu.idMenu != modul.idMenu) {
-              this.menu = {
-                idMenu: modul.idMenu,
-                nombreMenu: modul.nombreMenu,
-                vistaMenu: modul.vistaMenu,
-                esPadre: modul.esPadre,
-                subMenu: [],
-              };
-              this.modulos.forEach((mod: any) => {
-                if (mod.idModulo === modul.idModulo) {
-                  mod.menu.push(this.menu);
-                }
-              });
+          this.listaModulo.forEach((modul: any) => {
+            if (modul.idMenu != '') {
+              if (this.menu.idMenu != modul.idMenu) {
+                this.menu = {
+                  idMenu: modul.idMenu,
+                  nombreMenu: modul.nombreMenu,
+                  vistaMenu: modul.vistaMenu,
+                  esPadre: modul.esPadre,
+                  subMenu: [],
+                };
+                this.modulos.forEach((mod: any) => {
+                  if (mod.idModulo === modul.idModulo) {
+                    mod.menu.push(this.menu);
+                  }
+                });
+              }
             }
-          }
-        });
+          });
 
-        this.listaModulo.forEach((modul: any) => {
-          if (modul.idSubMenu != '') {
-            if (this.submenu.idSubMenu != modul.idSubMenu) {
-              this.submenu = {
-                idSubMenu: modul.idSubMenu,
-                nombreSubMenu: modul.nombreSubMenu,
-                vistaSubMenu: modul.vistaSubMenu,
-                banner: modul.banner,
-              };
-              this.modulos.forEach((mod: any) => {
-                if (mod.idModulo === modul.idModulo) {
-                  mod.menu.forEach((submod: any) => {
-                    if (submod.idMenu === modul.idMenu) {
-                      submod.subMenu.push(this.submenu);
-                    }
-                  });
-                }
-              });
+          this.listaModulo.forEach((modul: any) => {
+            if (modul.idSubMenu != '') {
+              if (this.submenu.idSubMenu != modul.idSubMenu) {
+                this.submenu = {
+                  idSubMenu: modul.idSubMenu,
+                  nombreSubMenu: modul.nombreSubMenu,
+                  vistaSubMenu: modul.vistaSubMenu,
+                  banner: modul.banner,
+                };
+                this.modulos.forEach((mod: any) => {
+                  if (mod.idModulo === modul.idModulo) {
+                    mod.menu.forEach((submod: any) => {
+                      if (submod.idMenu === modul.idMenu) {
+                        submod.subMenu.push(this.submenu);
+                      }
+                    });
+                  }
+                });
+              }
             }
-          }
-        });
-      },
-      (err) => {
-        console.log(err.message);
-      }
-    );
+          });
+        },
+        (err) => {
+          console.log(err.message);
+        }
+      );
   }
 
   @Input() public moduloItems: Array<ModuloIndex> = [];
