@@ -27,9 +27,23 @@ export class ListarEmpleadoComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<Empleado>;
   placeholderValue: string = '';
+  private paginator: MatPaginator;
+  private sort: MatSort;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -69,7 +83,7 @@ export class ListarEmpleadoComponent implements OnInit {
     this._snackBar.open('El Empleado fue eliminado con éxito.', '', {
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
-      duration: 1500,
+      duration: 5000,
     });
   }
 

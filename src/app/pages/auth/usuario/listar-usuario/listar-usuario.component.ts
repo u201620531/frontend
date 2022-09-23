@@ -22,11 +22,30 @@ export class ListarUsuarioComponent implements OnInit {
     'estado',
     'acciones',
   ];
-  dataSource!: MatTableDataSource<Usuario>;
+  dataSource!: MatTableDataSource<Usuario[]>;
   placeholderValue: string = '';
+  viewOptions: boolean = true;
+  private paginator!: MatPaginator;
+  private sort: MatSort;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -42,12 +61,8 @@ export class ListarUsuarioComponent implements OnInit {
   listarUsuarios() {
     this._usuarioService.listarUsuarios().subscribe(
       (res) => {
-        console.log(res);
-        // this.listaUsuarios = res;
-        // this.dataSource = new MatTableDataSource<Usuario>();
-        // this.dataSource.data = res;
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
+        this.listaUsuarios = res;
+        this.dataSource = new MatTableDataSource<Usuario[]>(res);
       },
       (err) => {
         console.log(err.message);
@@ -67,7 +82,7 @@ export class ListarUsuarioComponent implements OnInit {
     this._snackBar.open('El Usuario fue eliminado con éxito.', '', {
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
-      duration: 1500,
+      duration: 5000,
     });
   }
 

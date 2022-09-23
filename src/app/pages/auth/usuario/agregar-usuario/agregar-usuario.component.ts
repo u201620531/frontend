@@ -115,7 +115,7 @@ export class AgregarUsuarioComponent implements OnInit {
           this._snackBar.open(err.message, '', {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
         }
       );
@@ -141,7 +141,7 @@ export class AgregarUsuarioComponent implements OnInit {
         {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 1500,
+          duration: 5000,
         }
       );
     } else {
@@ -160,7 +160,6 @@ export class AgregarUsuarioComponent implements OnInit {
           ? this.form.value.usuarioCreacion
           : this._usuarioService.currentUsuarioValue.codigoUsuario,
       };
-      console.log(usuario);
       if (this.modificar) {
         this._usuarioService.actualizarUsuario(usuario).subscribe(
           (res) => {
@@ -172,7 +171,7 @@ export class AgregarUsuarioComponent implements OnInit {
               {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               }
             );
           },
@@ -180,7 +179,7 @@ export class AgregarUsuarioComponent implements OnInit {
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           }
         );
@@ -194,7 +193,7 @@ export class AgregarUsuarioComponent implements OnInit {
               {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               }
             );
             if (result.id === 1) this.back();
@@ -203,7 +202,7 @@ export class AgregarUsuarioComponent implements OnInit {
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           }
         );
@@ -242,7 +241,7 @@ export class AgregarUsuarioComponent implements OnInit {
                 {
                   horizontalPosition: 'center',
                   verticalPosition: 'bottom',
-                  duration: 1500,
+                  duration: 5000,
                 }
               );
             },
@@ -250,7 +249,7 @@ export class AgregarUsuarioComponent implements OnInit {
               this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             }
           );
