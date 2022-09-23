@@ -21,7 +21,7 @@ export interface Comprobante {
   idMoneda: string;
   serieGuia: string;
   correlativoGuia: string;
-  estado: string;
+  estado: string; //A-Activo, I-Inactivo, D-Declarado, P-Asignado plantilla, 
   fechaCreacion: string;
   usuarioCreacion: string;
 }

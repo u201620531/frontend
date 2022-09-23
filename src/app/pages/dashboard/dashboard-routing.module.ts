@@ -17,6 +17,7 @@ import { ListarProductoComponent } from '../producto/listar-producto/listar-prod
 import { CargarComprobanteComponent } from '../comprobante/cargar-comprobante/cargar-comprobante.component';
 import { AgregarUsuarioComponent } from '../auth/usuario/agregar-usuario/agregar-usuario.component';
 import { ListarUsuarioComponent } from '../auth/usuario/listar-usuario/listar-usuario.component';
+import { ListarPlantillaComponent } from '../comprobante/listar-plantilla/listar-plantilla.component';
 
 const routes: Routes = [
   {
@@ -27,7 +28,8 @@ const routes: Routes = [
       { path: 'agregar-comprobante', component: AgregarComprobanteComponent },
       { path: 'cargar-comprobante', component: CargarComprobanteComponent },
       { path: 'listar-comprobante', component: ListarComprobanteComponent },
-      { path: 'plantilla-comprobante', component: PlantillaComprobanteComponent },
+      { path: 'plantilla-comprobante', component: ListarPlantillaComponent },
+      { path: 'agregar-plantilla-comprobante', component: PlantillaComprobanteComponent },
       { path: 'reporte-comprobante', component: ReporteComprobanteComponent },
       { path: 'agregar-proveedor', component: AgregarProveedorComponent },
       { path: 'listar-proveedor', component: ListarProveedorComponent },

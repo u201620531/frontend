@@ -1,14 +1,72 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+  padding-top: 32px;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .container {
-    margin-left: 100px;
-    margin-right: 100px;
-    margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding-bottom: 10px;
 }
 
 .button-spacer {
   flex: 1 1 auto;
+}
+
+.toolbar {
+  background-color: rgb(248, 176, 51);
+  color: white;
+  border-radius: 25px;
+  box-shadow: 6px 8px 1px rgb(249, 214, 171);
+}
+
+.form-controls {
+  margin-top: 10px;
+  padding: 20px;
+  border-radius: 25px;
+  border: 2px solid rgb(248, 176, 51);
+  box-shadow: 6px 8px 1px rgb(249, 214, 171);
+}
+
+.header-table {
+  font-size: 12px;
+  font-weight: bold;
+  background-color:  rgb(33, 39, 210);
+  color: white;
+  border: 1px solid white;
+}
+
+.cell-table {
+  padding: 5px;
+}
+
+.mat-raised-button.mat-success,
+.mat-flat-button.mat-success,
+.mat-fab.mat-success,
+.mat-mini-fab.mat-success {
+  color: #f0fff3;
+  background-color: #155724;
+}
+
+.mat-raised-button.mat-warn,
+.mat-flat-button.mat-warn,
+.mat-fab.mat-warn,
+.mat-mini-fab.mat-warn {
+  color: #f0fff3;
+  background-color: rgb(248, 176, 51);
+}
+
+.empty-list {
+  margin-left: 12px;
+  margin-top: 48px;
+  color: red;
+  text-align-last: center;
 }

@@ -6,12 +6,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { Comprobante } from 'src/app/interfaces/comprobante';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
-import { filters } from 'src/shared/config';
+import { accion_mensaje, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-comprobante',
   templateUrl: './listar-comprobante.component.html',
-  styleUrls: ['./listar-comprobante.component.css']
+  styleUrls: ['./listar-comprobante.component.css'],
 })
 export class ListarComprobanteComponent implements OnInit {
   listaComprobante: Comprobante[] = [];
@@ -30,11 +30,30 @@ export class ListarComprobanteComponent implements OnInit {
     'estado',
     'acciones',
   ];
-  dataSource!: MatTableDataSource<Comprobante>;
+  dataSource!: MatTableDataSource<Comprobante[]>;
   placeholderValue: string = '';
+  viewOptions: boolean = false;
+  private paginator!: MatPaginator;
+  private sort: MatSort;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -43,7 +62,7 @@ export class ListarComprobanteComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.placeholderValue = filters.placeholders.comprobante	;
+    this.placeholderValue = filters.placeholders.comprobante;
     this.listarComprobante();
   }
 
@@ -51,8 +70,7 @@ export class ListarComprobanteComponent implements OnInit {
     this._ComprobanteService.listarComprobante().subscribe(
       (res) => {
         this.listaComprobante = res;
-        this.dataSource = new MatTableDataSource<Comprobante>();
-        this.dataSource.data = res;
+        this.dataSource = new MatTableDataSource<Comprobante[]>(res);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
@@ -71,18 +89,18 @@ export class ListarComprobanteComponent implements OnInit {
     this._ComprobanteService.eliminarComprobante(idComprobante).subscribe(
       (res) => {
         const result: any = res;
-        this._snackBar.open(result.message, '', {
+        this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 1500,
+          duration: 5000,
         });
         if (result.id === 1) this.listarComprobante();
       },
       (err) => {
-        this._snackBar.open(err.message, '', {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 1500,
+          duration: 5000,
         });
       }
     );

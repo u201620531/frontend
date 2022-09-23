@@ -13,6 +13,8 @@ import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { FormaPago } from 'src/app/interfaces/forma-pago';
 import { Subscription } from 'rxjs';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { accion_mensaje } from 'src/shared/config';
 
 @Component({
   selector: 'app-agregar-comprobante',
@@ -41,6 +43,7 @@ export class AgregarComprobanteComponent implements OnInit {
     private _monedaService: MonedaService,
     private _formaPagoService: FormaPagoService,
     private _comprobanteService: ComprobanteService,
+    private _usuarioService: UsuarioService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
@@ -147,7 +150,6 @@ export class AgregarComprobanteComponent implements OnInit {
   }
 
   agregarComprobante() {
-    const creationUser = 'jlre';
     const comprobante: Comprobante = {
       idComprobante: this.form.value.idComprobante,
       serie: this.form.value.serie,
@@ -171,9 +173,13 @@ export class AgregarComprobanteComponent implements OnInit {
       idMoneda: this.form.value.idMoneda,
       serieGuia: this.form.value.serieGuia,
       correlativoGuia: this.form.value.correlativoGuia,
-      estado: 'A',
-      fechaCreacion: new Date().toLocaleDateString(),
-      usuarioCreacion: creationUser,
+      estado: this.modificar ? this.form.value.estado : 'A',
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : new Date().toLocaleDateString(),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
     };
 
     if (this.modificar) {
@@ -183,17 +189,21 @@ export class AgregarComprobanteComponent implements OnInit {
           (res) => {
             const result: any = res;
             if (result.id === 1) this.back();
-            this._snackBar.open(result.message, '', {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 1500,
-            });
+            this._snackBar.open(
+              result.message,
+              accion_mensaje.registro_correcto,
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              }
+            );
           },
           (err) => {
-            this._snackBar.open(err.message, '', {
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
-              duration: 1500,
+              duration: 5000,
             });
           }
         );
@@ -201,18 +211,22 @@ export class AgregarComprobanteComponent implements OnInit {
       this._comprobanteService.agregarComprobante(comprobante).subscribe(
         (res) => {
           const result: any = res;
-          this._snackBar.open(result.message, '', {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 1500,
-          });
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            }
+          );
           if (result.id === 1) this.back();
         },
         (err) => {
-          this._snackBar.open(err.message, '', {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
-            duration: 1500,
+            duration: 5000,
           });
         }
       );
@@ -241,17 +255,21 @@ export class AgregarComprobanteComponent implements OnInit {
             (res) => {
               const result: any = res;
               if (result.id === 1) this.back();
-              this._snackBar.open(result.message, '', {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 1500,
-              });
+              this._snackBar.open(
+                result.message,
+                accion_mensaje.registro_correcto,
+                {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'bottom',
+                  duration: 5000,
+                }
+              );
             },
             (err) => {
-              this._snackBar.open(err.message, '', {
+              this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',
-                duration: 1500,
+                duration: 5000,
               });
             }
           );

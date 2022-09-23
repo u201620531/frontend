@@ -33,6 +33,7 @@ import { JwtInterceptor, ErrorInterceptor } from './helpers';
 import { fakeBackendProvider } from './helpers';
 import { AgregarUsuarioComponent } from './pages/auth/usuario/agregar-usuario/agregar-usuario.component';
 import { ListarUsuarioComponent } from './pages/auth/usuario/listar-usuario/listar-usuario.component';
+import { ListarPlantillaComponent } from './pages/comprobante/listar-plantilla/listar-plantilla.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +46,7 @@ import { ListarUsuarioComponent } from './pages/auth/usuario/listar-usuario/list
     CargarComprobanteComponent,
     ListarComprobanteComponent,
     ReporteComprobanteComponent,
+    ListarPlantillaComponent,
     PlantillaComprobanteComponent,
     AgregarFormaPagoComponent,
     ListarFormaPagoComponent,
@@ -55,7 +57,7 @@ import { ListarUsuarioComponent } from './pages/auth/usuario/listar-usuario/list
     AgregarProveedorComponent,
     ListarProveedorComponent,
     AgregarUsuarioComponent,
-    ListarUsuarioComponent
+    ListarUsuarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,7 @@ import { ListarUsuarioComponent } from './pages/auth/usuario/listar-usuario/list
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
     // provider used to create fake backend
-    fakeBackendProvider
+    fakeBackendProvider,
   ],
   bootstrap: [AppComponent],
 })
