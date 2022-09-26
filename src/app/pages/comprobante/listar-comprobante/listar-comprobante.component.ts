@@ -14,27 +14,25 @@ import { accion_mensaje, filters } from 'src/shared/config';
   styleUrls: ['./listar-comprobante.component.css'],
 })
 export class ListarComprobanteComponent implements OnInit {
-  listaComprobante: Comprobante[] = [];
+  listaComprobante: any[] = [];
 
   displayedColumns: string[] = [
     'item',
     'idComprobante',
-    'serie',
-    'correlativo',
+    'nroDocumento',
     'fechaEmision',
     'razonSocial',
-    'tipoDocumento',
-    'formaPago',
     'total',
     'moneda',
     'estado',
     'acciones',
   ];
-  dataSource!: MatTableDataSource<Comprobante[]>;
+  dataSource!: MatTableDataSource<any[]>;
   placeholderValue: string = '';
   viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
+  loading: boolean = true;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -70,11 +68,12 @@ export class ListarComprobanteComponent implements OnInit {
     this._ComprobanteService.listarComprobante().subscribe(
       (res) => {
         this.listaComprobante = res;
-        this.dataSource = new MatTableDataSource<Comprobante[]>(res);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.dataSource = new MatTableDataSource<any[]>(res);
+        this.loading = false;
+        this.viewOptions = this.listaComprobante.length > 1;
       },
       (err) => {
+        this.loading = false;
         console.log(err.message);
       }
     );

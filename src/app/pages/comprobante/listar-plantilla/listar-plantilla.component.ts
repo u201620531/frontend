@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,11 +7,13 @@ import { NavigationExtras, Router } from '@angular/router';
 import { PlantillaComprobante } from 'src/app/interfaces/plantilla-comprobante';
 import { PlantillaComprobanteService } from 'src/app/services/plantilla-comprobante.service';
 import { accion_mensaje, filters } from 'src/shared/config';
+import { CustomPaginator } from '../../shared/CustomPaginatorConfiguration';
 
 @Component({
   selector: 'app-listar-plantilla',
   templateUrl: './listar-plantilla.component.html',
   styleUrls: ['./listar-plantilla.component.css'],
+  providers: [{ provide: MatPaginatorIntl, useValue: CustomPaginator() }],
 })
 export class ListarPlantillaComponent implements OnInit {
   listaPlantillaComprobante: PlantillaComprobante[] = [];
@@ -26,17 +28,23 @@ export class ListarPlantillaComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<PlantillaComprobante>;
   placeholderValue: string = '';
-  private paginator: MatPaginator;
+  viewOptions: boolean = false;
+  private paginator!: MatPaginator;
   private sort: MatSort;
+  loading: boolean = true;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
-    this.sort = ms;
-    this.setDataSourceAttributes();
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
   }
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-    this.paginator = mp;
-    this.setDataSourceAttributes();
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
   }
 
   setDataSourceAttributes() {
@@ -61,10 +69,11 @@ export class ListarPlantillaComponent implements OnInit {
         this.listaPlantillaComprobante = res;
         this.dataSource = new MatTableDataSource<PlantillaComprobante>();
         this.dataSource.data = res;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.viewOptions = this.listaPlantillaComprobante.length > 0;
+        this.loading = false;
       },
       (err) => {
+        this.loading = false;
         console.log(err.message);
       }
     );

@@ -34,6 +34,8 @@ import { fakeBackendProvider } from './helpers';
 import { AgregarUsuarioComponent } from './pages/auth/usuario/agregar-usuario/agregar-usuario.component';
 import { ListarUsuarioComponent } from './pages/auth/usuario/listar-usuario/listar-usuario.component';
 import { ListarPlantillaComponent } from './pages/comprobante/listar-plantilla/listar-plantilla.component';
+import { CustomPaginator } from './pages/shared/CustomPaginatorConfiguration';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +71,7 @@ import { ListarPlantillaComponent } from './pages/comprobante/listar-plantilla/l
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() },
     // provider used to create fake backend
     fakeBackendProvider,
   ],

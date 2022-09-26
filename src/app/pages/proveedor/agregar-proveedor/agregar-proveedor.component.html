@@ -1,10 +1,19 @@
 <div class="container">
   <mat-toolbar class="toolbar">
-    <span>Mantenimiento de Proveedores</span>
+    <span>Mantenimiento de proveedores</span>
+    <div class="button-spacer"></div>
+    <button mat-button (click)="back()">
+      <mat-icon> arrow_back </mat-icon>Regresar
+    </button>
   </mat-toolbar>
-
-  <div class="form-controls">
-    <mat-card class="cardOptions">
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
+  <div class="form-controls" *ngIf="!loading">
+    <div>
       <form [formGroup]="form" (ngSubmit)="agregarProveedor()">
         <mat-grid-list cols="6" rowHeight="70px">
           <mat-grid-tile
@@ -12,94 +21,84 @@
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionMedium">
-                <mat-label>Tipo de cliente</mat-label>
-                <mat-select
-                  formControlName="idTipoProveedor"
-                  [(value)]="idTipoProveedor"
-                  [disabled]="readonlyOption"
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Id</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                readonly
+                formControlName="idProveedor"
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Tipo de cliente</mat-label>
+              <mat-select
+                formControlName="idTipoProveedor"
+                [(value)]="idTipoProveedor"
+                [disabled]="readonlyOption"
+              >
+                <mat-option>(Seleccione)</mat-option>
+                <mat-option
+                  *ngFor="let tipoProveedor of listaTiposProveedor"
+                  [value]="tipoProveedor.valor"
                 >
-                  <mat-option>(Seleccione)</mat-option>
-                  <mat-option
-                    *ngFor="let tipoProveedor of listaTiposProveedor"
-                    [value]="tipoProveedor.valor"
-                  >
-                    {{ tipoProveedor.descripcion }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                  {{ tipoProveedor.descripcion }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="1"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field>
-                <mat-label>Id</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  readonly
-                  formControlName="idProveedor"
-                />
-              </mat-form-field>
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="1"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <div class="inputID">
-              <mat-form-field class="inputOptionMedium">
-                <mat-label>Tipo de documento</mat-label>
-                <mat-select
-                  formControlName="idTipoDocumento"
-                  [(value)]="idTipoDocumento"
-                  [disabled]="readonlyOption"
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Tipo de documento</mat-label>
+              <mat-select
+                formControlName="idTipoDocumento"
+                [(value)]="idTipoDocumento"
+                [disabled]="readonlyOption"
+              >
+                <mat-option>(Seleccione)</mat-option>
+                <mat-option
+                  *ngFor="let tipoDocumento of listaTiposDocumento"
+                  [value]="tipoDocumento.valor"
                 >
-                  <mat-option>(Seleccione)</mat-option>
-                  <mat-option
-                    *ngFor="let tipoDocumento of listaTiposDocumento"
-                    [value]="tipoDocumento.valor"
-                  >
-                    {{ tipoDocumento.abreviatura }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                  {{ tipoDocumento.abreviatura }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="1"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionMedium">
-                <mat-label>N° de documento</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="nroDocumento"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>N° de documento</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="nroDocumento"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="2"
             [rowspan]="2"
             [style.background]="'transparent'"
           >
-            <div>
+            <div class="img-container">
               <img
                 src="../../../../assets/img/png/proveedor.png"
                 alt="proveedor"
-                width="300"
-                height="140"
                 align="right"
               />
             </div>
@@ -109,108 +108,96 @@
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
-                <mat-label *ngIf="idTipoProveedor === ''"
-                  >Nombre(s)/Razón Social</mat-label
-                >
-                <mat-label *ngIf="idTipoProveedor === 'J'"
-                  >Razón Social</mat-label
-                >
-                <mat-label *ngIf="idTipoProveedor === 'N'">Apellidos</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="razonSocial"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field class="input-option input-option-right">
+              <mat-label *ngIf="idTipoProveedor === ''"
+                >Nombre(s)/Razón Social</mat-label
+              >
+              <mat-label *ngIf="idTipoProveedor === 'J'"
+                >Razón Social</mat-label
+              >
+              <mat-label *ngIf="idTipoProveedor === 'N'">Apellidos</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="razonSocial"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="2"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
-                <mat-label>Nombre Comercial</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="nombreComercial"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Nombre Comercial</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="nombreComercial"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="2"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
-                <mat-label>Dirección</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="direccion"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Dirección</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="direccion"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="2"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
-                <mat-label>Dirección fiscal</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="direccionFiscal"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Dirección fiscal</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="direccionFiscal"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="1"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
-                <mat-label>Email 1</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="email1"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Email 1</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="email1"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile
             [colspan]="1"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
-                <mat-label>Email 2</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="email2"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
+            <mat-form-field class="input-option">
+              <mat-label>Email 2</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="email2"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
             <div style="display: none">
               <mat-form-field>
                 <mat-label>Estado</mat-label>
@@ -269,12 +256,9 @@
             >
               Eliminar
             </button>
-            <button type="button" mat-raised-button (click)="back()">
-              Volver
-            </button>
           </mat-grid-tile>
         </mat-grid-list>
       </form>
-    </mat-card>
+    </div>
   </div>
 </div>

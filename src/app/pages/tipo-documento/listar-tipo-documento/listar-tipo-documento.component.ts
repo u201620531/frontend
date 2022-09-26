@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,11 +7,13 @@ import { NavigationExtras, Router } from '@angular/router';
 import { TipoDocumento } from 'src/app/interfaces/tipo-documento';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 import { accion_mensaje, filters } from 'src/shared/config';
+import { CustomPaginator } from '../../shared/CustomPaginatorConfiguration';
 
 @Component({
   selector: 'app-listar-tipo-documento',
   templateUrl: './listar-tipo-documento.component.html',
   styleUrls: ['./listar-tipo-documento.component.css'],
+  providers: [{ provide: MatPaginatorIntl, useValue: CustomPaginator() }],
 })
 export class ListarTipoDocumentoComponent implements OnInit {
   listaTipoDocumento: TipoDocumento[] = [];
@@ -19,7 +21,6 @@ export class ListarTipoDocumentoComponent implements OnInit {
   displayedColumns: string[] = [
     'idTipoDocumento',
     'descripcion',
-    'abreviatura',
     'estado',
     'acciones',
   ];
@@ -28,6 +29,7 @@ export class ListarTipoDocumentoComponent implements OnInit {
   viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
+  loading: boolean = true;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -65,8 +67,10 @@ export class ListarTipoDocumentoComponent implements OnInit {
         this.listaTipoDocumento = res;
         this.viewOptions = this.listaTipoDocumento.length > 0;
         this.dataSource = new MatTableDataSource<TipoDocumento[]>(res);
+        this.loading = false;
       },
       (err) => {
+        this.loading = false;
         console.log(err.message);
       }
     );

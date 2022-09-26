@@ -1,37 +1,15 @@
-table {
-    width: 100%;
-    margin-top: 10px;
-  }
+.option-button {
+  margin: 0 5px;
+  display: inline-block;
+  line-height: 30px;
+}
 
-  .acctions {
-    text-align: right;
-  }
-
-  .link-actions {
-    cursor: pointer;
-  }
-
-  .search {
-    color: #23ff48;
-  }
-
-  .edit {
-    color: #1878d0;
-  }
-
-  .delete {
-    color: #e9331f;
-  }
-
-  .mat-form-field {
-    font-size: 14px;
-    width: 100%;
-  }
-
-  .rowActive {
-    color: black;
-  }
-
-  .rowInactive {
-    color: red;
-  }
+.mat-column-idPlantillaComprobante {
+  width: 10%;
+}
+.mat-column-estado {
+  width: 15%;
+}
+.mat-column-acciones {
+  width: 25%;
+}

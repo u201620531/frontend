@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Comprobante } from 'src/app/interfaces/comprobante';
 import { FormaPago } from 'src/app/interfaces/forma-pago';
@@ -40,13 +42,36 @@ export class CargarComprobanteComponent implements OnInit {
     'razonSocial',
     'detalle',
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource!: MatTableDataSource<any[]>;
   comprobanteEscaneado: any = [];
   comprobante: Comprobante;
   fileExcel?: File;
   excelData: any;
   habilitarRegistro: boolean = false;
   totalComprobantes: number = 0;
+
+  private paginator!: MatPaginator;
+  private sort: MatSort;
+  loading: boolean = false;
+
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   constructor(
     private _proveedorService: ProveedorService,
@@ -180,11 +205,12 @@ export class CargarComprobanteComponent implements OnInit {
 
   limpiarListaComprobantesPorCargar() {
     this.listaComprobantes = [];
-    this.listaComprobantesPorCargar=[];
+    this.listaComprobantesPorCargar = [];
     this.dataSource = new MatTableDataSource(this.listaComprobantesPorCargar);
   }
 
   seleccionarComprobantes(event: any): void {
+    this.loading = true;
     this.limpiarListaComprobantesPorCargar();
     this.fileExcel = event.target.files[0];
     let fileReader = new FileReader();
@@ -200,7 +226,8 @@ export class CargarComprobanteComponent implements OnInit {
       let sheetNames = workbook.SheetNames;
       this.excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[0]]);
 
-      this.habilitarRegistro = true;
+      if (this.listaComprobantesPorCargar.length === 0)
+        this.habilitarRegistro = false;
       let numRegistro = 0;
       this.excelData.forEach((element: any) => {
         numRegistro += 1;
@@ -234,9 +261,16 @@ export class CargarComprobanteComponent implements OnInit {
         const detalleValidacion = this.validarRegistro(element);
         this.comprobanteEscaneado = {
           item: numRegistro,
+          razonSocial: element.RAZON_SOCIAL,
+          idProveedor: element.RUC,
           nroDocumento: element.NRO_DOCUMENTO,
           ruc: element.RUC,
-          razonSocial: element.RAZON_SOCIAL,
+          fechaEmision: element.FECHA_EMISION,
+          idMoneda: element.TIPO_MONEDA,
+          importeTotal: element.IMPORTE_TOTAL,
+          fechaVencimiento: element.FECHA_VENCIMIENTO,
+          valorCompra: element.VALOR_COMPRA,
+          igv: element.IGV,
           detalle: detalleValidacion,
           estado: detalleValidacion === '' ? 1 : 0,
         };
@@ -248,7 +282,9 @@ export class CargarComprobanteComponent implements OnInit {
         this.listaComprobantes.push(this.comprobante);
       });
       this.cargarlistaComprobantesPorCargar();
+      console.log(this.listaComprobantes);
     };
+    this.loading = false;
   }
 
   cargarlistaComprobantesPorCargar() {
@@ -275,6 +311,7 @@ export class CargarComprobanteComponent implements OnInit {
     });
 
     if (detalleError === '') {
+      this.limpiarListaComprobantesPorCargar();
       this._snackBar.open(
         'Comprobantes registrados',
         accion_mensaje.registro_correcto,
@@ -360,8 +397,7 @@ export class CargarComprobanteComponent implements OnInit {
       comprobanteValidar.DESCUENTOS_GLOBALES,
       detalle
     );
-    if (this.habilitarRegistro)
-      this.habilitarRegistro = detalle === '' ? true : false;
+    this.habilitarRegistro = detalle === '' ? true : false;
     return detalle;
   }
 
@@ -590,6 +626,16 @@ export class CargarComprobanteComponent implements OnInit {
     comprobanteRegistro: Comprobante,
     comprobantesPorCargar: any
   ) {
+    comprobanteRegistro.fechaEmision=isNaN(parseInt(comprobantesPorCargar.fechaEmision))
+    ? new Date(comprobantesPorCargar.fechaEmision).toLocaleDateString()
+    : comprobantesPorCargar.fechaEmision;;
+    
+    comprobanteRegistro.fechaVencimiento=(comprobantesPorCargar.fechaVencimiento !== undefined && isNaN(parseInt(comprobantesPorCargar.fechaVencimiento)))
+    ? new Date(comprobantesPorCargar.fechaVencimiento).toLocaleDateString()
+    : comprobantesPorCargar.fechaVencimiento;
+    comprobanteRegistro.importeTotal=comprobantesPorCargar.importeTotal;
+    comprobanteRegistro.igv=comprobantesPorCargar.igv;
+    comprobanteRegistro.valorCompra=comprobantesPorCargar.valorCompra;
     comprobanteRegistro.totalGravadas =
       comprobantesPorCargar.totalGravadas === ''
         ? 0

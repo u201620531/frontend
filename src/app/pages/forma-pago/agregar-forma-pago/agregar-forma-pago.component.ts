@@ -17,12 +17,14 @@ import { accion_mensaje, estado_inicial } from 'src/shared/config';
 export class AgregarFormaPagoComponent implements OnInit {
   form: FormGroup;
   listaFormaPago: FormaPago[] = [];
-  idFormaPago: string = '';
+  listSupportTables: any = [];
+  IdFormaPago: string = '';
   readonlyId: boolean = false;
   readonlyOption: boolean = false;
   eliminar: boolean = true;
   confirmation: boolean = false;
   modificar: boolean = false;
+  loading: boolean = true;
 
   constructor(
     private _formaPagoService: FormaPagoService,
@@ -49,11 +51,12 @@ export class AgregarFormaPagoComponent implements OnInit {
 
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
+      if (params && params['idFormaPago'] === undefined) this.loading = false;
       if (params && params['idFormaPago']) {
-        this.idFormaPago = params['idFormaPago'];
-        this.readonlyId = this.idFormaPago ? true : false;
+        this.IdFormaPago = params['idFormaPago'];
+        this.readonlyId = this.IdFormaPago ? true : false;
         this._formaPagoService
-          .listarFormaPagoPorId(this.idFormaPago)
+          .listarFormaPagoPorId(this.IdFormaPago)
           .subscribe((res: any) => {
             this.form.setValue({
               idFormaPago: res.idFormaPago,
@@ -64,6 +67,7 @@ export class AgregarFormaPagoComponent implements OnInit {
               usuarioCreacion: res.usuarioCreacion,
             });
             this.modificar = true;
+            this.loading = false;
           });
       }
       if (params && params['modificar']) {
@@ -73,8 +77,12 @@ export class AgregarFormaPagoComponent implements OnInit {
     });
   }
 
+  consultarFormaPago(id: string) {
+    return this._formaPagoService.listarFormaPagoPorId(id);
+  }
+
   agregarFormaPago() {
-    const formaPago: FormaPago = {
+    const FormaPago: FormaPago = {
       idFormaPago: this.form.value.idFormaPago,
       descripcion: this.form.value.descripcion,
       abreviatura: this.form.value.abreviatura,
@@ -89,16 +97,20 @@ export class AgregarFormaPagoComponent implements OnInit {
 
     if (this.modificar) {
       this._formaPagoService
-        .actualizarFormaPago(formaPago, formaPago.idFormaPago)
+        .actualizarFormaPago(FormaPago, FormaPago.idFormaPago)
         .subscribe(
           (res) => {
             const result: any = res;
             if (result.id === 1) this.back();
-            this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 5000,
-            });
+            this._snackBar.open(
+              result.message,
+              accion_mensaje.registro_correcto,
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              }
+            );
           },
           (err) => {
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
@@ -109,15 +121,19 @@ export class AgregarFormaPagoComponent implements OnInit {
           }
         );
     } else {
-      this._formaPagoService.agregarFormaPago(formaPago).subscribe(
+      this._formaPagoService.agregarFormaPago(FormaPago).subscribe(
         (res) => {
           const result: any = res;
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            }
+          );
           if (result.id === 1) this.back();
-          this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 5000,
-          });
         },
         (err) => {
           this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
@@ -134,12 +150,12 @@ export class AgregarFormaPagoComponent implements OnInit {
     this._router.navigate(['/dashboard/listar-forma-pago']);
   }
 
-  eliminarformaPago(): void {
+  eliminarFormaPago(): void {
     const dialogRef = this._dialog.open(ConfirmationModalComponent, {
       width: '350px',
       data: {
         confirmation: this.confirmation,
-        question: `¿Está seguro que desea eliminar la Forma de pago '${this.idFormaPago}'?`,
+        question: `¿Está seguro que desea eliminar la forma de pago ${this.IdFormaPago}?`,
       },
     });
 
@@ -152,11 +168,15 @@ export class AgregarFormaPagoComponent implements OnInit {
             (res) => {
               const result: any = res;
               if (result.id === 1) this.back();
-              this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 5000,
-              });
+              this._snackBar.open(
+                result.message,
+                accion_mensaje.registro_correcto,
+                {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'bottom',
+                  duration: 5000,
+                }
+              );
             },
             (err) => {
               this._snackBar.open(err.message, accion_mensaje.error_tecnico, {

@@ -1,36 +1,53 @@
 <div class="container">
-  <mat-toolbar>
+  <mat-toolbar class="toolbar">
     <span>Listado de plantillas Excel</span>
     <div class="button-spacer"></div>
-    <button mat-button routerLink="/dashboard/agregar-plantilla-comprobante">
-      Agregar
-    </button>
   </mat-toolbar>
-
-  <div *ngIf="listaPlantillaComprobante.length > 0">
-    <mat-form-field appearance="standard">
-      <mat-label>Filtro (Ingrese descripción):</mat-label>
-      <input
-        matInput
-        (keyup)="aplicarFiltro($event)"
-        placeholder="{{ placeholderValue }}"
-        #input
-        autocomplete="off"
-      />
-    </mat-form-field>
-
-    <div class="mat-elevation-z8">
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
+  <div class="form-controls" *ngIf="viewOptions">
+    <button
+      mat-raised-button
+      type="button"
+      color="primary"
+      routerLink="/dashboard/agregar-plantilla-comprobante"
+    >
+      <mat-icon>add_circle_outline</mat-icon>Agregar
+    </button>
+    <div *ngIf="listaPlantillaComprobante.length > 0">
+      <mat-form-field appearance="standard">
+        <mat-label>Filtro (Ingrese descripción):</mat-label>
+        <input
+          matInput
+          (keyup)="aplicarFiltro($event)"
+          placeholder="{{ placeholderValue }}"
+          #input
+          autocomplete="off"
+        />
+      </mat-form-field>
       <table mat-table [dataSource]="dataSource" matSort>
         <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
 
         <!-- Id Column -->
         <ng-container matColumnDef="idPlantillaComprobante">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="header-table"
+            style="border-radius: 20px 0 0 20px"
+          >
+            Id Plantilla Comprobante
+          </th>
           <td
             mat-cell
             *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
             {{ element.idPlantillaComprobante }}
           </td>
@@ -38,11 +55,19 @@
 
         <!-- Description Column -->
         <ng-container matColumnDef="nroTicket">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nro Ticket</th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="header-table"
+            style="text-align: center"
+          >
+            N° Ticket
+          </th>
           <td
             mat-cell
             *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
             {{ element.nroTicket }}
           </td>
@@ -50,11 +75,18 @@
 
         <!-- fechaCreacion Column -->
         <ng-container matColumnDef="fechaCreacion">
-          <th mat-header-cell *matHeaderCellDef>F. creación</th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            F. creación
+          </th>
           <td
             mat-cell
             *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
             {{ element.fechaCreacion }}
           </td>
@@ -62,11 +94,18 @@
 
         <!-- fechaDeclaracion Column -->
         <ng-container matColumnDef="fechaDeclaracion">
-          <th mat-header-cell *matHeaderCellDef>F. declaración</th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            F. declaración
+          </th>
           <td
             mat-cell
             *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
             {{ element.fechaDeclaracion }}
           </td>
@@ -74,11 +113,18 @@
 
         <!-- observacion Column -->
         <ng-container matColumnDef="observacion">
-          <th mat-header-cell *matHeaderCellDef>observación</th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            Observación
+          </th>
           <td
             mat-cell
             *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
             {{ element.observacion }}
           </td>
@@ -86,47 +132,73 @@
 
         <!-- Estado Column -->
         <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            Estado
+          </th>
           <td
             mat-cell
             *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
-            {{ element.estado }}
+            {{ element.desEstado }}
           </td>
         </ng-container>
 
         <!-- Acciones Column -->
         <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let element" class="acctions">
-            <a
-              class="link-actions search"
-              matTooltip="Ver Forma de pago"
-              (click)="
-                modificarPlantillaComprobante(element.idPlantillaComprobante, 0)
-              "
-            >
-              <mat-icon>search</mat-icon>
-            </a>
-            <a
-              class="link-actions edit"
-              matTooltip="Editar Forma de pago"
-              (click)="
-                modificarPlantillaComprobante(element.idPlantillaComprobante, 1)
-              "
-            >
-              <mat-icon>edit</mat-icon>
-            </a>
-            <a
-              (click)="
-                eliminarPlantillaComprobante(element.idPlantillaComprobante)
-              "
-              class="link-actions delete"
-              matTooltip="Eliminar Forma de pago"
-            >
-              <mat-icon>delete</mat-icon>
-            </a>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="border-radius: 0 20px 20px 0"
+          ></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="row-option">
+              <button
+                mat-raised-button
+                class="option-button"
+                type="button"
+                color="view"
+                (click)="
+                  modificarPlantillaComprobante(
+                    element.idPlantillaComprobante,
+                    0
+                  )
+                "
+              >
+                <mat-icon>search</mat-icon>Ver
+              </button>
+              <button
+                mat-raised-button
+                type="button"
+                color="success"
+                class="option-button"
+                (click)="
+                  modificarPlantillaComprobante(
+                    element.idPlantillaComprobante,
+                    1
+                  )
+                "
+              >
+                <mat-icon>edit</mat-icon>Editar
+              </button>
+              <button
+                mat-raised-button
+                type="button"
+                color="warn"
+                class="option-button"
+                (click)="
+                  eliminarPlantillaComprobante(element.idPlantillaComprobante)
+                "
+              >
+                <mat-icon>delete</mat-icon>Eliminar
+              </button>
+            </div>
           </td>
         </ng-container>
 
@@ -135,13 +207,16 @@
       </table>
 
       <mat-paginator
+        [pageSize]="5"
         [pageSizeOptions]="[5, 10, 25, 100]"
         showFirstLastButtons
         aria-label="Seleccionar página"
       ></mat-paginator>
     </div>
-  </div>
-  <div *ngIf="listaPlantillaComprobante.length === 0">
-    <h2>No hay plantillas para mostrar</h2>
+    <div *ngIf="viewOptions">
+      <div *ngIf="listaPlantillaComprobante.length === 0" class="empty-list">
+        <h2>No hay plantillas para mostrar</h2>
+      </div>
+    </div>
   </div>
 </div>

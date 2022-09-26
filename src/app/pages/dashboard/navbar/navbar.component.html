@@ -1,6 +1,13 @@
 <mat-toolbar class="toolbarDashboard">
-  <button mat-button [matMenuTriggerFor]="menuPrincipal">...</button>
-  <span>{{nombreEmpresa}}</span>
+  <button
+    mat-raised-button
+    color="primary"
+    [matMenuTriggerFor]="menuPrincipal"
+    style="margin-right: 10px"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>{{ nombreEmpresa }}</span>
   <mat-menu #menuPrincipal="matMenu">
     <ng-container *ngFor="let modulo of modulos">
       <div *ngIf="modulo.esPrincipal === 1">
@@ -59,9 +66,8 @@
   </div>
   <div></div>
   <span class="button-spacer"></span>
-  <label *ngIf="currentUsuario !== undefined">{{
-    currentUsuario.codigoUsuario
-  }}</label
+  <label *ngIf="currentUsuario !== undefined"
+    >Usuario: {{ currentUsuario.codigoUsuario }}</label
   ><button
     mat-icon-button
     (click)="logout()"

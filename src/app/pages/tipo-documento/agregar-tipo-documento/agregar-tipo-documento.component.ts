@@ -24,6 +24,7 @@ export class AgregarTipoDocumentoComponent implements OnInit {
   eliminar: boolean = true;
   confirmation: boolean = false;
   modificar: boolean = false;
+  loading:boolean=true;
 
   constructor(
     private _TipoDocumentoService: TipoDocumentoService,
@@ -50,6 +51,7 @@ export class AgregarTipoDocumentoComponent implements OnInit {
 
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
+      if (params && params['idTipoDocumento']===undefined) this.loading=false;
       if (params && params['idTipoDocumento']) {
         this.IdTipoDocumento = params['idTipoDocumento'];
         this.readonlyId = this.IdTipoDocumento ? true : false;
@@ -65,6 +67,7 @@ export class AgregarTipoDocumentoComponent implements OnInit {
               usuarioCreacion: res.usuarioCreacion,
             });
             this.modificar = true;
+            this.loading=false;
           });
       }
       if (params && params['modificar']) {

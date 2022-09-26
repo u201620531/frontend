@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,21 +7,23 @@ import { NavigationExtras, Router } from '@angular/router';
 import { Proveedor } from 'src/app/interfaces/proveedor';
 import { ProveedorService } from 'src/app/services/proveedor.service';
 import { accion_mensaje, filters } from 'src/shared/config';
+import { CustomPaginator } from '../../shared/CustomPaginatorConfiguration';
 
 @Component({
   selector: 'app-listar-proveedor',
   templateUrl: './listar-proveedor.component.html',
   styleUrls: ['./listar-proveedor.component.css'],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() }]
 })
 export class ListarProveedorComponent implements OnInit {
   listaProveedores: Proveedor[] = [];
   displayedColumns: string[] = [
     'idProveedor',
-    'idTipoProveedor',
+    //'idTipoProveedor',
     'idTipoDocumento',
     'nroDocumento',
     'razonSocial',
-    'direccion',
     'estado',
     'acciones',
   ];
@@ -30,6 +32,7 @@ export class ListarProveedorComponent implements OnInit {
   viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
+  loading: boolean = true;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -58,7 +61,7 @@ export class ListarProveedorComponent implements OnInit {
 
   async ngOnInit() {
     this.placeholderValue = filters.placeholders.proveedor;
-   this.listarProveedores();
+    this.listarProveedores();
   }
 
   async listarProveedores() {
@@ -67,8 +70,10 @@ export class ListarProveedorComponent implements OnInit {
         this.listaProveedores = res;
         this.viewOptions = this.listaProveedores.length > 0;
         this.dataSource = new MatTableDataSource<Proveedor[]>(res);
+        this.loading = false;
       },
       (err) => {
+        this.loading = false;
         console.log(err.message);
       }
     );

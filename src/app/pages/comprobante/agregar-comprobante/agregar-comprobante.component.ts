@@ -96,7 +96,7 @@ export class AgregarComprobanteComponent implements OnInit {
           .subscribe((res: any) => {
             this.form.setValue({
               idComprobante: res.idComprobante,
-              descripcion: res.serie,
+              serie: res.serie,
               correlativo: res.correlativo,
               idTipoDocumento: res.idTipoDocumento,
               idFormaPago: res.idFormaPago,
@@ -117,7 +117,7 @@ export class AgregarComprobanteComponent implements OnInit {
               idMoneda: res.idMoneda,
               serieGuia: res.serieGuia,
               correlativoGuia: res.correlativoGuia,
-              status: res.estado,
+              estado: res.estado,
               fechaCreacion: res.fechaCreacion,
               usuarioCreacion: res.usuarioCreacion,
             });
@@ -133,7 +133,7 @@ export class AgregarComprobanteComponent implements OnInit {
 
   listarTipoDocumento() {
     this._tipoDocumentoService.listarTipoDocumento().subscribe((res) => {
-      this.listarTipoDocumento = res;
+      this.listaTipoDocumento = res;
     });
   }
 
@@ -234,7 +234,7 @@ export class AgregarComprobanteComponent implements OnInit {
   }
 
   back() {
-    this._router.navigate(['/dashboard/listar-tipo-documento']);
+    this._router.navigate(['/dashboard/listar-comprobante']);
   }
 
   eliminarComprobante(): void {

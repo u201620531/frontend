@@ -1,13 +1,23 @@
 <div class="container">
   <mat-toolbar class="toolbar">
-    <span>Listado de Proveedores</span>
+    <span>Listado de proveedores</span>
     <div class="button-spacer"></div>
-    <button mat-button routerLink="/dashboard/agregar-proveedor">
-      Agregar
-    </button>
   </mat-toolbar>
-
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
   <div class="form-controls" *ngIf="viewOptions">
+    <button
+      mat-raised-button
+      type="button"
+      color="primary"
+      routerLink="/dashboard/agregar-proveedor"
+    >
+      <mat-icon>add_circle_outline</mat-icon>Agregar
+    </button>
     <div *ngIf="listaProveedores.length > 0">
       <mat-form-field appearance="standard">
         <mat-label>Filtro (Ingrese aquí el filtro)</mat-label>
@@ -19,170 +29,160 @@
           autocomplete="off"
         />
       </mat-form-field>
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Id Column -->
+        <ng-container matColumnDef="idProveedor">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="border-radius: 20px 0 0 20px"
+          >
+            <div class="cell-table">Id proveedor</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
+          >
+            <div class="cell-table">
+              {{ element.idProveedor }}
+            </div>
+          </td>
+        </ng-container>
+        <!-- Tipo de documento Column -->
+        <ng-container matColumnDef="idTipoDocumento">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            T. documento
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
+          >
+            <div class="cell-table">
+              {{ element.abrTipoDocumento }}
+            </div>
+          </td>
+        </ng-container>
 
-      <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort>
-          <!-- Id Column -->
-          <ng-container matColumnDef="idProveedor">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="border-radius: 20px 0 0 20px"
-            >
-              <div class="cell-table">Id Proveedor</div>
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="cell-table">
-                {{ element.idProveedor }}
-              </div>
-            </td>
-          </ng-container>
+        <!-- N° documento Column -->
+        <ng-container matColumnDef="nroDocumento">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            N° documento
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
+          >
+            <div class="cell-table">
+              {{ element.nroDocumento }}
+            </div>
+          </td>
+        </ng-container>
 
-          <!-- Tipo Column -->
-          <ng-container matColumnDef="idTipoProveedor">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="text-align: center"
-            >
-              <div class="cell-table">Tipo Proveedor</div>
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="cell-table">
-                {{ element.desTipoProveedor }}
-              </div>
-            </td>
-          </ng-container>
+        <!-- Razon Social Column -->
+        <ng-container matColumnDef="razonSocial">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            Apellidos y Nombres/Razón Social
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
+          >
+            <div class="cell-table">
+              {{ element.razonSocial }}
+            </div>
+          </td>
+        </ng-container>
 
-          <!-- Tipo de documento Column -->
-          <ng-container matColumnDef="idTipoDocumento">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="text-align: center"
-            >
-              Tipo de documento
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="cell-table">
-                {{ element.desTipoDocumento }}
-              </div>
-            </td>
-          </ng-container>
+        <!-- Estado Column -->
+        <ng-container matColumnDef="estado">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="text-align: center"
+          >
+            <div class="cell-table">Estado</div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
+          >
+            <div class="cell-table">{{ element.desEstado }}</div>
+          </td>
+        </ng-container>
 
-          <!-- N° documento Column -->
-          <ng-container matColumnDef="nroDocumento">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="text-align: center"
-            >
-              N° documento
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="cell-table">
-                {{ element.nroDocumento }}
-              </div>
-            </td>
-          </ng-container>
+        <!-- acciones Column -->
+        <ng-container matColumnDef="acciones">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="border-radius: 0 20px 20px 0"
+          ></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="row-option">
+              <button
+                mat-raised-button
+                class="option-button"
+                type="button"
+                color="view"
+                (click)="modificarProveedor(element.idProveedor, 0)"
+              >
+                <mat-icon>search</mat-icon>Ver
+              </button>
+              <button
+                mat-raised-button
+                type="button"
+                color="success"
+                class="option-button"
+                (click)="modificarProveedor(element.idProveedor, 1)"
+              >
+                <mat-icon>edit</mat-icon>Editar
+              </button>
+              <button
+                mat-raised-button
+                type="button"
+                color="warn"
+                class="option-button"
+                (click)="eliminarProveedor(element.idProveedor)"
+              >
+                <mat-icon>delete</mat-icon>Eliminar
+              </button>
+            </div>
+          </td>
+        </ng-container>
 
-          <!-- Razon Social Column -->
-          <ng-container matColumnDef="razonSocial">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="text-align: center"
-            >
-              Apellidos y Nombres/Razon Social
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="cell-table">
-                {{ element.razonSocial }}
-              </div>
-            </td>
-          </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
 
-          <!-- Dirección Column -->
-          <ng-container matColumnDef="direccion">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="text-align: center"
-            >
-              Dirección
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="cell-table">{{ element.direccion }}</div>
-            </td>
-          </ng-container>
-
-          <!-- Estado Column -->
-          <ng-container matColumnDef="estado">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="text-align: center"
-            >
-              <div class="cell-table">Estado</div>
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="cell-table">{{ element.estado }}</div>
-            </td>
-          </ng-container>
-
-          <!-- acciones Column -->
-          <ng-container matColumnDef="acciones">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              class="header-table"
-              style="border-radius: 0 20px 20px 0"
-            ></th>
-            <td mat-cell *matCellDef="let element" class="acctions">
-              <div class="cell-table">
-                <a
-                  class="link-actions search"
-                  matTooltip="Ver Cliente"
-                  (click)="modificarProveedor(element.idProveedor, 0)"
-                >
-                  <mat-icon>search</mat-icon>
-                </a>
-                <a
-                  class="link-actions edit"
-                  matTooltip="Modificar Cliente"
-                  (click)="modificarProveedor(element.idProveedor, 1)"
-                >
-                  <mat-icon>edit</mat-icon>
-                </a>
-                <a
-                  class="link-actions delete"
-                  matTooltip="Eliminar Cliente"
-                  (click)="eliminarProveedor(element.idProveedor)"
-                >
-                  <mat-icon>delete</mat-icon>
-                </a>
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-
-        <mat-paginator
-          [pageSize]="5"
-          [pageSizeOptions]="[5, 10, 25, 100]"
-          showFirstLastButtons
-          aria-label="Seleccionar página de proveedores"
-        ></mat-paginator>
-      </div>
+      <mat-paginator
+        [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        showFirstLastButtons
+        aria-label="Seleccionar página de proveedores"
+      ></mat-paginator>
     </div>
     <div *ngIf="viewOptions">
       <div *ngIf="listaProveedores.length === 0" class="empty-list">

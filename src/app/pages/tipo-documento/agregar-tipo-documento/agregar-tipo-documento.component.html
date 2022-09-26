@@ -1,31 +1,41 @@
 <div class="container">
   <mat-toolbar class="toolbar">
-    <span>Mantenimiento de Tipos de documento</span>
+    <span>Mantenimiento de tipos de documento</span>
+    <div class="button-spacer"></div>
+    <button mat-button (click)="back()">
+      <mat-icon> arrow_back </mat-icon>Regresar
+    </button>
   </mat-toolbar>
-
-  <div class="form-controls">
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
+  <div class="form-controls" *ngIf="!loading">
     <mat-card class="cardOptions">
       <form [formGroup]="form" (ngSubmit)="agregarTipoDocumento()">
         <mat-grid-list cols="6" rowHeight="70px">
           <mat-grid-tile
-            [colspan]="1"
-            [rowspan]="3"
+            [colspan]="2"
+            [rowspan]="2"
             [style.background]="'transparent'"
           >
+          <div class="img-container" style="margin-right: 10px;">
             <img
               src="../../../../assets/img/png/tipoDocumento.png"
               alt="tipo documento"
               width="200"
               height="120"
             />
+            </div>
           </mat-grid-tile>
           <mat-grid-tile
-            [colspan]="5"
+            [colspan]="1"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field>
+              <mat-form-field class="input-option">
                 <mat-label>Id</mat-label>
                 <input
                   matInput
@@ -35,15 +45,19 @@
                   size="3"
                 />
               </mat-form-field>
-            </div>
           </mat-grid-tile>
           <mat-grid-tile
-            [colspan]="4"
+            [colspan]="3"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionMedium">
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="3"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+              <mat-form-field class="input-option input-option-right">
                 <mat-label>Descripción</mat-label>
                 <input
                   matInput
@@ -53,15 +67,13 @@
                   maxlength="200"
                 />
               </mat-form-field>
-            </div>
-          </mat-grid-tile>
+           </mat-grid-tile>
           <mat-grid-tile
-            [colspan]="2"
+            [colspan]="1"
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <div class="inputID">
-              <mat-form-field class="inputOptionLarge">
+              <mat-form-field class="input-option">
                 <mat-label>Abreviatura</mat-label>
                 <input
                   matInput
@@ -71,7 +83,6 @@
                   maxlength="10"
                 />
               </mat-form-field>
-            </div>
             <div style="display: none">
               <mat-form-field>
                 <mat-label>Estado</mat-label>
@@ -130,12 +141,8 @@
             >
               Eliminar
             </button>
-            <button type="button" mat-raised-button (click)="back()">
-              Volver
-            </button>
           </mat-grid-tile>
         </mat-grid-list>
       </form>
     </mat-card>
   </div>
-</div>

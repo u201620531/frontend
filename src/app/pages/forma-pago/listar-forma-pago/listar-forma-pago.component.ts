@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,18 +7,19 @@ import { NavigationExtras, Router } from '@angular/router';
 import { FormaPago } from 'src/app/interfaces/forma-pago';
 import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { accion_mensaje, filters } from 'src/shared/config';
+import { CustomPaginator } from '../../shared/CustomPaginatorConfiguration';
 
 @Component({
   selector: 'app-listar-forma-pago',
   templateUrl: './listar-forma-pago.component.html',
   styleUrls: ['./listar-forma-pago.component.css'],
+  providers: [{ provide: MatPaginatorIntl, useValue: CustomPaginator() }],
 })
 export class ListarFormaPagoComponent implements OnInit {
   listaFormaPago: FormaPago[] = [];
   displayedColumns: string[] = [
     'idFormaPago',
     'descripcion',
-    'abreviatura',
     'estado',
     'acciones',
   ];
@@ -27,6 +28,7 @@ export class ListarFormaPagoComponent implements OnInit {
   viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
+  loading: boolean = true;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -64,8 +66,10 @@ export class ListarFormaPagoComponent implements OnInit {
         this.listaFormaPago = res;
         this.viewOptions = this.listaFormaPago.length > 0;
         this.dataSource = new MatTableDataSource<FormaPago[]>(res);
+        this.loading = false;
       },
       (err) => {
+        this.loading = false;
         console.log(err.message);
       }
     );

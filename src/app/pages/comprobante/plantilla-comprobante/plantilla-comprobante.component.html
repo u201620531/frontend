@@ -1,208 +1,210 @@
 <div class="container">
-  <mat-toolbar>
+  <mat-toolbar class="toolbar">
     <span>Detalle de plantilla Excel</span>
     <div class="button-spacer"></div>
-    <button mat-button routerLink="/dashboard/plantilla-comprobante">
-      Regresar
+    <button mat-button (click)="back()">
+      <mat-icon> arrow_back </mat-icon>Regresar
     </button>
   </mat-toolbar>
-
-  <div *ngIf="listaDetallePlantillaComprobante.length > 0">
-    <mat-form-field appearance="standard">
-      <mat-label>Filtro (Ingrese Razon Social):</mat-label>
-      <input
-        matInput
-        (keyup)="aplicarFiltro($event)"
-        placeholder="{{ placeholderValue }}"
-        #input
-        autocomplete="off"
-      />
-    </mat-form-field>
-
-    <div>
-      <button
-        mat-raised-button
-        style="margin-right: 20px"
-        type="button"
-        (click)="generarPlantilla()"
-      >
-        Generar plantilla
-      </button>
-    </div>
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" matSort>
-        <!--- Note that these columns can be defined in any order.
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
+  <div class="form-controls" *ngIf="viewOptions">
+    <button
+      mat-raised-button
+      type="button"
+      color="primary"
+      (click)="generarPlantilla()"
+    >
+      <mat-icon>playlist_add_check</mat-icon>Generar plantilla
+    </button>
+    <div *ngIf="listaDetallePlantillaComprobante.length > 0">
+      <mat-form-field appearance="standard">
+        <mat-label>Filtro (Ingrese Razon Social):</mat-label>
+        <input
+          matInput
+          (keyup)="aplicarFiltro($event)"
+          placeholder="{{ placeholderValue }}"
+          #input
+          autocomplete="off"
+        />
+      </mat-form-field>
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
 
-        <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox
-              (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="border-radius: 20px 0 0 20px">
+              <mat-checkbox
+                (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+              >
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-checkbox
+                (click)="
+                  $event.stopPropagation();
+                  selectRow(element.serie, element.correlativo)
+                "
+                (change)="$event ? selection.toggle(element) : null"
+                [checked]="selection.isSelected(element)"
+              >
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- idPlantillaComprobante Column -->
+          <ng-container matColumnDef="idPlantillaComprobante">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              style="display: none"
             >
-            </mat-checkbox>
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <mat-checkbox
-              (click)="
-                $event.stopPropagation();
-                selectRow(element.serie, element.correlativo)
-              "
-              (change)="$event ? selection.toggle(element) : null"
-              [checked]="selection.isSelected(element)"
+              idPlantillaComprobante
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+              style="display: none"
             >
-            </mat-checkbox>
-          </td>
-        </ng-container>
+              {{ element.idPlantillaComprobante }}
+            </td>
+          </ng-container>
 
-        <!-- idPlantillaComprobante Column -->
-        <ng-container matColumnDef="idPlantillaComprobante">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            style="display: none"
-          >
-            idPlantillaComprobante
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-            style="display: none"
-          >
-            {{ element.idPlantillaComprobante }}
-          </td>
-        </ng-container>
-
-        <!-- serie Column -->
-        <ng-container matColumnDef="serie">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Serie</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.serie }}
-          </td>
-        </ng-container>
-
-        <!-- correlativo Column -->
-        <ng-container matColumnDef="correlativo">
-          <th mat-header-cell *matHeaderCellDef>Correlativo</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.correlativo }}
-          </td>
-        </ng-container>
-
-        <!-- nroDocumento Column -->
-        <ng-container matColumnDef="nroDocumento">
-          <th mat-header-cell *matHeaderCellDef>Doc. Proveedor</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.nroDocumento }}
-          </td>
-        </ng-container>
-
-        <!-- razonSocial Column -->
-        <ng-container matColumnDef="razonSocial">
-          <th mat-header-cell *matHeaderCellDef>Proveedor</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.razonSocial }}
-          </td>
-        </ng-container>
-
-        <!-- fechaEmision Column -->
-        <ng-container matColumnDef="fechaEmision">
-          <th mat-header-cell *matHeaderCellDef>F. Emisión</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.fechaEmision }}
-          </td>
-        </ng-container>
-
-        <!-- formaPago Column -->
-        <ng-container matColumnDef="formaPago">
-          <th mat-header-cell *matHeaderCellDef>Forma Pago</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.desFormaPago }}
-          </td>
-        </ng-container>
-
-        <!-- importeTotal Column -->
-        <ng-container matColumnDef="importeTotal">
-          <th mat-header-cell *matHeaderCellDef>Importe</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.importeTotal }}
-          </td>
-        </ng-container>
-
-        <!-- Estado Column -->
-        <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
-          >
-            {{ element.estado }}
-          </td>
-        </ng-container>
-
-        <!-- Acciones Column
-        <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let element" class="acctions">
-            <a
-              (click)="
-                eliminarDetallePlantillaComprobante(
-                  element.idPlantillaComprobante,
-                  element.idComprobante
-                )
-              "
-              class="link-actions delete"
-              matTooltip="Eliminar Forma de pago"
+          <!-- serie Column -->
+          <ng-container matColumnDef="serie">
+            <th mat-header-cell *matHeaderCellDef 
+            class="header-table"
+            style="text-align: center">Serie</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
             >
-              <mat-icon>delete</mat-icon>
-            </a>
-          </td>
-        </ng-container> -->
+              {{ element.serie }}
+            </td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
+          <!-- correlativo Column -->
+          <ng-container matColumnDef="correlativo">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="text-align: center">Correlativo</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            >
+              {{ element.correlativo }}
+            </td>
+          </ng-container>
 
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        showFirstLastButtons
-        aria-label="Seleccionar página"
-      ></mat-paginator>
+          <!-- nroDocumento Column -->
+          <ng-container matColumnDef="nroDocumento">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="text-align: center">Doc. Proveedor</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            >
+              {{ element.nroDocumento }}
+            </td>
+          </ng-container>
+
+          <!-- razonSocial Column -->
+          <ng-container matColumnDef="razonSocial">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="text-align: center">Proveedor</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            >
+              {{ element.razonSocial }}
+            </td>
+          </ng-container>
+
+          <!-- fechaEmision Column -->
+          <ng-container matColumnDef="fechaEmision">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="text-align: center">F. Emisión</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            >
+              {{ element.fechaEmision }}
+            </td>
+          </ng-container>
+
+          <!-- formaPago Column -->
+          <ng-container matColumnDef="formaPago">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="text-align: center">F. Pago</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            >
+              {{ element.desFormaPago }}
+            </td>
+          </ng-container>
+
+          <!-- importeTotal Column -->
+          <ng-container matColumnDef="importeTotal">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="text-align: center">Importe</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            >
+              {{ element.importeTotal }}
+            </td>
+          </ng-container>
+
+          <!-- Estado Column -->
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef
+            class="header-table"
+            style="text-align: center;border-radius: 0 20px 20px 0">Estado</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
+            >
+              {{ element.desEstado }}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons
+          aria-label="Seleccionar página"
+        ></mat-paginator>
+      </div>
+      <div *ngIf="viewOptions">
+        <div *ngIf="listaDetallePlantillaComprobante.length === 0" class="empty-list">
+          <h2>No hay comprobantes asociados para mostrar</h2>
+        </div>
+      </div>
     </div>
   </div>
-  <div *ngIf="listaDetallePlantillaComprobante.length === 0">
-    <h2>No hay plantillas para mostrar</h2>
-  </div>
-</div>

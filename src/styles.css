@@ -22,26 +22,34 @@ body {
 }
 
 .toolbar {
-  background-color: rgb(248, 176, 51);
+  background-color: #3f51b5;
   color: white;
   border-radius: 25px;
-  box-shadow: 6px 8px 1px rgb(249, 214, 171);
+  border: 2px solid #3f51b5;
+  box-shadow: 6px 8px 1px rgb(231, 231, 233);
 }
 
 .form-controls {
   margin-top: 10px;
   padding: 20px;
   border-radius: 25px;
-  border: 2px solid rgb(248, 176, 51);
-  box-shadow: 6px 8px 1px rgb(249, 214, 171);
+  border: 2px solid #3f51b5;
+  box-shadow: 6px 8px 1px rgb(231, 231, 233);
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
 }
 
 .header-table {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
-  background-color:  rgb(33, 39, 210);
+  background-color: #3f51b5;
   color: white;
   border: 1px solid white;
+  text-align: center;
+  padding: 10px;
 }
 
 .cell-table {
@@ -56,17 +64,116 @@ body {
   background-color: #155724;
 }
 
-.mat-raised-button.mat-warn,
+.mat-raised-button.mat-view,
+.mat-flat-button.mat-view,
+.mat-fab.mat-view,
+.mat-mini-fab.mat-view {
+  color: #f0fff3;
+  background-color: #fcb530;
+}
+
+/* .mat-raised-button.mat-warn,
 .mat-flat-button.mat-warn,
 .mat-fab.mat-warn,
 .mat-mini-fab.mat-warn {
   color: #f0fff3;
   background-color: rgb(248, 176, 51);
-}
+} */
 
 .empty-list {
   margin-left: 12px;
   margin-top: 48px;
   color: red;
   text-align-last: center;
+}
+
+.file-select {
+  position: relative;
+  display: inline;
+  padding: 10px;
+}
+
+.file-select::before {
+  background-color: #155724;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  content: "Seleccionar archivos";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.file-select input[type="file"] {
+  opacity: 0;
+  width: 200px;
+  height: 36px;
+  display: inline-block;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: bold;
+  color: #5678ef;
+}
+
+th.mat-header-cell,
+mat-cell {
+  text-align: center !important;
+}
+
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  padding: 10px !important;
+}
+
+.spinner {
+  margin: 0 auto; /*centra al medio*/
+}
+
+.input-option {
+  position: absolute;
+  width: 100% !important;
+}
+
+.input-option-right{
+margin-right: 10px;
+}
+
+.input-numeric {
+  text-align: right !important;
+}
+
+.img-container {
+  width: 100%;
+  height: 100%;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+}
+
+.row-active {
+  color: black;
+}
+
+.row-inactive {
+  color: red;
+}
+
+.row-option {
+  text-align: center;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
 }

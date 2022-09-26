@@ -27,6 +27,7 @@ export class AgregarProveedorComponent implements OnInit {
   eliminar: boolean = true;
   confirmacion: boolean = false;
   modificar: boolean = false;
+  loading: boolean = true;
 
   constructor(
     private _usuarioService: UsuarioService,
@@ -63,6 +64,7 @@ export class AgregarProveedorComponent implements OnInit {
 
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
+      if (params && params['idProveedor'] === undefined) this.loading = false;
       if (params && params['idProveedor']) {
         this.IdProveedor = params['idProveedor'];
         this.readonlyId = this.IdProveedor ? true : false;
@@ -71,6 +73,7 @@ export class AgregarProveedorComponent implements OnInit {
           .subscribe((res: any) => {
             this.idTipoDocumento = res.idTipoDocumento;
             this.idTipoProveedor = res.idTipoProveedor;
+            this.loading = false;
             this.form.setValue({
               idProveedor: res.idProveedor,
               idTipoProveedor: res.idTipoProveedor,
@@ -140,11 +143,15 @@ export class AgregarProveedorComponent implements OnInit {
           (res) => {
             const result: any = res;
             if (result.id === 1) this.back();
-            this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 5000,
-            });
+            this._snackBar.open(
+              result.message,
+              accion_mensaje.registro_correcto,
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              }
+            );
           },
           (err) => {
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
@@ -155,15 +162,19 @@ export class AgregarProveedorComponent implements OnInit {
           }
         );
     } else {
-      console.log('prov',proveedor);
+      console.log('prov', proveedor);
       this._proveedorService.agregarProveedor(proveedor).subscribe(
         (res) => {
           const result: any = res;
-          this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 5000,
-          });
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            }
+          );
           if (result.id === 1) this.back();
         },
         (err) => {
@@ -199,11 +210,15 @@ export class AgregarProveedorComponent implements OnInit {
             (res) => {
               const result: any = res;
               if (result.id === 1) this.back();
-              this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 5000,
-              });
+              this._snackBar.open(
+                result.message,
+                accion_mensaje.registro_correcto,
+                {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'bottom',
+                  duration: 5000,
+                }
+              );
             },
             (err) => {
               this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
