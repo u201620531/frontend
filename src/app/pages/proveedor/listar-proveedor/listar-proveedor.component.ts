@@ -20,7 +20,6 @@ export class ListarProveedorComponent implements OnInit {
   listaProveedores: Proveedor[] = [];
   displayedColumns: string[] = [
     'idProveedor',
-    //'idTipoProveedor',
     'idTipoDocumento',
     'nroDocumento',
     'razonSocial',
@@ -29,7 +28,6 @@ export class ListarProveedorComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<Proveedor[]>;
   placeholderValue: string = '';
-  viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
   loading: boolean = true;
@@ -68,7 +66,6 @@ export class ListarProveedorComponent implements OnInit {
     this._proveedorService.listarPoveedores().subscribe(
       (res) => {
         this.listaProveedores = res;
-        this.viewOptions = this.listaProveedores.length > 0;
         this.dataSource = new MatTableDataSource<Proveedor[]>(res);
         this.loading = false;
       },

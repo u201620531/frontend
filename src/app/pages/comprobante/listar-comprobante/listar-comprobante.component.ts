@@ -17,7 +17,6 @@ export class ListarComprobanteComponent implements OnInit {
   listaComprobante: any[] = [];
 
   displayedColumns: string[] = [
-    'item',
     'idComprobante',
     'nroDocumento',
     'fechaEmision',
@@ -29,7 +28,6 @@ export class ListarComprobanteComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<any[]>;
   placeholderValue: string = '';
-  viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
   loading: boolean = true;
@@ -70,7 +68,6 @@ export class ListarComprobanteComponent implements OnInit {
         this.listaComprobante = res;
         this.dataSource = new MatTableDataSource<any[]>(res);
         this.loading = false;
-        this.viewOptions = this.listaComprobante.length > 1;
       },
       (err) => {
         this.loading = false;

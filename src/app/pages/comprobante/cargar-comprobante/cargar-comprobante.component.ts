@@ -282,7 +282,6 @@ export class CargarComprobanteComponent implements OnInit {
         this.listaComprobantes.push(this.comprobante);
       });
       this.cargarlistaComprobantesPorCargar();
-      console.log(this.listaComprobantes);
     };
     this.loading = false;
   }
@@ -626,16 +625,20 @@ export class CargarComprobanteComponent implements OnInit {
     comprobanteRegistro: Comprobante,
     comprobantesPorCargar: any
   ) {
-    comprobanteRegistro.fechaEmision=isNaN(parseInt(comprobantesPorCargar.fechaEmision))
-    ? new Date(comprobantesPorCargar.fechaEmision).toLocaleDateString()
-    : comprobantesPorCargar.fechaEmision;;
-    
-    comprobanteRegistro.fechaVencimiento=(comprobantesPorCargar.fechaVencimiento !== undefined && isNaN(parseInt(comprobantesPorCargar.fechaVencimiento)))
-    ? new Date(comprobantesPorCargar.fechaVencimiento).toLocaleDateString()
-    : comprobantesPorCargar.fechaVencimiento;
-    comprobanteRegistro.importeTotal=comprobantesPorCargar.importeTotal;
-    comprobanteRegistro.igv=comprobantesPorCargar.igv;
-    comprobanteRegistro.valorCompra=comprobantesPorCargar.valorCompra;
+    comprobanteRegistro.fechaEmision = isNaN(
+      parseInt(comprobantesPorCargar.fechaEmision)
+    )
+      ? new Date(comprobantesPorCargar.fechaEmision).toLocaleDateString()
+      : comprobantesPorCargar.fechaEmision;
+
+    comprobanteRegistro.fechaVencimiento =
+      comprobantesPorCargar.fechaVencimiento !== undefined &&
+      isNaN(parseInt(comprobantesPorCargar.fechaVencimiento))
+        ? new Date(comprobantesPorCargar.fechaVencimiento).toLocaleDateString()
+        : comprobantesPorCargar.fechaVencimiento;
+    comprobanteRegistro.importeTotal = comprobantesPorCargar.importeTotal;
+    comprobanteRegistro.igv = comprobantesPorCargar.igv;
+    comprobanteRegistro.valorCompra = comprobantesPorCargar.valorCompra;
     comprobanteRegistro.totalGravadas =
       comprobantesPorCargar.totalGravadas === ''
         ? 0

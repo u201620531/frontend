@@ -53,101 +53,104 @@
         Cancelar registro
       </button>
     </div>
-    <mat-spinner *ngIf="loading" diameter="50" class="spinner" style="margin-top:200px;"></mat-spinner>
+    <mat-spinner
+      *ngIf="loading"
+      diameter="50"
+      class="spinner"
+      style="margin-top: 200px"
+    ></mat-spinner>
     <div *ngIf="listaComprobantesPorCargar.length > 0">
-        <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" matSort>
-            <!-- item Column -->
-            <ng-container matColumnDef="item">
-              <th
-                mat-header-cell
-                *matHeaderCellDef
-                class="header-table"
-                style="border-radius: 20px 0 0 20px"
-              >
-                N°
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
-              >
-                {{ element.item }}
-              </td>
-            </ng-container>
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- item Column -->
+        <ng-container matColumnDef="item">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="border-radius: 20px 0 0 20px"
+          >
+            N°
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.item }}
+          </td>
+        </ng-container>
 
-            <!-- nroDocumento Column -->
-            <ng-container matColumnDef="nroDocumento">
-              <th mat-header-cell *matHeaderCellDef class="header-table">
-                Nro comprobante
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
-              >
-                {{ element.nroDocumento }}
-              </td>
-            </ng-container>
+        <!-- nroDocumento Column -->
+        <ng-container matColumnDef="nroDocumento">
+          <th mat-header-cell *matHeaderCellDef class="header-table">
+            Nro comprobante
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.nroDocumento }}
+          </td>
+        </ng-container>
 
-            <!-- ruc Column -->
-            <ng-container matColumnDef="ruc">
-              <th mat-header-cell *matHeaderCellDef class="header-table">
-                Doc. proveedor
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
-              >
-                {{ element.ruc }}
-              </td>
-            </ng-container>
+        <!-- ruc Column -->
+        <ng-container matColumnDef="ruc">
+          <th mat-header-cell *matHeaderCellDef class="header-table">
+            Doc. proveedor
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.ruc }}
+          </td>
+        </ng-container>
 
-            <!-- razonSocial Column -->
-            <ng-container matColumnDef="razonSocial">
-              <th mat-header-cell *matHeaderCellDef class="header-table">
-                Razon social
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
-              >
-                {{ element.razonSocial }}
-              </td>
-            </ng-container>
+        <!-- razonSocial Column -->
+        <ng-container matColumnDef="razonSocial">
+          <th mat-header-cell *matHeaderCellDef class="header-table">
+            Razon social
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.razonSocial }}
+          </td>
+        </ng-container>
 
-            <!-- detalle Column -->
-            <ng-container matColumnDef="detalle">
-              <th
-                mat-header-cell
-                *matHeaderCellDef
-                class="header-table"
-                style="border-radius: 0 20px 20px 0"
-              >
-                Detalle
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
-              >
-                {{ element.detalle }}
-              </td>
-            </ng-container>
+        <!-- detalle Column -->
+        <ng-container matColumnDef="detalle">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="header-table"
+            style="border-radius: 0 20px 20px 0"
+          >
+            Detalle
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="element.estado === 1 ? 'rowActive' : 'rowInactive'"
+          >
+            {{ element.detalle }}
+          </td>
+        </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="listadoColumnas"></tr>
-            <tr mat-row *matRowDef="let row; columns: listadoColumnas"></tr>
-          </table>
+        <tr mat-header-row *matHeaderRowDef="listadoColumnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: listadoColumnas"></tr>
+      </table>
 
-          <mat-paginator
-            [pageSize]="5"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            showFirstLastButtons
-            aria-label="Seleccionar página de comprobantes"
-          ></mat-paginator>
-        </div>
+      <mat-paginator
+        [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        showFirstLastButtons
+        aria-label="Seleccionar página de comprobantes"
+      ></mat-paginator>
     </div>
     <div *ngIf="listaComprobantesPorCargar.length === 0" class="empty-list">
       <h2>No hay comprobantes electrónicos seleccionados</h2>
