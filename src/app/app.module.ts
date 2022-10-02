@@ -36,6 +36,13 @@ import { ListarUsuarioComponent } from './pages/auth/usuario/listar-usuario/list
 import { ListarPlantillaComponent } from './pages/comprobante/listar-plantilla/listar-plantilla.component';
 import { CustomPaginator } from './pages/shared/CustomPaginatorConfiguration';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
+import { ListarTipoCambioComponent } from './pages/tipo-cambio/listar-tipo-cambio/listar-tipo-cambio.component';
+import { AgregarTipoCambioComponent } from './pages/tipo-cambio/agregar-tipo-cambio/agregar-tipo-cambio.component';
+import { ListarCuentaContableComponent } from './pages/cuenta-contable/listar-cuenta-contable/listar-cuenta-contable.component';
+import { AgregarCuentaContableComponent } from './pages/cuenta-contable/agregar-cuenta-contable/agregar-cuenta-contable.component';
+import { AgregarSubCuentaContableComponent } from './pages/sub-cuenta-contable/agregar-sub-cuenta-contable/agregar-sub-cuenta-contable.component';
+import { ListarSubCuentaContableComponent } from './pages/sub-cuenta-contable/listar-sub-cuenta-contable/listar-sub-cuenta-contable.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +67,12 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
     ListarProveedorComponent,
     AgregarUsuarioComponent,
     ListarUsuarioComponent,
+    ListarTipoCambioComponent,
+    AgregarTipoCambioComponent,
+    ListarCuentaContableComponent,
+    AgregarCuentaContableComponent,
+    AgregarSubCuentaContableComponent,
+    ListarSubCuentaContableComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +87,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
     { provide: MatPaginatorIntl, useValue: CustomPaginator() },
     // provider used to create fake backend
     fakeBackendProvider,
+    DatePipe
   ],
   bootstrap: [AppComponent],
 })

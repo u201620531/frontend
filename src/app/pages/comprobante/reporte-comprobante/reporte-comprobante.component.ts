@@ -9,7 +9,10 @@ import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { Comprobante } from 'src/app/interfaces/comprobante';
 import * as XLSX from 'xlsx-js-style';
-import { reportes } from 'src/shared/config';
+import { accion_mensaje, reportes, soporte } from 'src/shared/config';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SoporteService } from 'src/app/services/soporte.service';
+import { formatoFechaGuion } from 'src/shared/functions';
 
 @Component({
   selector: 'app-reporte-comprobante',
@@ -20,11 +23,19 @@ export class ReporteComprobanteComponent implements OnInit {
   listaTipoDocumento: TipoDocumento[] = [];
   listaMoneda: Moneda[] = [];
   listaFormaPago: FormaPago[] = [];
+  listaEstados: any = [];
   listaComprobantes: Comprobante[] = [];
-  // rangeDates = new FormGroup({
-  //   start: new FormControl(),
-  //   end: new FormControl(),
-  // });
+  rangeDates = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
+
+  resetRange() {
+    this.rangeDates.patchValue({
+      start: null,
+      end: null,
+    });
+  }
 
   nroDocumento: string = '';
   idTipoDocumento: string = '';
@@ -32,18 +43,22 @@ export class ReporteComprobanteComponent implements OnInit {
   idMoneda: string = '';
   fechaEmisionIni: string = '';
   fechaEmisionFin: string = '';
+  estado: string = '';
 
   constructor(
+    private _snackBar: MatSnackBar,
     private _tipoDocumentoService: TipoDocumentoService,
     private _monedaService: MonedaService,
     private _formaPagoService: FormaPagoService,
-    private _comprobanteService: ComprobanteService
+    private _comprobanteService: ComprobanteService,
+    private _soporteService: SoporteService
   ) {}
 
   ngOnInit(): void {
     this.listarFormasPago();
     this.listarMonedas();
     this.listarTiposDocumento();
+    this.listarEstados();
   }
 
   listarTiposDocumento() {
@@ -64,7 +79,21 @@ export class ReporteComprobanteComponent implements OnInit {
     });
   }
 
-  cleanFilters(): void {}
+  listarEstados() {
+    this._soporteService
+      .listarSoporteById(soporte.estadoComprobanteElectronico)
+      .subscribe((res) => {
+        this.listaEstados = res;
+      });
+  }
+
+  cleanFilters(): void {
+    this.resetRange();
+    this.idMoneda='';
+    this.idTipoDocumento='';
+    this.idFormaPago='';
+    this.estado='';
+  }
 
   async descargarReporte() {
     this._comprobanteService
@@ -73,19 +102,35 @@ export class ReporteComprobanteComponent implements OnInit {
         this.idTipoDocumento === '' ? 'X' : this.idTipoDocumento,
         this.idFormaPago === '' ? 'X' : this.idFormaPago,
         this.idMoneda === '' ? 'X' : this.idMoneda,
-        this.fechaEmisionIni === '' ? 'X' : this.fechaEmisionIni,
-        this.fechaEmisionFin === '' ? 'X' : this.fechaEmisionFin
+        this.rangeDates.value.start === ''
+          ? 'X'
+          : this.rangeDates.value.start !== null
+          ? formatoFechaGuion(this.rangeDates.value.start)
+          : this.rangeDates.value.start,
+        this.rangeDates.value.end === ''
+          ? 'X'
+          : this.rangeDates.value.end !== null
+          ? formatoFechaGuion(this.rangeDates.value.end)
+          : this.rangeDates.value.end,
+        this.estado === '' ? 'X' : this.estado
       )
       .subscribe(
         (res) => {
           this.listaComprobantes = res;
-          this.generarReporte();
+          if (this.listaComprobantes.length === 0) {
+            this._snackBar.open('Consulta Ok', accion_mensaje.listado_vacio, {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            });
+          } else this.generarReporte();
         },
         (err) => {
           console.log(err.message);
         }
       );
   }
+
   styleHeader = {
     font: {
       bold: true,
@@ -98,6 +143,7 @@ export class ReporteComprobanteComponent implements OnInit {
       fgColor: { rgb: '1212C6' },
     },
   };
+
   async generarReporte() {
     const wb = XLSX.utils.book_new();
 

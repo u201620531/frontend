@@ -1,59 +1,24 @@
 <div class="container">
   <mat-toolbar class="toolbar">
-    <span>Reporte de Comprobantes electrónicos</span>
+    <span>Reporte de comprobantes electrónicos</span>
   </mat-toolbar>
   <div class="form-controls">
-    <mat-card class="cardOptions">
-      <mat-grid-list cols="6" rowHeight="50px">
-        <mat-grid-tile [colspan]="1" [rowspan]="1" class="gridTile">
-          <mat-label>Fecha:</mat-label>
+      <mat-grid-list cols="9" rowHeight="50px">
+        <mat-grid-tile [colspan]="1" [rowspan]="1" >
+          <mat-label>Fecha emisión:</mat-label>
         </mat-grid-tile>
-        <!-- <mat-grid-tile
-          [colspan]="2"
-          [rowspan]="1"
-          [style.background]="'transparent'"
-        >
-          <mat-form-field appearance="fill" class="example-form-field">
-            <input matInput [matDatepicker]="datepicker" />
-            <mat-date-range-input [formGroup]="rangeDates" [rangePicker]="picker">
-              <input matStartDate formControlName="start" placeholder="Start date">
-              <input matEndDate formControlName="end" placeholder="End date">
-            </mat-date-range-input>
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="datepicker"
-            ></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
-            <mat-datepicker #datepicker>
-              <mat-datepicker-actions>
-                <button mat-button matDatepickerCancel>Cancel</button>
-                <button mat-raised-button color="primary" matDatepickerApply>
-                  Apply
-                </button>
-              </mat-datepicker-actions>
-            </mat-datepicker>
-          </mat-form-field>
-        </mat-grid-tile> -->
-        <!-- <mat-grid-tile
-          [colspan]="1"
-          [rowspan]="1"
-          [style.background]="'transparent'"
-        >
-          <mat-label>Fechas:</mat-label>
-        </mat-grid-tile> -->
-        <mat-grid-tile [colspan]="2" [rowspan]="1" class="gridTile">
+        <mat-grid-tile [colspan]="2" [rowspan]="1" >
           <mat-form-field appearance="fill">
-            <mat-date-range-input [rangePicker]="rangePicker">
-              <input matStartDate placeholder="Start date" />
-              <input matEndDate placeholder="End date" />
+            <mat-date-range-input [formGroup]="rangeDates" [rangePicker]="rangeDate">
+              <input matStartDate formControlName="start" placeholder="Fecha Inicio" />
+              <input matEndDate formControlName="end" placeholder="Fecha fin" />
             </mat-date-range-input>
-            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
             <mat-datepicker-toggle
               matSuffix
-              [for]="rangePicker"
+              [for]="rangeDate"
             ></mat-datepicker-toggle>
-            <mat-date-range-picker #rangePicker>
+            <mat-date-range-picker #rangeDate>
               <mat-date-range-picker-actions>
                 <button mat-button matDateRangePickerCancel>Cancel</button>
                 <button
@@ -67,12 +32,12 @@
             </mat-date-range-picker>
           </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="1" [rowspan]="1" class="gridTile">
+        <mat-grid-tile [colspan]="1" [rowspan]="1" style="margin-left: 20px;" >
           <mat-label>Tipo de documento:</mat-label>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="2" [rowspan]="1" class="gridTile">
-          <mat-form-field class="inputOptionShort">
-            <mat-select>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" >
+          <mat-form-field class="input-option">
+            <mat-select [(value)]="idTipoDocumento">
               <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let tipoDocumento of listaTipoDocumento"
@@ -83,12 +48,12 @@
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="1" [rowspan]="1" class="gridTile">
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
           <mat-label>Tipo de moneda:</mat-label>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="2" [rowspan]="1" class="gridTile">
-          <mat-form-field class="inputOptionLarge">
-            <mat-select>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" >
+          <mat-form-field class="input-option">
+            <mat-select [(value)]="idMoneda">
               <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let moneda of listaMoneda"
@@ -99,12 +64,12 @@
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="1" [rowspan]="1" class="gridTile">
+        <mat-grid-tile [colspan]="1" [rowspan]="1" >
           <mat-label>Forma de pago:</mat-label>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="2" [rowspan]="1" class="gridTile">
-          <mat-form-field class="inputOptionLarge">
-            <mat-select>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" >
+          <mat-form-field class="input-option">
+            <mat-select [(value)]="idFormaPago">
               <mat-option>(Seleccione)</mat-option>
               <mat-option
                 *ngFor="let formaPago of listaFormaPago"
@@ -115,7 +80,23 @@
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="6" [rowspan]="1" class="gridTile">
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-label>Estado:</mat-label>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" >
+          <mat-form-field class="input-option">
+            <mat-select [(value)]="estado">
+              <mat-option>(Seleccione)</mat-option>
+              <mat-option
+                *ngFor="let estado of listaEstados"
+                [value]="estado.valor"
+              >
+                {{ estado.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="9" [rowspan]="1" >
           <div style="margin: 10px">
             <button
               style="min-width: 25px; margin-right: 20px"
@@ -123,7 +104,7 @@
               color="primary"
               (click)="descargarReporte()"
             >
-              Procesar
+              Generar
             </button>
             <button
               style="min-width: 25px"
@@ -136,6 +117,5 @@
           </div>
         </mat-grid-tile>
       </mat-grid-list>
-    </mat-card>
   </div>
 </div>

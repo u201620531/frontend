@@ -3,6 +3,7 @@ export const soporte = {
   tipoProveedor: 'TPV',
   categoriaProducto: 'CTP',
   cargoEmpleado: 'CEM',
+  estadoComprobanteElectronico: 'ECE',
 };
 
 export const filters = {
@@ -16,6 +17,9 @@ export const filters = {
     usuario: 'Usuario',
     moneda: 'Moneda',
     plantilla: 'Plaantilla Excel',
+    tipoCambio: 'Tipo de cambio',
+    cuentaContable: 'Cuenta contable',
+    subCuentaContable: 'Sub cuenta contable',
   },
 };
 
@@ -32,6 +36,10 @@ export const nombre_servicios = {
   comprobante: 'comprobantes',
   plantilla: 'plantillas',
   detallePlantilla: 'detalleplantillas',
+  cuentaContable: 'cuentacontables',
+  subCuentaContable: 'subcuentacontables',
+  tipoCambio: 'tipocambios',
+  moneda: 'monedas',
 };
 
 export const accion_mensaje = {
@@ -39,6 +47,7 @@ export const accion_mensaje = {
   modificar_valor_selecionado: 'modificar valor seleccionado',
   error_tecnico: 'Comunicarse con soport TI',
   registro_correcto: 'Ok',
+  listado_vacio: 'No hay registros con los filtros seleccionados',
 };
 
 export const nombre_empresa = 'Empresa logística';

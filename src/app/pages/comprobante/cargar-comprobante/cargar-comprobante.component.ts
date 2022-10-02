@@ -20,6 +20,7 @@ import {
   filters,
   validaciones_comprobantes,
 } from 'src/shared/config';
+import { formatoFechaGuion } from 'src/shared/functions';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -576,7 +577,7 @@ export class CargarComprobanteComponent implements OnInit {
     if (!obligatorio && (fecha === '' || fecha === undefined)) return detalle;
     let RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
     fecha = isNaN(parseInt(fecha))
-      ? new Date(fecha).toLocaleDateString()
+      ? formatoFechaGuion(new Date(fecha))
       : fecha;
     if (!fecha.toString().match(RegExPattern))
       return (
@@ -628,13 +629,13 @@ export class CargarComprobanteComponent implements OnInit {
     comprobanteRegistro.fechaEmision = isNaN(
       parseInt(comprobantesPorCargar.fechaEmision)
     )
-      ? new Date(comprobantesPorCargar.fechaEmision).toLocaleDateString()
+      ? formatoFechaGuion(comprobantesPorCargar.fechaEmision)
       : comprobantesPorCargar.fechaEmision;
 
     comprobanteRegistro.fechaVencimiento =
       comprobantesPorCargar.fechaVencimiento !== undefined &&
       isNaN(parseInt(comprobantesPorCargar.fechaVencimiento))
-        ? new Date(comprobantesPorCargar.fechaVencimiento).toLocaleDateString()
+        ? formatoFechaGuion(comprobantesPorCargar.fechaVencimiento)
         : comprobantesPorCargar.fechaVencimiento;
     comprobanteRegistro.importeTotal = comprobantesPorCargar.importeTotal;
     comprobanteRegistro.igv = comprobantesPorCargar.igv;
@@ -682,7 +683,7 @@ export class CargarComprobanteComponent implements OnInit {
     // comprobanteRegistro.serieGuia: string;
     // comprobanteRegistro.correlativoGuia: string;
     comprobanteRegistro.estado = estado_inicial;
-    comprobanteRegistro.fechaCreacion = new Date().toLocaleDateString();
+    comprobanteRegistro.fechaCreacion = formatoFechaGuion(new Date());
     comprobanteRegistro.usuarioCreacion =
       this._usuarioService.currentUsuarioValue.codigoUsuario;
     return comprobanteRegistro;

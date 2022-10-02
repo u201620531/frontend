@@ -23,10 +23,11 @@ export class ComprobanteService {
     idFormaPago: string,
     idMoneda: string,
     fechaEmisionIni: string,
-    fechaEmisionFin: string
+    fechaEmisionFin: string,
+    estado: string
   ): Observable<any> {
     return this.http.get(
-      `${environment.apiURL}/${nombre_servicios.comprobante}/${nroDocumento}/${idTipoDocumento}/${idFormaPago}/${idMoneda}/${fechaEmisionIni}/${fechaEmisionFin}`
+      `${environment.apiURL}/${nombre_servicios.comprobante}/${nroDocumento}/${idTipoDocumento}/${idFormaPago}/${idMoneda}/${fechaEmisionIni}/${fechaEmisionFin}/${estado}`
     );
   }
 
