@@ -9,6 +9,7 @@ import { SoporteService } from 'src/app/services/soporte.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { accion_mensaje, estado_inicial, soporte } from 'src/shared/config';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
+import { formatoFechaGuion } from 'src/shared/functions';
 
 @Component({
   selector: 'app-agregar-tipo-cambio',
@@ -80,13 +81,16 @@ export class AgregarTipoCambioComponent implements OnInit {
 
   agregarTipoCambio() {
     const tipoCambio: TipoCambio = {
-      fecha: this.modificar ? this.form.value.fecha : '',
+      fecha:
+        this.form.value.fecha !== null
+          ? formatoFechaGuion(this.form.value.fecha)
+          : this.form.value.fecha,
       compra: this.form.value.compra,
       venta: this.form.value.venta,
       estado: this.modificar ? this.form.value.estado : estado_inicial,
       fechaCreacion: this.modificar
         ? this.form.value.fechaCreacion
-        : new Date().toLocaleDateString(),
+        : formatoFechaGuion(new Date()),
       usuarioCreacion: this.modificar
         ? this.form.value.usuarioCreacion
         : this._usuarioService.currentUsuarioValue.codigoUsuario,
@@ -118,7 +122,6 @@ export class AgregarTipoCambioComponent implements OnInit {
           }
         );
     } else {
-      console.log('prov', tipoCambio);
       this._tipoCambioService.agregarTipoCambio(tipoCambio).subscribe(
         (res) => {
           const result: any = res;

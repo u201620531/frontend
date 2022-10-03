@@ -1,0 +1,18 @@
+.option-button {
+    margin: 0 5px;
+    display: inline-block;
+    line-height: 30px;
+  }
+
+  .mat-column-idCuentaContable {
+width: 15%;
+}
+.mat-column-nombre {
+  width: 15%;
+}
+.mat-column-estado {
+  width: 20%;
+}
+.mat-column-acciones {
+  width: 35%;
+}

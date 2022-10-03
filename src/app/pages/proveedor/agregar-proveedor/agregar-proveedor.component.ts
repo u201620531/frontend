@@ -8,6 +8,7 @@ import { ProveedorService } from 'src/app/services/proveedor.service';
 import { SoporteService } from 'src/app/services/soporte.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { accion_mensaje, estado_inicial, soporte } from 'src/shared/config';
+import { formatoFechaGuion } from 'src/shared/functions';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -130,7 +131,7 @@ export class AgregarProveedorComponent implements OnInit {
       estado: this.modificar ? this.form.value.estado : estado_inicial,
       fechaCreacion: this.modificar
         ? this.form.value.fechaCreacion
-        : new Date().toLocaleDateString(),
+        : formatoFechaGuion(new Date()),
       usuarioCreacion: this.modificar
         ? this.form.value.usuarioCreacion
         : this._usuarioService.currentUsuarioValue.codigoUsuario,
@@ -162,7 +163,6 @@ export class AgregarProveedorComponent implements OnInit {
           }
         );
     } else {
-      console.log('prov', proveedor);
       this._proveedorService.agregarProveedor(proveedor).subscribe(
         (res) => {
           const result: any = res;
