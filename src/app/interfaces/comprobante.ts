@@ -18,6 +18,7 @@ export interface Comprobante {
   otrosCargos: number;
   descuentosGlobales: number;
   importeTotal: number;
+  tipoCambio:number;
   idMoneda: string;
   serieGuia: string;
   correlativoGuia: string;

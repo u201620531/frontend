@@ -7,11 +7,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { CuentaContable } from 'src/app/interfaces/cuenta-contable';
 import { DetallePlantillaComprobante } from 'src/app/interfaces/detalle-plantilla-comprobante';
 import { PlantillaComprobante } from 'src/app/interfaces/plantilla-comprobante';
 import { PlantillaCONCAR } from 'src/app/interfaces/plantilla-concar';
+import { SubCuentaContable } from 'src/app/interfaces/sub-cuenta-contable';
+import { CuentaContableService } from 'src/app/services/cuenta-contable.service';
 import { DetallePlantillaComprobanteService } from 'src/app/services/detalle-plantilla-comprobante.service';
 import { PlantillaComprobanteService } from 'src/app/services/plantilla-comprobante.service';
+import { SubCuentaContableService } from 'src/app/services/sub-cuenta-contable.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import {
   accion_mensaje,
@@ -46,7 +50,6 @@ export class PlantillaComprobanteComponent implements OnInit {
   placeholderValue: string = '';
   idPlantillaComprobante: string = '';
   plantillaCONCAR: PlantillaCONCAR[] = [];
-  viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
   modificar: boolean = false;
@@ -63,6 +66,10 @@ export class PlantillaComprobanteComponent implements OnInit {
     usuarioCreacion: '',
   };
   detallePlantillaRegistro: DetallePlantillaComprobante[] = [];
+  validaRegistro: boolean = false;
+  nroTicketEnvio: string = '';
+  fechaDeclaracion: string = '';
+  onseervaciones: string = '';
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -88,6 +95,8 @@ export class PlantillaComprobanteComponent implements OnInit {
     private _plantillaComprobanteService: PlantillaComprobanteService,
     private _detallePlantillaComprobanteService: DetallePlantillaComprobanteService,
     private _usuarioService: UsuarioService,
+    private _cuentaContableService: CuentaContableService,
+    private _subCuentaContableService: SubCuentaContableService,
     private _formBuilder: FormBuilder,
     private _route: ActivatedRoute,
     private _router: Router
@@ -117,14 +126,40 @@ export class PlantillaComprobanteComponent implements OnInit {
       : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
+  listaSubCuentasContables: SubCuentaContable[] = [];
+  listaCuentasContables: CuentaContable[] = [];
+
   ngOnInit(): void {
+    this.listarCuentasContables();
+    this.listarSubCuentasContables();
     this.placeholderValue = filters.placeholders.plantilla;
     this.listarDetallePlantilla();
   }
 
+  async listarSubCuentasContables() {
+    this._subCuentaContableService.listarSubCuentasContables().subscribe(
+      (res) => {
+        this.listaSubCuentasContables = res;
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
+  }
+
+  async listarCuentasContables() {
+    this._cuentaContableService.listarCuentasContables().subscribe(
+      (res) => {
+        this.listaCuentasContables = res;
+      },
+      (err) => {
+        console.log(err.message);
+      }
+    );
+  }
+
   listarDetallePlantilla() {
     this._route.queryParams.subscribe((params) => {
-      console.log(params);
       if (params && params['idPlantillaComprobante'])
         this.idPlantillaComprobante = params['idPlantillaComprobante'];
       else this.idPlantillaComprobante = '0';
@@ -135,7 +170,6 @@ export class PlantillaComprobanteComponent implements OnInit {
           this.dataSource =
             new MatTableDataSource<DetallePlantillaComprobante>();
           this.dataSource.data = res;
-          this.viewOptions = this.listaDetallePlantillaComprobante.length > 0;
           this.loading = false;
           // this.modificar = true;
         });
@@ -144,11 +178,39 @@ export class PlantillaComprobanteComponent implements OnInit {
         this.eliminar = params['modificar'] !== '1' ? true : false;
       }
     });
+    console.log('readonlyOption',this.readonlyOption);
   }
 
   aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  eliminarPlantillaComprobante(idPlantillaComprobante: string) {
+    this._plantillaComprobanteService
+      .eliminarPlantillaComprobante(idPlantillaComprobante)
+      .subscribe(
+        (res) => {
+          const result: any = res;
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            }
+          );
+          if (result.id === 1) this.back();
+        },
+        (err) => {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 5000,
+          });
+        }
+      );
   }
 
   eliminarDetallePlantillaComprobante(
@@ -184,7 +246,7 @@ export class PlantillaComprobanteComponent implements OnInit {
       );
   }
 
-  generarPlantilla() {
+  asignarValoresPlantilla() {
     this.plantillaCONCAR = [];
     const fechaActual = new Date();
     const nro_Comprobante = (fechaActual.getMonth() + 1)
@@ -192,14 +254,13 @@ export class PlantillaComprobanteComponent implements OnInit {
       .padStart(2, '0');
     let _correlativo = 0;
     let plantilla: any;
-    let validaRegistro: boolean = false;
+    this.validaRegistro = false;
     let detalleRegistro: DetallePlantillaComprobante = {
       idComprobante: '',
       idPlantillaComprobante: '',
       detalle: '',
       estado: '',
     };
-
     this.listaDetallePlantillaComprobante.forEach((_comprobante: any) => {
       if (_comprobante.select === '1') {
         detalleRegistro = {
@@ -214,17 +275,19 @@ export class PlantillaComprobanteComponent implements OnInit {
         plantilla.Número_de_Comprobante =
           nro_Comprobante + _correlativo.toString().padStart(4, '0');
         plantilla.Fecha_de_Comprobante = _comprobante.fechaEmision;
-        plantilla.Código_de_Moneda = 'NS';
+        plantilla.Código_de_Moneda = 'PEN';
         plantilla.Glosa_Principal = '';
         plantilla.Tipo_de_Cambio = '0.00';
         plantilla.Tipo_de_Conversión = 'M';
         plantilla.Flag_de_Conversión_de_Moneda = 'N';
         plantilla.Fecha_Tipo_de_Cambio = '';
-        plantilla.Cuenta_Contable = '00000000';
-        plantilla.Código_de_Anexo = '000000000000000000';
+        plantilla.Cuenta_Contable =
+          this.listaCuentasContables[0].idCuentaContable;
+        plantilla.Código_de_Anexo =
+          this.listaSubCuentasContables[0].idSubCuentaContable;
         plantilla.Código_de_Centro_de_Costo = '000000';
         plantilla.Debe_____Haber = 'D';
-        plantilla.Importe_Original = 0.0;
+        plantilla.Importe_Original = _comprobante.importeTotal;
         plantilla.Importe_en_Dólares = '';
         plantilla.Importe_en_Soles = 0.0;
         plantilla.Tipo_de_Documento = 'FE';
@@ -256,22 +319,27 @@ export class PlantillaComprobanteComponent implements OnInit {
         detalleRegistro.idComprobante = _comprobante.idComprobante;
         detalleRegistro.estado = estado_inicial;
         this.detallePlantillaRegistro.push(detalleRegistro);
-        validaRegistro = true;
+        this.validaRegistro = true;
       }
     });
+  }
 
-    if (validaRegistro) {
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.sheet_add_aoa(wb, plantilla_CONCAR.campos);
+  async generarPlantilla() {
+    this.descargarPlantilla();
+    if (this.validaRegistro) this.registrarPlantilla();
+  }
 
-      const ws = XLSX.utils.sheet_add_json(wb, this.plantillaCONCAR, {
-        origin: 'A2',
-        skipHeader: true,
-      });
-      XLSX.utils.book_append_sheet(wb, ws, 'compr');
-      this.registrarPlantilla();
-      //    XLSX.writeFile(wb, plantilla_CONCAR.nombre_archivo + '.xlsx');
-    }
+  async descargarPlantilla() {
+    this.asignarValoresPlantilla();
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.sheet_add_aoa(wb, plantilla_CONCAR.campos);
+
+    const ws = XLSX.utils.sheet_add_json(wb, this.plantillaCONCAR, {
+      origin: 'A2',
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(wb, ws, 'compr');
+    XLSX.writeFile(wb, plantilla_CONCAR.nombre_archivo + '.xlsx');
   }
 
   async registrarPlantilla() {
@@ -323,7 +391,7 @@ export class PlantillaComprobanteComponent implements OnInit {
         .subscribe(
           (res) => {
             const result: any = res;
-            this.idPlantillaComprobante = result.detail
+            this.idPlantillaComprobante = result.detail;
             this.registrarDetalle(this.idPlantillaComprobante);
           },
           (err) => {
@@ -337,38 +405,38 @@ export class PlantillaComprobanteComponent implements OnInit {
     }
   }
 
-registrarDetalle(idPlantilla:string){
-  console.log('id',idPlantilla);
-  let error_detalle = '';
-      this.detallePlantillaRegistro.forEach((element) => {
-        element.idPlantillaComprobante = idPlantilla;
-        console.log('element',element);
-        this._detallePlantillaComprobanteService
-          .agregarDetallePlantillaComprobante(element)
-          .subscribe(
-            (res) => {
-              const result: any = res;
-            },
-            (err) => {
-              error_detalle = err.message;
-            }
-          );
+  registrarDetalle(idPlantilla: string) {
+    console.log('id', idPlantilla);
+    let error_detalle = '';
+    this.detallePlantillaRegistro.forEach((element) => {
+      element.idPlantillaComprobante = idPlantilla;
+      console.log('element', element);
+      this._detallePlantillaComprobanteService
+        .agregarDetallePlantillaComprobante(element)
+        .subscribe(
+          (res) => {
+            const result: any = res;
+          },
+          (err) => {
+            error_detalle = err.message;
+          }
+        );
+    });
+    if (error_detalle === '') {
+      this._snackBar.open('Registro Ok', accion_mensaje.registro_correcto, {
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        duration: 5000,
       });
-      if (error_detalle === '') {
-        this._snackBar.open('Registro Ok', accion_mensaje.registro_correcto, {
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-          duration: 5000,
-        });
-        this.back();
-      } else {
-        this._snackBar.open(error_detalle, accion_mensaje.error_tecnico, {
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-          duration: 5000,
-        });
-      }
-}
+      this.back();
+    } else {
+      this._snackBar.open(error_detalle, accion_mensaje.error_tecnico, {
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        duration: 5000,
+      });
+    }
+  }
 
   back() {
     this._router.navigate(['/dashboard/plantilla-comprobante']);

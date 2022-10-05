@@ -7,11 +7,13 @@ import { Comprobante } from 'src/app/interfaces/comprobante';
 import { FormaPago } from 'src/app/interfaces/forma-pago';
 import { Moneda } from 'src/app/interfaces/moneda';
 import { Proveedor } from 'src/app/interfaces/proveedor';
+import { TipoCambio } from 'src/app/interfaces/tipo-cambio';
 import { TipoDocumento } from 'src/app/interfaces/tipo-documento';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { MonedaService } from 'src/app/services/moneda.service';
 import { ProveedorService } from 'src/app/services/proveedor.service';
+import { TipoCambioService } from 'src/app/services/tipo-cambio.service';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import {
@@ -20,7 +22,10 @@ import {
   filters,
   validaciones_comprobantes,
 } from 'src/shared/config';
-import { formatoFechaGuion } from 'src/shared/functions';
+import {
+  formatoFechaGuion,
+  formatoFechaGuionCadena,
+} from 'src/shared/functions';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -36,6 +41,7 @@ export class CargarComprobanteComponent implements OnInit {
   listaTiposDocumento: TipoDocumento[] = [];
   listaFormasPago: FormaPago[] = [];
   listaMonedas: Moneda[] = [];
+  listaTipoCambio: TipoCambio[] = [];
   listadoColumnas: string[] = [
     'item',
     'nroDocumento',
@@ -81,6 +87,7 @@ export class CargarComprobanteComponent implements OnInit {
     private _formaPagoService: FormaPagoService,
     private _usuarioService: UsuarioService,
     private _comprobanteService: ComprobanteService,
+    private _tipoCambioService:TipoCambioService,
     private _snackBar: MatSnackBar
   ) {}
 
@@ -127,6 +134,7 @@ export class CargarComprobanteComponent implements OnInit {
     this.listarTiposDocumento();
     this.listarFormasPago();
     this.listarMonedas();
+    this.listarTipoCambio();
   }
 
   private cantidadComprobantes() {
@@ -204,6 +212,21 @@ export class CargarComprobanteComponent implements OnInit {
     );
   }
 
+  private listarTipoCambio() {
+    this._tipoCambioService.listarTiposCambio().subscribe(
+      (res) => {
+        this.listaTipoCambio = res;
+      },
+      (err) => {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+      }
+    );
+  }
+
   limpiarListaComprobantesPorCargar() {
     this.listaComprobantes = [];
     this.listaComprobantesPorCargar = [];
@@ -252,6 +275,7 @@ export class CargarComprobanteComponent implements OnInit {
           otrosCargos: 0,
           descuentosGlobales: 0,
           importeTotal: 0,
+          tipoCambio:0,
           idMoneda: '',
           serieGuia: '',
           correlativoGuia: '',
@@ -470,7 +494,10 @@ export class CargarComprobanteComponent implements OnInit {
         validaciones_comprobantes.tipo_documento.vacia
       );
     const registro = this.listaTiposDocumento.filter((tipo_documento) =>
-      tipo_documento.descripcion.toString().match(TIPO_DOCUMENTO)
+      tipo_documento.descripcion
+        .toString()
+        .toUpperCase()
+        .match(TIPO_DOCUMENTO.toUpperCase())
     )[0];
     if (registro === undefined)
       return (
@@ -501,8 +528,12 @@ export class CargarComprobanteComponent implements OnInit {
         ' ' +
         validaciones_comprobantes.moneda.vacia
       );
+    TIPO_MONEDA = TIPO_MONEDA.replace('SOLES', 'SOL');
     const registro = this.listaMonedas.filter((moneda) =>
-      moneda.descripcion.toString().match(TIPO_MONEDA)
+      moneda.descripcion
+        .toString()
+        .toUpperCase()
+        .match(TIPO_MONEDA.toUpperCase())
     )[0];
     if (registro === undefined)
       return (
@@ -577,7 +608,7 @@ export class CargarComprobanteComponent implements OnInit {
     if (!obligatorio && (fecha === '' || fecha === undefined)) return detalle;
     let RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
     fecha = isNaN(parseInt(fecha))
-      ? formatoFechaGuion(new Date(fecha))
+      ? new Date(fecha).toLocaleDateString()
       : fecha;
     if (!fecha.toString().match(RegExPattern))
       return (
@@ -630,13 +661,14 @@ export class CargarComprobanteComponent implements OnInit {
       parseInt(comprobantesPorCargar.fechaEmision)
     )
       ? formatoFechaGuion(comprobantesPorCargar.fechaEmision)
-      : comprobantesPorCargar.fechaEmision;
-
+      : formatoFechaGuionCadena(comprobantesPorCargar.fechaEmision);
     comprobanteRegistro.fechaVencimiento =
       comprobantesPorCargar.fechaVencimiento !== undefined &&
       isNaN(parseInt(comprobantesPorCargar.fechaVencimiento))
         ? formatoFechaGuion(comprobantesPorCargar.fechaVencimiento)
-        : comprobantesPorCargar.fechaVencimiento;
+        : comprobantesPorCargar.fechaVencimiento == undefined
+        ? ''
+        : formatoFechaGuionCadena(comprobantesPorCargar.fechaVencimiento);
     comprobanteRegistro.importeTotal = comprobantesPorCargar.importeTotal;
     comprobanteRegistro.igv = comprobantesPorCargar.igv;
     comprobanteRegistro.valorCompra = comprobantesPorCargar.valorCompra;
@@ -680,6 +712,7 @@ export class CargarComprobanteComponent implements OnInit {
       comprobantesPorCargar.importeTotal === ''
         ? 0
         : comprobanteRegistro.importeTotal;
+        comprobanteRegistro.tipoCambio=0;
     // comprobanteRegistro.serieGuia: string;
     // comprobanteRegistro.correlativoGuia: string;
     comprobanteRegistro.estado = estado_inicial;

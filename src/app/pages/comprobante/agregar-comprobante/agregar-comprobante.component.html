@@ -129,6 +129,17 @@
               />
             </mat-form-field>
           </mat-grid-tile>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>tipoCambio</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="tipoCambio"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
           <mat-grid-tile
             [colspan]="6"
             [rowspan]="1"

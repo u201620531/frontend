@@ -9,7 +9,7 @@
     class="spinner"
     style="margin-top: 200px"
   ></mat-spinner>
-  <div class="form-controls" *ngIf="viewOptions">
+  <div class="form-controls" *ngIf="!loading">
     <button
       mat-raised-button
       type="button"
@@ -213,10 +213,8 @@
         aria-label="Seleccionar página"
       ></mat-paginator>
     </div>
-    <div *ngIf="viewOptions">
-      <div *ngIf="listaPlantillaComprobante.length === 0" class="empty-list">
-        <h2>No hay plantillas para mostrar</h2>
-      </div>
+    <div *ngIf="listaPlantillaComprobante.length === 0" class="empty-list">
+      <h2>No hay plantillas para mostrar</h2>
     </div>
   </div>
 </div>

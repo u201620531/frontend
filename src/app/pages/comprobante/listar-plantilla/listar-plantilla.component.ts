@@ -28,7 +28,6 @@ export class ListarPlantillaComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<PlantillaComprobante>;
   placeholderValue: string = '';
-  viewOptions: boolean = false;
   private paginator!: MatPaginator;
   private sort: MatSort;
   loading: boolean = true;
@@ -69,7 +68,6 @@ export class ListarPlantillaComponent implements OnInit {
         this.listaPlantillaComprobante = res;
         this.dataSource = new MatTableDataSource<PlantillaComprobante>();
         this.dataSource.data = res;
-        this.viewOptions = this.listaPlantillaComprobante.length > 0;
         this.loading = false;
       },
       (err) => {
@@ -113,12 +111,12 @@ export class ListarPlantillaComponent implements OnInit {
 
   modificarPlantillaComprobante(
     idPlantillaComprobante: string,
-    edit: number
+    modificar: number
   ): void {
     const extras: NavigationExtras = {
       queryParams: {
         idPlantillaComprobante: idPlantillaComprobante,
-        edit: edit,
+        modificar: modificar,
       },
     };
 
