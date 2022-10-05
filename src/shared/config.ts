@@ -90,6 +90,12 @@ export const validaciones_comprobantes = {
   valor_numerico: {
     no_valida: 'no válido',
   },
+  tipo_cambio: {
+    no_existe: 'no existe',
+    inactivo: 'inactivo',
+    no_registrados: 'No hay tipos de cambio registrados',
+    fecha_emision_no_valida: 'No hay tipo de cambio registrado para la fecha de emisión',
+  },
 };
 
 export const plantilla_CONCAR = {
