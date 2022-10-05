@@ -23,6 +23,7 @@ import {
   filters,
   plantilla_CONCAR,
 } from 'src/shared/config';
+import { formatoFechaGuion } from 'src/shared/functions';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -103,8 +104,8 @@ export class PlantillaComprobanteComponent implements OnInit {
   ) {
     this.form = this._formBuilder.group({
       idPlantillaComprobante: ['', Validators.required],
-      nroTicketEnvio: [''],
-      fechaDeclaracion: [''],
+      nroTicketEnvio: ['', Validators.required],
+      fechaDeclaracion: ['', Validators.required],
       observacion: [''],
       estado: [''],
       fechaCreacion: [''],
@@ -133,6 +134,7 @@ export class PlantillaComprobanteComponent implements OnInit {
     this.listarCuentasContables();
     this.listarSubCuentasContables();
     this.placeholderValue = filters.placeholders.plantilla;
+    this.listarPlantilla();
     this.listarDetallePlantilla();
   }
 
@@ -158,8 +160,34 @@ export class PlantillaComprobanteComponent implements OnInit {
     );
   }
 
+  listarPlantilla(): void {
+    this._route.queryParams.subscribe((params) => {
+      if (params && params['idPlantillaComprobante']) {
+        this.idPlantillaComprobante = params['idPlantillaComprobante'];
+        this._plantillaComprobanteService
+          .listarPlantillaComprobantePorId(this.idPlantillaComprobante)
+          .subscribe((res: any) => {
+            this.form.setValue({
+              idPlantillaComprobante: res.idPlantillaComprobante,
+              nroTicketEnvio: res.nroTicketEnvio,
+              fechaDeclaracion: res.fechaDeclaracion,
+              observacion: res.observacion,
+              estado: res.estado,
+              fechaCreacion: res.fechaCreacion,
+              usuarioCreacion: res.usuarioCreacion,
+            });
+            this.modificar = this.idPlantillaComprobante !== '0';
+          });
+      }
+    });
+  }
+
   listarDetallePlantilla() {
     this._route.queryParams.subscribe((params) => {
+      if (params && params['modificar']) {
+        this.readonlyOption = params['modificar'] !== '1' ? true : false;
+        this.eliminar = params['modificar'] !== '1' ? true : false;
+      }
       if (params && params['idPlantillaComprobante'])
         this.idPlantillaComprobante = params['idPlantillaComprobante'];
       else this.idPlantillaComprobante = '0';
@@ -171,14 +199,8 @@ export class PlantillaComprobanteComponent implements OnInit {
             new MatTableDataSource<DetallePlantillaComprobante>();
           this.dataSource.data = res;
           this.loading = false;
-          // this.modificar = true;
         });
-      if (params && params['modificar']) {
-        this.readonlyOption = params['modificar'] !== '1' ? true : false;
-        this.eliminar = params['modificar'] !== '1' ? true : false;
-      }
     });
-    console.log('readonlyOption',this.readonlyOption);
   }
 
   aplicarFiltro(event: Event) {
@@ -353,7 +375,7 @@ export class PlantillaComprobanteComponent implements OnInit {
       : estado_inicial;
     this.plantillaRegistro.fechaCreacion = this.modificar
       ? this.form.value.fechaCreacion
-      : new Date().toLocaleDateString();
+      : formatoFechaGuion(new Date());
     this.plantillaRegistro.usuarioCreacion = this.modificar
       ? this.form.value.usuarioCreacion
       : this._usuarioService.currentUsuarioValue.codigoUsuario;
@@ -406,11 +428,9 @@ export class PlantillaComprobanteComponent implements OnInit {
   }
 
   registrarDetalle(idPlantilla: string) {
-    console.log('id', idPlantilla);
     let error_detalle = '';
     this.detallePlantillaRegistro.forEach((element) => {
       element.idPlantillaComprobante = idPlantilla;
-      console.log('element', element);
       this._detallePlantillaComprobanteService
         .agregarDetallePlantillaComprobante(element)
         .subscribe(
@@ -435,6 +455,79 @@ export class PlantillaComprobanteComponent implements OnInit {
         verticalPosition: 'bottom',
         duration: 5000,
       });
+    }
+  }
+
+  agregarPlantillaComprobante() {
+    const plantillaComprobante: PlantillaComprobante = {
+      idPlantillaComprobante: this.modificar
+        ? this.form.value.idPlantillaComprobante
+        : '',
+      nroTicketEnvio: this.form.value.nroTicketEnvio,
+      fechaDeclaracion: formatoFechaGuion(this.form.value.fechaDeclaracion),
+      observacion: this.form.value.observacion,
+      estado: this.modificar ? this.form.value.estado : estado_inicial,
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : formatoFechaGuion(new Date()),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
+    };
+
+    if (this.modificar) {
+      this._plantillaComprobanteService
+        .actualizarPlantillaComprobante(
+          plantillaComprobante,
+          plantillaComprobante.idPlantillaComprobante
+        )
+        .subscribe(
+          (res) => {
+            const result: any = res;
+            if (result.id === 1) this.back();
+            this._snackBar.open(
+              result.message,
+              accion_mensaje.registro_correcto,
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              }
+            );
+          },
+          (err) => {
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            });
+          }
+        );
+    } else {
+      this._plantillaComprobanteService
+        .agregarPlantillaComprobante(plantillaComprobante)
+        .subscribe(
+          (res) => {
+            const result: any = res;
+            this._snackBar.open(
+              result.message,
+              accion_mensaje.registro_correcto,
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              }
+            );
+            if (result.id === 1) this.back();
+          },
+          (err) => {
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            });
+          }
+        );
     }
   }
 

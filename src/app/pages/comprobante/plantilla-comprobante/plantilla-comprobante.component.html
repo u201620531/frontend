@@ -35,12 +35,12 @@
     </button>
     <button
       mat-raised-button
-      type="button"
+      type=""
       color="primary"
       style="margin-right: 20px"
-      (click)="registrarPlantilla()"
       *ngIf="idPlantillaComprobante !== '0'"
       [disabled]="readonlyOption"
+      (click)="agregarPlantillaComprobante()"
     >
       Guardar
     </button>
@@ -55,30 +55,36 @@
       Eliminar
     </button>
     <div *ngIf="listaDetallePlantillaComprobante.length > 0">
-      <!-- <mat-form-field appearance="standard">
-        <mat-label>Filtro (Ingrese Razon Social):</mat-label>
-        <input
-          matInput
-          (keyup)="aplicarFiltro($event)"
-          placeholder="{{ placeholderValue }}"
-          #input
-          autocomplete="off"
-        />
-      </mat-form-field> -->
       <div style="margin-top: 24px">
-        <mat-grid-list
-          cols="6"
-          rowHeight="70px"
-          *ngIf="idPlantillaComprobante !== '0'"
-        >
-          <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <form [formGroup]="form">
+          <mat-grid-list
+            cols="6"
+            rowHeight="70px"
+            *ngIf="idPlantillaComprobante !== '0'"
+          >
+            <mat-grid-tile
+              [colspan]="1"
+              [rowspan]="1"
+              [style.background]="'transparent'"
+            >
+              <mat-form-field class="input-option input-option-right">
+                <mat-label>Id Plantilla</mat-label>
+                <input
+                  matInput
+                  autocomplete="off"
+                  readonly
+                  formControlName="idPlantillaComprobante"
+                />
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
               <mat-form-field class="input-option">
                 <mat-label>N° Ticket</mat-label>
                 <input
                   matInput
                   autocomplete="off"
                   [disabled]="readonlyOption"
-                  placeholder="N° ticket envío"
+                  formControlName="nroTicketEnvio"
                 />
               </mat-form-field>
             </mat-grid-tile>
@@ -87,33 +93,34 @@
                 <mat-label>Fecha declaración</mat-label>
                 <input
                   matInput
-                  placeholder="Fecha declaración"
                   [matDatepicker]="picker"
                   [readonly]="readonlyOption"
+                  formControlName="fechaDeclaracion"
                 />
-                <mat-hint>DD-MM-YYYY</mat-hint>
+                <mat-hint>DD/MM/YYYY</mat-hint>
                 <mat-datepicker-toggle
                   matSuffix
                   [for]="picker"
                 ></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="4" [rowspan]="1"> </mat-grid-tile>
-          <mat-grid-tile [colspan]="6" [rowspan]="1">
-            <div class="input-option">
-              <mat-form-field>
-                <mat-label>Observaciones</mat-label>
-                <input
-                  matInput
-                  [disabled]="readonlyOption"
-                  autocomplete="off"
-                  placeholder="Observaciones"
-                />
-              </mat-form-field>
-            </div>
-          </mat-grid-tile>
-        </mat-grid-list>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="3" [rowspan]="1"> </mat-grid-tile>
+            <mat-grid-tile [colspan]="6" [rowspan]="1">
+              <div class="input-option">
+                <mat-form-field>
+                  <mat-label>Observación</mat-label>
+                  <input
+                    matInput
+                    [disabled]="readonlyOption"
+                    autocomplete="off"
+                    formControlName="observacion"
+                  />
+                </mat-form-field>
+              </div>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </form>
       </div>
       <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="select">
