@@ -60,6 +60,7 @@ export class CargarComprobanteComponent implements OnInit {
   private paginator!: MatPaginator;
   private sort: MatSort;
   loading: boolean = false;
+  existeFechaEmision: boolean = false;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -87,7 +88,7 @@ export class CargarComprobanteComponent implements OnInit {
     private _formaPagoService: FormaPagoService,
     private _usuarioService: UsuarioService,
     private _comprobanteService: ComprobanteService,
-    private _tipoCambioService:TipoCambioService,
+    private _tipoCambioService: TipoCambioService,
     private _snackBar: MatSnackBar
   ) {}
 
@@ -275,7 +276,7 @@ export class CargarComprobanteComponent implements OnInit {
           otrosCargos: 0,
           descuentosGlobales: 0,
           importeTotal: 0,
-          tipoCambio:0,
+          tipoCambio: 0,
           idMoneda: '',
           serieGuia: '',
           correlativoGuia: '',
@@ -373,6 +374,7 @@ export class CargarComprobanteComponent implements OnInit {
       detalle,
       true
     );
+    detalle = this.validarTipoCambio(comprobanteValidar.FECHA_EMISION, detalle);
     detalle = this.validarValorFecha(
       'Fecha vcmto',
       comprobanteValidar.FECHA_VENCIMIENTO,
@@ -605,6 +607,7 @@ export class CargarComprobanteComponent implements OnInit {
     detalle: string,
     obligatorio: boolean
   ) {
+    this.existeFechaEmision = false;
     if (!obligatorio && (fecha === '' || fecha === undefined)) return detalle;
     let RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
     fecha = isNaN(parseInt(fecha))
@@ -650,6 +653,41 @@ export class CargarComprobanteComponent implements OnInit {
         validaciones_comprobantes.fecha.no_valida
       );
     }
+    this.existeFechaEmision = true;
+    return detalle;
+  }
+
+  private validarTipoCambio(FECHA_EMISION: any, detalle: string) {
+    if (!this.existeFechaEmision)
+      return (
+        detalle +
+        this.agregarSeparador(detalle) +
+        filters.placeholders.tipoCambio +
+        ' ' +
+        validaciones_comprobantes.tipo_cambio.fecha_emision_no_valida
+      );
+    FECHA_EMISION = isNaN(parseInt(FECHA_EMISION))
+      ? formatoFechaGuion(FECHA_EMISION)
+      : formatoFechaGuionCadena(FECHA_EMISION);
+    const registro = this.listaTipoCambio.filter((tipo_cambio) =>
+      tipo_cambio.fecha.toString().match(FECHA_EMISION)
+    )[0];
+    if (registro === undefined)
+      return (
+        detalle +
+        this.agregarSeparador(detalle) +
+        filters.placeholders.tipoCambio +
+        ' ' +
+        validaciones_comprobantes.tipo_cambio.no_existe
+      );
+    if (registro.estado !== 'A')
+      return (
+        this.agregarSeparador(detalle) +
+        filters.placeholders.tipoCambio +
+        ' ' +
+        validaciones_comprobantes.tipo_cambio.inactivo
+      );
+    this.comprobante.tipoCambio = registro.compra;
     return detalle;
   }
 
@@ -712,7 +750,7 @@ export class CargarComprobanteComponent implements OnInit {
       comprobantesPorCargar.importeTotal === ''
         ? 0
         : comprobanteRegistro.importeTotal;
-        comprobanteRegistro.tipoCambio=0;
+    comprobanteRegistro.tipoCambio = comprobanteRegistro.tipoCambio;
     // comprobanteRegistro.serieGuia: string;
     // comprobanteRegistro.correlativoGuia: string;
     comprobanteRegistro.estado = estado_inicial;
