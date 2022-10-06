@@ -20,6 +20,7 @@ export class UsuarioService {
     fechaCreacion: '',
     usuarioCreacion: '',
   };
+  errorAutenticacion: any;
 
   constructor(private http: HttpClient) {
     const data = JSON.parse(
@@ -52,10 +53,15 @@ export class UsuarioService {
     codigoUsuario: string,
     contrasena: string
   ) {
+    this.errorAutenticacion = {};
     await this.autenticacion(codigoUsuario, contrasena);
-    localStorage.setItem('currentUsuario', JSON.stringify(this.usuario));
-    this.currentUsuarioSubject.next(this.usuario);
-    return this.usuario;
+    if (this.errorAutenticacion.text!== undefined) {
+      return this.errorAutenticacion;
+    } else {
+      localStorage.setItem('currentUsuario', JSON.stringify(this.usuario));
+      this.currentUsuarioSubject.next(this.usuario);
+      return this.usuario;
+    }
   }
 
   listarUsuarioPoridEmpleadoycodigoUsuario(
@@ -74,7 +80,8 @@ export class UsuarioService {
           `${environment.apiURL}/${nombre_servicios.usuario}/${codigoUsuario}/${contrasena}`
         )
         .toPromise();
-      this.usuario = response === undefined ? this.usuario : response;
+      if (response === undefined) this.errorAutenticacion = response;
+      else this.usuario = response;
     } catch (error) {
       return error;
     }

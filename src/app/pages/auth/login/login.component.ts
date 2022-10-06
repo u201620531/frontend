@@ -41,24 +41,34 @@ export class LoginComponent {
     if (this.loginForm.invalid) {
       return;
     }
-
     this.loading = true;
-    const result =
+    const result: any =
       await this._usuarioService.listarUsuarioPorCodigoUsuarioyContrasena(
         this.loginForm.value.codigoUsuario,
         this.loginForm.value.contrasena
       );
-
-    if (result.idEmpleado !== '') {
+    if (result && result.idEmpleado != undefined && result.idEmpleado !== '') {
       this._router.navigate([this.returnUrl]);
     } else {
-      this.error = 'Usuario no existe';
-      this._snackBar.open('Usuario no existe', accion_mensaje.modificar_valor_ingresado, {
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-        duration: 3000,
-      });
-      this.loading = false;
+      if (result) {
+        this.error = result.text;
+        this._snackBar.open(
+          this.error,
+          accion_mensaje.modificar_valor_ingresado,
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 3000,
+          }
+        );
+        this.loading = false;
+      } else {
+        this._snackBar.open(this.error, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 3000,
+        });
+      }
     }
   }
 }
