@@ -132,6 +132,10 @@ td.mat-footer-cell {
   padding: 10px !important;
 }
 
+.spinner-login {
+  margin: 20%;
+}
+
 .spinner {
   margin: 0 auto; /*centra al medio*/
 }
@@ -141,8 +145,8 @@ td.mat-footer-cell {
   width: 100% !important;
 }
 
-.input-option-right{
-margin-right: 10px;
+.input-option-right {
+  margin-right: 10px;
 }
 
 .input-numeric {

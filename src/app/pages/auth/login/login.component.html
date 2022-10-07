@@ -1,14 +1,101 @@
-<div class="body-login">
-  <div class="login">
-    <mat-spinner *ngIf="loading" diameter="50" class="spinner"></mat-spinner>
+<div class="block_container">
+  <mat-spinner *ngIf="loading" diameter="50" class="spinner-login"></mat-spinner>
+  <div class="bloc1"
+  *ngIf="!loading">
+    <img src="../../../../assets/img/png/login.png" alt="login"
+    width="250"
+    height="150" />
+    <p
+      style="
+        color: white;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 30px;
+        padding: 24px 0;
+      "
+    >
+      Sistema de gestión de documentos
+    </p>
+    <p
+      style="
+        color: white;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 12px;
+      "
+    >
+      Proceso automático para el registro de comprobantes electrónicos de compra.
+    </p>
+    <p
+      style="
+        color: white;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 12px;
+      "
+    >
+      El sistema le permite:
+    </p>
+    <p
+      style="
+        color: white;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 12px;
+      "
+    >
+      - Cargar comprobantes electrónicos en formato PDF
+    </p>
+    <p
+      style="
+        color: white;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 12px;
+      "
+    >
+      - Generar la plantilla Excel CONCAR
+    </p>
+    <p
+      style="
+        color: white;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 12px;
+      "
+    >
+      - Generar reporte de comprobantes electrónicos de compra
+    </p>
+  </div>
+  <!-- <div class="bloc-separator"></div> -->
+  <div class="bloc2"
+  *ngIf="!loading">
     <form
-      *ngIf="!loading"
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
       action=""
     >
-      <img src="../../../../assets/img/png/login.png" alt="login" />
-      <h1>Login</h1>
+      <img
+        src="../../../../assets/img/png/login_user2.png"
+        alt="login"
+        width="160"
+        height="150"
+      />
+      <p
+        style="
+          color: rgb(19, 1, 85);
+          font-family: Georgia, 'Times New Roman', Times, serif;
+          font-size: 36px;
+          padding-top: 24px;
+        "
+      >
+        Inicio de sesión
+      </p>
+      <p
+        style="
+          color: rgb(19, 1, 85);
+          font-family: Georgia, 'Times New Roman', Times, serif;
+          font-size: 12px;
+          padding-bottom: 24px;
+        "
+      >
+        Ingrese su código de usuario y contraseña
+      </p>
+      <div style="margin: 0;">
       <mat-form-field class="input" appearance="fill">
         <mat-label>Usuario</mat-label>
         <input
@@ -59,6 +146,7 @@
       >
         Ingresar
       </button>
+    </div>
     </form>
   </div>
 </div>
