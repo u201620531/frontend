@@ -43,6 +43,7 @@ import { ListarCuentaContableComponent } from './pages/cuenta-contable/listar-cu
 import { AgregarCuentaContableComponent } from './pages/cuenta-contable/agregar-cuenta-contable/agregar-cuenta-contable.component';
 import { AgregarSubCuentaContableComponent } from './pages/sub-cuenta-contable/agregar-sub-cuenta-contable/agregar-sub-cuenta-contable.component';
 import { ListarSubCuentaContableComponent } from './pages/sub-cuenta-contable/listar-sub-cuenta-contable/listar-sub-cuenta-contable.component';
+import { CambiarContrasenaComponent } from './pages/auth/cambiar-contrasena/cambiar-contrasena.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +67,7 @@ import { ListarSubCuentaContableComponent } from './pages/sub-cuenta-contable/li
     AgregarProveedorComponent,
     ListarProveedorComponent,
     AgregarUsuarioComponent,
+    CambiarContrasenaComponent,
     ListarUsuarioComponent,
     ListarTipoCambioComponent,
     AgregarTipoCambioComponent,

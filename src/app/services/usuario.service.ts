@@ -64,12 +64,11 @@ export class UsuarioService {
     }
   }
 
-  listarUsuarioPoridEmpleadoycodigoUsuario(
-    idEmpleado: string,
+  listarUsuarioPorCodigoUsuario(
     codigoUsuario: string
   ) {
     return this.http.get(
-      `${environment.apiURL}/${nombre_servicios.usuario}/${idEmpleado}/${codigoUsuario}`
+      `${environment.apiURL}/${nombre_servicios.usuario}/${codigoUsuario}`
     );
   }
 

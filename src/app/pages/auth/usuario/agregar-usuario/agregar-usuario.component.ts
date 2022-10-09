@@ -67,8 +67,7 @@ export class AgregarUsuarioComponent implements OnInit {
         this.codigoUsuario = params['codigoUsuario'];
         this.readonlyId = this.codigoUsuario ? true : false;
         this._usuarioService
-          .listarUsuarioPoridEmpleadoycodigoUsuario(
-            this.idEmpleado,
+          .listarUsuarioPorCodigoUsuario(
             this.codigoUsuario
           )
           .subscribe((res: any) => {

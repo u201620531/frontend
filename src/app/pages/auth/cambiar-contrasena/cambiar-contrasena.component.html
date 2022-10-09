@@ -1,0 +1,114 @@
+<div class="container">
+  <mat-toolbar class="toolbar">
+    <span>Cambiar contraseña</span>
+    <div class="button-spacer"></div>
+    <button mat-button (click)="back()">
+      <mat-icon> arrow_back </mat-icon>Regresar
+    </button>
+  </mat-toolbar>
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
+  <div class="form-controls" *ngIf="!loading">
+    <div>
+      <form [formGroup]="form" (ngSubmit)="actualizarContrasena()">
+        <mat-grid-list cols="6" rowHeight="70px">  
+       <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="2"
+          [style.background]="'transparent'"
+        >
+            <img
+              src="../../../../assets/img/png/cambiarContrasena.png"
+              alt="contrasena"
+              width="420"
+              height="220"
+            />
+         </mat-grid-tile>
+        <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <mat-form-field class="input-option">
+              <mat-label>Contraseña</mat-label>
+              <input
+                type="password"
+                matInput
+                autocomplete="off"
+                formControlName="contrasena"
+              /> </mat-form-field
+          ></mat-grid-tile>
+          <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+        </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <mat-form-field class="input-option">
+              <mat-label>Confirmar Contraseña</mat-label>
+              <input
+                type="password"
+                matInput
+                autocomplete="off"
+                formControlName="confirmarContrasena"
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+        </mat-grid-tile>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Codigo usuario</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="codigoUsuario"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>idEmpleado</mat-label>
+              <input matInput autocomplete="off" formControlName="idEmpleado" />
+            </mat-form-field>
+          </div>
+          <mat-grid-tile
+            [colspan]="6"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <button
+              mat-raised-button
+              style="margin-right: 20px"
+              type="submit"
+              color="primary"
+            >
+              Guardar
+            </button>
+            <button
+              mat-raised-button
+              type="button"
+              color="warn"
+              (click)="back()"
+            >
+              Cancelar
+            </button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </form>
+    </div>
+  </div>
+</div>

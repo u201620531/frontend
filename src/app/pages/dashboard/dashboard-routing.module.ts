@@ -24,6 +24,7 @@ import { ListarTipoCambioComponent } from '../tipo-cambio/listar-tipo-cambio/lis
 import { ListarCuentaContableComponent } from '../cuenta-contable/listar-cuenta-contable/listar-cuenta-contable.component';
 import { AgregarSubCuentaContableComponent } from '../sub-cuenta-contable/agregar-sub-cuenta-contable/agregar-sub-cuenta-contable.component';
 import { ListarSubCuentaContableComponent } from '../sub-cuenta-contable/listar-sub-cuenta-contable/listar-sub-cuenta-contable.component';
+import { CambiarContrasenaComponent } from '../auth/cambiar-contrasena/cambiar-contrasena.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,7 @@ const routes: Routes = [
       { path: 'agregar-forma-pago', component: AgregarFormaPagoComponent },
       { path: 'listar-forma-pago', component: ListarFormaPagoComponent },
       { path: 'agregar-usuario', component: AgregarUsuarioComponent },
+      { path: 'cambiar-contrasena', component: CambiarContrasenaComponent },
       { path: 'listar-usuario', component: ListarUsuarioComponent },
       { path: 'agregar-tipo-cambio', component: AgregarTipoCambioComponent },
       { path: 'listar-tipo-cambio', component: ListarTipoCambioComponent },
