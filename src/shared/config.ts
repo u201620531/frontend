@@ -43,11 +43,13 @@ export const nombre_servicios = {
 };
 
 export const accion_mensaje = {
-  modificar_valor_ingresado: 'modificar valor ingresado',
-  modificar_valor_selecionado: 'modificar valor seleccionado',
+  modificar_valor_ingresado: 'Modificar valor ingresado',
+  modificar_valor_selecionado: 'Modificar valor seleccionado',
   error_tecnico: 'Comunicarse con soport TI',
   registro_correcto: 'Ok',
   listado_vacio: 'No hay registros con los filtros seleccionados',
+  faltan_datos: 'No ha ingresado/seleccionado los datos requeridos',
+  agregar_valor_ingresado_seleccionado:'Agregar/seleccionar valores requeridos'
 };
 
 export const nombre_empresa = 'Empresa logística';

@@ -1,27 +1,38 @@
 <div class="container">
   <mat-toolbar class="toolbar">
-    <span>Mantenimiento de Comprobante electrónico</span>
+    <span>Mantenimiento de comprobantes</span>
+    <div class="button-spacer"></div>
+    <button mat-button (click)="back()">
+      <mat-icon> arrow_back </mat-icon>Regresar
+    </button>
   </mat-toolbar>
-
-  <div class="form-controls">
-    <mat-card class="cardOptions">
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
+  <div class="form-controls" *ngIf="!loading">
+    <div>
       <form [formGroup]="form" (ngSubmit)="agregarComprobante()">
         <mat-grid-list cols="6" rowHeight="70px">
-          <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <div class="inputOptionMedium">
-              <mat-form-field>
-                <mat-label>Id Comprobante</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  readonly
-                  formControlName="idComprobante"
-                />
-              </mat-form-field>
-            </div>
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'transparent'"
+          >
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Id Comprobante</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                readonly
+                formControlName="idComprobante"
+              />
+            </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <div class="inputOptionMedium">
+            <div class="input-option">
               <mat-form-field>
                 <mat-label>Serie</mat-label>
                 <input matInput autocomplete="off" formControlName="serie" />
@@ -33,7 +44,7 @@
             [rowspan]="1"
             [style.background]="'transparent'"
           >
-            <mat-form-field class="inputOptionMedium" style="margin-left: 20px">
+            <mat-form-field class="input-option" style="margin-left: 20px">
               <mat-label>Correlativo</mat-label>
               <input
                 matInput
@@ -51,33 +62,34 @@
             />
           </mat-grid-tile>
           <mat-grid-tile [colspan]="3" [rowspan]="1">
-            <mat-form-field class="inputOptionLarge" style="display: none">
-              <mat-label>Id Proveedor</mat-label>
+            <mat-form-field class="input-option">
+              <mat-label>Proveedor</mat-label>
               <input
-                matInput
-                autocomplete="off"
+                type="text"
+                matInput=""
                 formControlName="idProveedor"
-                readonly
+                [matAutocomplete]="auto"
               />
-            </mat-form-field>
-            <mat-form-field class="inputOptionLarge">
-              <mat-label>Nro. Documento</mat-label>
-              <input matInput autocomplete="off" readonly />
-            </mat-form-field>
-            <button
-              type="button"
-              style="min-width: 25px; margin-left: 20px; margin-right: 20px"
-              mat-raised-button
-            >
-              Buscar Proveedor
-            </button>
-            <mat-form-field class="inputOptionLarge">
-              <mat-label>Razon Social</mat-label>
-              <input matInput autocomplete="off" readonly />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="displayFn"
+              >
+                <mat-option
+                  *ngFor="let proveedorItem of filtroProveedores | async"
+                  [value]="proveedorItem"
+                >
+                  {{ proveedorItem.razonSocial }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </mat-grid-tile>
+          <div style="top: 120px; position: absolute">
+            <label>{{ proveedor.idProveedor }} </label>
+            <label>{{ proveedor.nroDocumento }} </label>
+            <label>{{ proveedor.razonSocial }} </label>
+          </div>
           <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <mat-form-field class="inputOptionLarge">
+            <mat-form-field class="input-option input-option-right">
               <mat-label>Tipo de documento</mat-label>
               <mat-select formControlName="idTipoDocumento">
                 <mat-option>(Seleccione)</mat-option>
@@ -91,7 +103,7 @@
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <mat-form-field class="inputOptionLarge">
+            <mat-form-field class="input-option input-option-right">
               <mat-label>Forma de Pago</mat-label>
               <mat-select formControlName="idFormaPago">
                 <mat-option>(Seleccione)</mat-option>
@@ -105,7 +117,42 @@
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <mat-form-field class="inputOptionLarge">
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>F. emisión</mat-label>
+              <input
+                matInput
+                formControlName="fechaEmision"
+                [matDatepicker]="pickerFE"
+                [readonly]="readonlyOption"
+                (dateChange)="asignarTipoCambio()"
+              />
+              <mat-hint>DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerFE"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerFE></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>F. vencimiento</mat-label>
+              <input
+                matInput
+                formControlName="fechaVencimiento"
+                [matDatepicker]="pickerFV"
+                [readonly]="readonlyOption"
+              />
+              <mat-hint>DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerFV"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerFV></mat-datepicker>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field class="input-option input-option-right">
               <mat-label>Moneda</mat-label>
               <mat-select formControlName="idMoneda">
                 <mat-option>(Seleccione)</mat-option>
@@ -119,24 +166,90 @@
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <mat-form-field class="inputOptionLarge">
-              <mat-label>Importe Total</mat-label>
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Tipo cambio</mat-label>
+              <input
+                matInput
+                type="numeric"
+                autocomplete="off"
+                formControlName="tipoCambio"
+                class="input-numeric"
+                min="1"
+                #input
+                [SoloNumeros]="true"
+                readonly
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Valor compra</mat-label>
               <input
                 matInput
                 autocomplete="off"
+                formControlName="valorCompra"
+                class="input-numeric"
+                (keyup)="onKeyUpEvent($event)"
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>IGV</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="igv"
+                class="input-numeric"
+                readonly
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-form-field class="input-option input-option-right">
+              <mat-label>Importe Total</mat-label>
+              <input
+                matInput
+                type="numeric"
+                autocomplete="off"
                 formControlName="importeTotal"
                 class="input-numeric"
+                min="1"
+                #input
+                [SoloNumeros]="true"
               />
             </mat-form-field>
           </mat-grid-tile>
           <div style="display: none">
             <mat-form-field>
-              <mat-label>tipoCambio</mat-label>
+              <mat-label>estado</mat-label>
               <input
                 matInput
                 autocomplete="off"
-                formControlName="tipoCambio"
-                [readonly]="readonlyOption"
+                formControlName="estado"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>creacion</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="fechaCreacion"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>usuario creacion</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="usuarioCreacion"
+                readonly
               />
             </mat-form-field>
           </div>
@@ -164,12 +277,9 @@
             >
               Eliminar
             </button>
-            <button type="button" mat-raised-button (click)="back()">
-              Volver
-            </button>
           </mat-grid-tile>
         </mat-grid-list>
       </form>
-    </mat-card>
+    </div>
   </div>
 </div>

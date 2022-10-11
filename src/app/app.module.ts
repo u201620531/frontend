@@ -44,6 +44,9 @@ import { AgregarCuentaContableComponent } from './pages/cuenta-contable/agregar-
 import { AgregarSubCuentaContableComponent } from './pages/sub-cuenta-contable/agregar-sub-cuenta-contable/agregar-sub-cuenta-contable.component';
 import { ListarSubCuentaContableComponent } from './pages/sub-cuenta-contable/listar-sub-cuenta-contable/listar-sub-cuenta-contable.component';
 import { CambiarContrasenaComponent } from './pages/auth/cambiar-contrasena/cambiar-contrasena.component';
+import { SoloNumeros } from './directives/solo-numeros.directive';
+import { FormatoMonedaDirective } from './directives/formatoMoneda';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,6 +78,8 @@ import { CambiarContrasenaComponent } from './pages/auth/cambiar-contrasena/camb
     AgregarCuentaContableComponent,
     AgregarSubCuentaContableComponent,
     ListarSubCuentaContableComponent,
+    SoloNumeros,
+    FormatoMonedaDirective
   ],
   imports: [
     BrowserModule,
@@ -87,6 +92,7 @@ import { CambiarContrasenaComponent } from './pages/auth/cambiar-contrasena/camb
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: MatPaginatorIntl, useValue: CustomPaginator() },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     // provider used to create fake backend
     fakeBackendProvider,
     DatePipe

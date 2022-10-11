@@ -13,136 +13,135 @@
     style="margin-top: 200px"
   ></mat-spinner>
   <div class="form-controls" *ngIf="!loading">
-    <mat-card class="cardOptions">
-      <form [formGroup]="form" (ngSubmit)="agregarTipoDocumento()">
-        <mat-grid-list cols="6" rowHeight="70px">
-          <mat-grid-tile
-            [colspan]="2"
-            [rowspan]="2"
-            [style.background]="'transparent'"
-          >
-          <div class="img-container" style="margin-right: 10px;">
+    <form [formGroup]="form" (ngSubmit)="agregarTipoDocumento()">
+      <mat-grid-list cols="6" rowHeight="70px">
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="2"
+          [style.background]="'transparent'"
+        >
+          <div class="img-container" style="margin-right: 10px">
             <img
               src="../../../../assets/img/png/tipoDocumento.png"
               alt="tipo documento"
               width="200"
               height="120"
             />
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="1"
-            [rowspan]="1"
-            [style.background]="'transparent'"
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <mat-form-field class="input-option">
+            <mat-label>Id</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              [readonly]="readonlyId"
+              formControlName="idTipoDocumento"
+              size="3"
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <mat-form-field class="input-option input-option-right">
+            <mat-label>Descripción</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              formControlName="descripcion"
+              [readonly]="readonlyOption"
+              maxlength="200"
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <mat-form-field class="input-option">
+            <mat-label>Abreviatura</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              formControlName="abreviatura"
+              [readonly]="readonlyOption"
+              maxlength="10"
+            />
+          </mat-form-field>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Estado</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="estado"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="fechaCreacion"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: none">
+            <mat-form-field>
+              <mat-label>Usuario</mat-label>
+              <input
+                matInput
+                autocomplete="off"
+                formControlName="usuarioCreacion"
+                [readonly]="readonlyOption"
+              />
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="6"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="submit"
+            color="primary"
+            [disabled]="readonlyOption"
           >
-              <mat-form-field class="input-option">
-                <mat-label>Id</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  [readonly]="readonlyId"
-                  formControlName="idTipoDocumento"
-                  size="3"
-                />
-              </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="3"
-            [rowspan]="1"
-            [style.background]="'transparent'"
+            Guardar
+          </button>
+          <button
+            mat-raised-button
+            style="margin-right: 20px"
+            type="button"
+            color="warn"
+            [disabled]="eliminar"
+            (click)="eliminarTipoDocumento()"
           >
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="3"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-              <mat-form-field class="input-option input-option-right">
-                <mat-label>Descripción</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="descripcion"
-                  [readonly]="readonlyOption"
-                  maxlength="200"
-                />
-              </mat-form-field>
-           </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="1"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-              <mat-form-field class="input-option">
-                <mat-label>Abreviatura</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="abreviatura"
-                  [readonly]="readonlyOption"
-                  maxlength="10"
-                />
-              </mat-form-field>
-            <div style="display: none">
-              <mat-form-field>
-                <mat-label>Estado</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="estado"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
-            <div style="display: none">
-              <mat-form-field>
-                <mat-label>Fecha</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="fechaCreacion"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
-            <div style="display: none">
-              <mat-form-field>
-                <mat-label>Usuario</mat-label>
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="usuarioCreacion"
-                  [readonly]="readonlyOption"
-                />
-              </mat-form-field>
-            </div>
-          </mat-grid-tile>
-          <mat-grid-tile
-            [colspan]="6"
-            [rowspan]="1"
-            [style.background]="'transparent'"
-          >
-            <button
-              mat-raised-button
-              style="margin-right: 20px"
-              type="submit"
-              color="primary"
-              [disabled]="readonlyOption"
-            >
-              Guardar
-            </button>
-            <button
-              mat-raised-button
-              style="margin-right: 20px"
-              type="button"
-              color="warn"
-              [disabled]="eliminar"
-              (click)="eliminarTipoDocumento()"
-            >
-              Eliminar
-            </button>
-          </mat-grid-tile>
-        </mat-grid-list>
-      </form>
-    </mat-card>
+            Eliminar
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
   </div>
+</div>
