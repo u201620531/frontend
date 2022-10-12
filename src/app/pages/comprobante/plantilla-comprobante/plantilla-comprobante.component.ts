@@ -1,17 +1,17 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CuentaContable } from 'src/app/interfaces/cuenta-contable';
 import { DetallePlantillaComprobante } from 'src/app/interfaces/detalle-plantilla-comprobante';
 import { PlantillaComprobante } from 'src/app/interfaces/plantilla-comprobante';
 import { PlantillaCONCAR } from 'src/app/interfaces/plantilla-concar';
 import { SubCuentaContable } from 'src/app/interfaces/sub-cuenta-contable';
+import { AuditoriaService } from 'src/app/services/auditoria.service';
 import { CuentaContableService } from 'src/app/services/cuenta-contable.service';
 import { DetallePlantillaComprobanteService } from 'src/app/services/detalle-plantilla-comprobante.service';
 import { PlantillaComprobanteService } from 'src/app/services/plantilla-comprobante.service';
@@ -19,6 +19,7 @@ import { SubCuentaContableService } from 'src/app/services/sub-cuenta-contable.s
 import { UsuarioService } from 'src/app/services/usuario.service';
 import {
   accion_mensaje,
+  auditoriaLog,
   estado_inicial,
   filters,
   plantilla_CONCAR,
@@ -71,6 +72,7 @@ export class PlantillaComprobanteComponent implements OnInit {
   nroTicketEnvio: string = '';
   fechaDeclaracion: string = '';
   onseervaciones: string = '';
+  auditoria: any = {};
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -98,6 +100,7 @@ export class PlantillaComprobanteComponent implements OnInit {
     private _usuarioService: UsuarioService,
     private _cuentaContableService: CuentaContableService,
     private _subCuentaContableService: SubCuentaContableService,
+    private _auditoriaService: AuditoriaService,
     private _formBuilder: FormBuilder,
     private _route: ActivatedRoute,
     private _router: Router
@@ -144,7 +147,24 @@ export class PlantillaComprobanteComponent implements OnInit {
         this.listaSubCuentasContables = res;
       },
       (err) => {
-        console.log(err.message);
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+          proceso: auditoriaLog.procesos.listar + ' subcuentas',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
       }
     );
   }
@@ -155,7 +175,24 @@ export class PlantillaComprobanteComponent implements OnInit {
         this.listaCuentasContables = res;
       },
       (err) => {
-        console.log(err.message);
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+          proceso: auditoriaLog.procesos.listar + ' cuentas',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
       }
     );
   }
@@ -166,18 +203,41 @@ export class PlantillaComprobanteComponent implements OnInit {
         this.idPlantillaComprobante = params['idPlantillaComprobante'];
         this._plantillaComprobanteService
           .listarPlantillaComprobantePorId(this.idPlantillaComprobante)
-          .subscribe((res: any) => {
-            this.form.setValue({
-              idPlantillaComprobante: res.idPlantillaComprobante,
-              nroTicketEnvio: res.nroTicketEnvio,
-              fechaDeclaracion: res.fechaDeclaracion,
-              observacion: res.observacion,
-              estado: res.estado,
-              fechaCreacion: res.fechaCreacion,
-              usuarioCreacion: res.usuarioCreacion,
-            });
-            this.modificar = this.idPlantillaComprobante !== '0';
-          });
+          .subscribe(
+            (res: any) => {
+              this.form.setValue({
+                idPlantillaComprobante: res.idPlantillaComprobante,
+                nroTicketEnvio: res.nroTicketEnvio,
+                fechaDeclaracion: res.fechaDeclaracion,
+                observacion: res.observacion,
+                estado: res.estado,
+                fechaCreacion: res.fechaCreacion,
+                usuarioCreacion: res.usuarioCreacion,
+              });
+              this.modificar = this.idPlantillaComprobante !== '0';
+            },
+            (err: any) => {
+              this.auditoria = {
+                fecha: new Date(),
+                opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+                proceso: auditoriaLog.procesos.listar + ' plantilla',
+                codigoError: err.id,
+                mensageError: err.message,
+                detalleError: err.detail,
+                codigoUsuario:
+                  this._usuarioService.currentUsuarioValue.codigoUsuario,
+              };
+              this._auditoriaService
+                .agregarAuditoria(this.auditoria)
+                .subscribe((res) => {});
+
+              this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                duration: 5000,
+              });
+            }
+          );
       }
     });
   }
@@ -193,13 +253,36 @@ export class PlantillaComprobanteComponent implements OnInit {
       else this.idPlantillaComprobante = '0';
       this._detallePlantillaComprobanteService
         .listarDetallePlantillaComprobante(this.idPlantillaComprobante)
-        .subscribe((res: any) => {
-          this.listaDetallePlantillaComprobante = res;
-          this.dataSource =
-            new MatTableDataSource<DetallePlantillaComprobante>();
-          this.dataSource.data = res;
-          this.loading = false;
-        });
+        .subscribe(
+          (res: any) => {
+            this.listaDetallePlantillaComprobante = res;
+            this.dataSource =
+              new MatTableDataSource<DetallePlantillaComprobante>();
+            this.dataSource.data = res;
+            this.loading = false;
+          },
+          (err: any) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+              proceso: auditoriaLog.procesos.listar + ' detalle',
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
+            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            });
+          }
+        );
     });
   }
 
@@ -226,6 +309,20 @@ export class PlantillaComprobanteComponent implements OnInit {
           if (result.id === 1) this.back();
         },
         (err) => {
+          this.auditoria = {
+            fecha: new Date(),
+            opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+            proceso: auditoriaLog.procesos.eliminar + ' plnatilla',
+            codigoError: err.id,
+            mensageError: err.message,
+            detalleError: err.detail,
+            codigoUsuario:
+              this._usuarioService.currentUsuarioValue.codigoUsuario,
+          };
+          this._auditoriaService
+            .agregarAuditoria(this.auditoria)
+            .subscribe((res) => {});
+
           this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
@@ -259,6 +356,20 @@ export class PlantillaComprobanteComponent implements OnInit {
           if (result.id === 1) this.listarDetallePlantilla();
         },
         (err) => {
+          this.auditoria = {
+            fecha: new Date(),
+            opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+            proceso: auditoriaLog.procesos.eliminar + ' detalle',
+            codigoError: err.id,
+            mensageError: err.message,
+            detalleError: err.detail,
+            codigoUsuario:
+              this._usuarioService.currentUsuarioValue.codigoUsuario,
+          };
+          this._auditoriaService
+            .agregarAuditoria(this.auditoria)
+            .subscribe((res) => {});
+
           this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
@@ -400,6 +511,20 @@ export class PlantillaComprobanteComponent implements OnInit {
             );
           },
           (err) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+              proceso: auditoriaLog.procesos.actualiar + ' plantilla',
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
@@ -417,6 +542,20 @@ export class PlantillaComprobanteComponent implements OnInit {
             this.registrarDetalle(this.idPlantillaComprobante);
           },
           (err) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+              proceso: auditoriaLog.procesos.guardar + ' plantilla',
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
@@ -438,6 +577,23 @@ export class PlantillaComprobanteComponent implements OnInit {
             const result: any = res;
           },
           (err) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+              proceso:
+                auditoriaLog.procesos.guardar +
+                ' detalle ' +
+                element.idComprobante,
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
             error_detalle = err.message;
           }
         );
@@ -496,6 +652,20 @@ export class PlantillaComprobanteComponent implements OnInit {
             );
           },
           (err) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+              proceso: auditoriaLog.procesos.actualiar + ' plantilla',
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
@@ -521,6 +691,20 @@ export class PlantillaComprobanteComponent implements OnInit {
             if (result.id === 1) this.back();
           },
           (err) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+              proceso: auditoriaLog.procesos.guardar + ' plantilla',
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',

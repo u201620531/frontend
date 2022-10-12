@@ -40,6 +40,7 @@ export const nombre_servicios = {
   subCuentaContable: 'subcuentacontables',
   tipoCambio: 'tipocambios',
   moneda: 'monedas',
+  auditoria: 'auditorias',
 };
 
 export const accion_mensaje = {
@@ -49,7 +50,8 @@ export const accion_mensaje = {
   registro_correcto: 'Ok',
   listado_vacio: 'No hay registros con los filtros seleccionados',
   faltan_datos: 'No ha ingresado/seleccionado los datos requeridos',
-  agregar_valor_ingresado_seleccionado:'Agregar/seleccionar valores requeridos'
+  agregar_valor_ingresado_seleccionado:
+    'Agregar/seleccionar valores requeridos',
 };
 
 export const nombre_empresa = 'Empresa logística';
@@ -96,7 +98,8 @@ export const validaciones_comprobantes = {
     no_existe: 'no existe',
     inactivo: 'inactivo',
     no_registrados: 'No hay tipos de cambio registrados',
-    fecha_emision_no_valida: 'No hay tipo de cambio registrado para la fecha de emisión',
+    fecha_emision_no_valida:
+      'No hay tipo de cambio registrado para la fecha de emisión',
   },
 };
 
@@ -161,5 +164,27 @@ export const reportes = {
       { wch: 15 },
       { wch: 15 },
     ],
+  },
+};
+
+export const auditoriaLog = {
+  opciones: {
+    login: 'Login',
+    comprobantes_agregar: 'Agregar comprobante',
+    comprobante_cargar:'Cargar comprobante',
+    comprobante_reporte:'Reporte comprobantes',
+    comprobante_listar:'Listar comprobantes',
+    comprobante_plantilla_agregar:'Agregar plantilla ',
+    comprobante_plantilla_listar: 'Listar plantilla'
+  },
+  procesos: {
+    acceso: 'Acceder al sistema',
+    guardar: 'Guardar',
+    actualiar: 'Actualizar',
+    eliminar: 'Eliminar',
+    consultar: 'Consultar', 
+    listar: 'Listar',
+    generar: 'Generar',
+    descargar:'Descargar'
   },
 };

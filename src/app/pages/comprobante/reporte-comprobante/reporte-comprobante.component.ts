@@ -9,10 +9,17 @@ import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { Comprobante } from 'src/app/interfaces/comprobante';
 import * as XLSX from 'xlsx-js-style';
-import { accion_mensaje, reportes, soporte } from 'src/shared/config';
+import {
+  accion_mensaje,
+  auditoriaLog,
+  reportes,
+  soporte,
+} from 'src/shared/config';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SoporteService } from 'src/app/services/soporte.service';
 import { formatoFechaGuion } from 'src/shared/functions';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { AuditoriaService } from 'src/app/services/auditoria.service';
 
 @Component({
   selector: 'app-reporte-comprobante',
@@ -44,6 +51,7 @@ export class ReporteComprobanteComponent implements OnInit {
   fechaEmisionIni: string = '';
   fechaEmisionFin: string = '';
   estado: string = '';
+  auditoria: any = {};
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -51,7 +59,9 @@ export class ReporteComprobanteComponent implements OnInit {
     private _monedaService: MonedaService,
     private _formaPagoService: FormaPagoService,
     private _comprobanteService: ComprobanteService,
-    private _soporteService: SoporteService
+    private _soporteService: SoporteService,
+    private _usuarioService: UsuarioService,
+    private _auditoriaService: AuditoriaService
   ) {}
 
   ngOnInit(): void {
@@ -62,37 +72,126 @@ export class ReporteComprobanteComponent implements OnInit {
   }
 
   listarTiposDocumento() {
-    this._tipoDocumentoService.listarTipoDocumento().subscribe((res) => {
-      this.listaTipoDocumento = res;
-    });
+    this._tipoDocumentoService.listarTipoDocumento().subscribe(
+      (res) => {
+        this.listaTipoDocumento = res;
+      },
+      (err: any) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_reporte,
+          proceso: auditoriaLog.procesos.listar + ' tipos de documento',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+      }
+    );
   }
 
   listarMonedas() {
-    this._monedaService.listarMonedas().subscribe((res) => {
-      this.listaMoneda = res;
-    });
+    this._monedaService.listarMonedas().subscribe(
+      (res) => {
+        this.listaMoneda = res;
+      },
+      (err: any) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_reporte,
+          proceso: auditoriaLog.procesos.listar + ' monedas',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+      }
+    );
   }
 
   listarFormasPago() {
-    this._formaPagoService.listarFormaPago().subscribe((res) => {
-      this.listaFormaPago = res;
-    });
+    this._formaPagoService.listarFormaPago().subscribe(
+      (res) => {
+        this.listaFormaPago = res;
+      },
+      (err: any) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_reporte,
+          proceso: auditoriaLog.procesos.listar + ' formas de pago',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+      }
+    );
   }
 
   listarEstados() {
     this._soporteService
       .listarSoporteById(soporte.estadoComprobanteElectronico)
-      .subscribe((res) => {
-        this.listaEstados = res;
-      });
+      .subscribe(
+        (res) => {
+          this.listaEstados = res;
+        },
+        (err: any) => {
+          this.auditoria = {
+            fecha: new Date(),
+            opcion: auditoriaLog.opciones.comprobante_reporte,
+            proceso: auditoriaLog.procesos.listar + ' estados',
+            codigoError: err.id,
+            mensageError: err.message,
+            detalleError: err.detail,
+            codigoUsuario:
+              this._usuarioService.currentUsuarioValue.codigoUsuario,
+          };
+          this._auditoriaService
+            .agregarAuditoria(this.auditoria)
+            .subscribe((res) => {});
+
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 5000,
+          });
+        }
+      );
   }
 
   cleanFilters(): void {
     this.resetRange();
-    this.idMoneda='';
-    this.idTipoDocumento='';
-    this.idFormaPago='';
-    this.estado='';
+    this.idMoneda = '';
+    this.idTipoDocumento = '';
+    this.idFormaPago = '';
+    this.estado = '';
   }
 
   async descargarReporte() {
@@ -126,7 +225,25 @@ export class ReporteComprobanteComponent implements OnInit {
           } else this.generarReporte();
         },
         (err) => {
-          console.log(err.message);
+          this.auditoria = {
+            fecha: new Date(),
+            opcion: auditoriaLog.opciones.comprobante_reporte,
+            proceso: auditoriaLog.procesos.descargar + ' reporte',
+            codigoError: err.id,
+            mensageError: err.message,
+            detalleError: err.detail,
+            codigoUsuario:
+              this._usuarioService.currentUsuarioValue.codigoUsuario,
+          };
+          this._auditoriaService
+            .agregarAuditoria(this.auditoria)
+            .subscribe((res) => {});
+
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 5000,
+          });
         }
       );
   }

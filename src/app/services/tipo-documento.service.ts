@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { nombre_servicios } from 'src/shared/config';
 import { TipoDocumento } from '../interfaces/tipo-documento';
 
 @Injectable({
@@ -9,32 +10,31 @@ import { TipoDocumento } from '../interfaces/tipo-documento';
 })
 export class TipoDocumentoService {
   constructor(private http: HttpClient) {}
-  route = 'tipodocumentos';
 
   listarTipoDocumento(): Observable<any> {
-    return this.http.get(`${environment.apiURL}/${this.route}`);
+    return this.http.get(`${environment.apiURL}/${nombre_servicios.tipoDocumento}`);
   }
 
   listarTipoDocumentoPorId(idTipoDocumento: string) {
     return this.http.get(
-      `${environment.apiURL}/${this.route}/${idTipoDocumento}`
+      `${environment.apiURL}/${nombre_servicios.tipoDocumento}/${idTipoDocumento}`
     );
   }
 
   listarTipoDocumentoPorDescripcion(idTipoDocumento: string, estado: string) {
     return this.http.get(
-      `${environment.apiURL}/${this.route}/${idTipoDocumento}/${estado}`
+      `${environment.apiURL}/${nombre_servicios.tipoDocumento}/${idTipoDocumento}/${estado}`
     );
   }
 
   eliminarTipoDocumento(idTipoDocumento: string) {
     return this.http.delete(
-      `${environment.apiURL}/${this.route}/${idTipoDocumento}`
+      `${environment.apiURL}/${nombre_servicios.tipoDocumento}/${idTipoDocumento}`
     );
   }
 
   agegarTipoDocumento(tipoDocumento: TipoDocumento) {
-    return this.http.post(`${environment.apiURL}/${this.route}`, tipoDocumento);
+    return this.http.post(`${environment.apiURL}/${nombre_servicios.tipoDocumento}`, tipoDocumento);
   }
 
   actualizarTipoDocumento(
@@ -42,7 +42,7 @@ export class TipoDocumentoService {
     idTipoDocumento: string
   ) {
     return this.http.put(
-      `${environment.apiURL}/${this.route}/${idTipoDocumento}`,
+      `${environment.apiURL}/${nombre_servicios.tipoDocumento}/${idTipoDocumento}`,
       tipoDocumento
     );
   }

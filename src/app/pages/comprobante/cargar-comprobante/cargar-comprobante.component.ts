@@ -9,6 +9,7 @@ import { Moneda } from 'src/app/interfaces/moneda';
 import { Proveedor } from 'src/app/interfaces/proveedor';
 import { TipoCambio } from 'src/app/interfaces/tipo-cambio';
 import { TipoDocumento } from 'src/app/interfaces/tipo-documento';
+import { AuditoriaService } from 'src/app/services/auditoria.service';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { MonedaService } from 'src/app/services/moneda.service';
@@ -18,6 +19,7 @@ import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import {
   accion_mensaje,
+  auditoriaLog,
   estado_inicial,
   filters,
   validaciones_comprobantes,
@@ -61,6 +63,7 @@ export class CargarComprobanteComponent implements OnInit {
   private sort: MatSort;
   loading: boolean = false;
   existeFechaEmision: boolean = false;
+  auditoria: any = {};
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -89,6 +92,7 @@ export class CargarComprobanteComponent implements OnInit {
     private _usuarioService: UsuarioService,
     private _comprobanteService: ComprobanteService,
     private _tipoCambioService: TipoCambioService,
+    private _auditoriaService: AuditoriaService,
     private _snackBar: MatSnackBar
   ) {}
 
@@ -144,6 +148,19 @@ export class CargarComprobanteComponent implements OnInit {
         this.totalComprobantes = res.length;
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_cargar,
+          proceso: auditoriaLog.procesos.listar + ' comprobantes',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -159,6 +176,19 @@ export class CargarComprobanteComponent implements OnInit {
         this.listaProveedores = res;
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_cargar,
+          proceso: auditoriaLog.procesos.listar + ' proveedores',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -174,6 +204,19 @@ export class CargarComprobanteComponent implements OnInit {
         this.listaTiposDocumento = res;
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_cargar,
+          proceso: auditoriaLog.procesos.listar + ' tipos de documento',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -189,6 +232,19 @@ export class CargarComprobanteComponent implements OnInit {
         this.listaMonedas = res;
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_cargar,
+          proceso: auditoriaLog.procesos.listar + ' monedas',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -204,6 +260,19 @@ export class CargarComprobanteComponent implements OnInit {
         this.listaFormasPago = res;
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_cargar,
+          proceso: auditoriaLog.procesos.listar + ' formas de pago',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -219,6 +288,19 @@ export class CargarComprobanteComponent implements OnInit {
         this.listaTipoCambio = res;
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_cargar,
+          proceso: auditoriaLog.procesos.listar + ' tipo de cambio',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -330,6 +412,24 @@ export class CargarComprobanteComponent implements OnInit {
             this.habilitarRegistro = false;
           },
           (error) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_cargar,
+              proceso:
+                auditoriaLog.procesos.guardar +
+                ' comprobante' +
+                _comprobante.serie +
+                '-' +
+                _comprobante.correlativo,
+              codigoError: error.id,
+              mensageError: error.message,
+              detalleError: error.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
             detalleError += this.agregarSeparador(detalleError) + error.message;
           }
         );

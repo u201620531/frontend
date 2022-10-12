@@ -14,7 +14,7 @@ import { FormaPago } from 'src/app/interfaces/forma-pago';
 import { Observable, Subscription } from 'rxjs';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { accion_mensaje } from 'src/shared/config';
+import { accion_mensaje, auditoriaLog } from 'src/shared/config';
 import { Proveedor } from 'src/app/interfaces/proveedor';
 import { ProveedorService } from 'src/app/services/proveedor.service';
 import { map, startWith } from 'rxjs/operators';
@@ -23,6 +23,7 @@ import {
   formatoFechaGuion,
   formatoFechaGuionCadena,
 } from 'src/shared/functions';
+import { AuditoriaService } from 'src/app/services/auditoria.service';
 
 @Component({
   selector: 'app-agregar-comprobante',
@@ -59,6 +60,7 @@ export class AgregarComprobanteComponent implements OnInit {
 
   filtroProveedores: Observable<Proveedor[]>;
   formProveedor: FormGroup;
+  auditoria: any = {};
 
   constructor(
     private _tipoDocumentoService: TipoDocumentoService,
@@ -68,6 +70,7 @@ export class AgregarComprobanteComponent implements OnInit {
     private _usuarioService: UsuarioService,
     private _proveedorService: ProveedorService,
     private _tipoCambioService: TipoCambioService,
+    private _auditoriaService: AuditoriaService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
@@ -163,48 +166,65 @@ export class AgregarComprobanteComponent implements OnInit {
   async listarComprobante() {
     this._comprobanteService
       .listarComprobantePorId(this.IdComprobante)
-      .subscribe((res: any) => {
-        this.IdProveedor = res.idProveedor;
-        let dateFEmision = new Date(res.fechaEmision);
-        dateFEmision.setDate(dateFEmision.getDate() + 1);
-        let dateFVencimiento;
-        if (isNaN(res.fechaVencimiento)) {
-          dateFVencimiento = new Date(res.fechaVencimiento);
-          dateFVencimiento.setDate(dateFVencimiento.getDate() + 1);
+      .subscribe(
+        (res: any) => {
+          this.IdProveedor = res.idProveedor;
+          let dateFEmision = new Date(res.fechaEmision);
+          dateFEmision.setDate(dateFEmision.getDate() + 1);
+          let dateFVencimiento;
+          if (isNaN(res.fechaVencimiento)) {
+            dateFVencimiento = new Date(res.fechaVencimiento);
+            dateFVencimiento.setDate(dateFVencimiento.getDate() + 1);
+          }
+          this.form.setValue({
+            idComprobante: res.idComprobante,
+            serie: res.serie,
+            correlativo: res.correlativo,
+            idTipoDocumento: res.idTipoDocumento,
+            idFormaPago: res.idFormaPago,
+            idProveedor: res.idProveedor,
+            fechaEmision: dateFEmision,
+            fechaVencimiento: isNaN(res.fechaVencimiento)
+              ? dateFVencimiento
+              : res.fechaVencimiento,
+            totalGravadas: res.totalGravadas.toFixed(2),
+            totalInafectas: res.totalInafectas,
+            totalExoneradas: res.totalExoneradas,
+            totalExportacion: res.totalExportacion,
+            valorCompra: res.valorCompra.toFixed(2),
+            igv: res.igv.toFixed(2),
+            isc: res.isc,
+            otrosTributos: res.otrosTributos,
+            otrosCargos: res.otrosCargos,
+            descuentosGlobales: res.descuentosGlobales,
+            importeTotal: res.importeTotal.toFixed(2),
+            tipoCambio: res.tipoCambio,
+            idMoneda: res.idMoneda,
+            serieGuia: res.serieGuia,
+            correlativoGuia: res.correlativoGuia,
+            estado: res.estado,
+            fechaCreacion: res.fechaCreacion,
+            usuarioCreacion: res.usuarioCreacion,
+          });
+          this.listarProveedor();
+          this.modificar = true;
+        },
+        (error) => {
+          this.auditoria = {
+            fecha: new Date(),
+            opcion: auditoriaLog.opciones.comprobantes_agregar,
+            proceso: auditoriaLog.procesos.consultar + ' comprobante',
+            codigoError: '0',
+            mensageError: error.message,
+            detalleError: error,
+            codigoUsuario:
+              this._usuarioService.currentUsuarioValue.codigoUsuario,
+          };
+          this._auditoriaService
+            .agregarAuditoria(this.auditoria)
+            .subscribe((res) => {});
         }
-        this.form.setValue({
-          idComprobante: res.idComprobante,
-          serie: res.serie,
-          correlativo: res.correlativo,
-          idTipoDocumento: res.idTipoDocumento,
-          idFormaPago: res.idFormaPago,
-          idProveedor: res.idProveedor,
-          fechaEmision: dateFEmision,
-          fechaVencimiento: isNaN(res.fechaVencimiento)
-            ? dateFVencimiento
-            : res.fechaVencimiento,
-          totalGravadas: res.totalGravadas.toFixed(2),
-          totalInafectas: res.totalInafectas,
-          totalExoneradas: res.totalExoneradas,
-          totalExportacion: res.totalExportacion,
-          valorCompra: res.valorCompra.toFixed(2),
-          igv: res.igv.toFixed(2),
-          isc: res.isc,
-          otrosTributos: res.otrosTributos,
-          otrosCargos: res.otrosCargos,
-          descuentosGlobales: res.descuentosGlobales,
-          importeTotal: res.importeTotal.toFixed(2),
-          tipoCambio: res.tipoCambio,
-          idMoneda: res.idMoneda,
-          serieGuia: res.serieGuia,
-          correlativoGuia: res.correlativoGuia,
-          estado: res.estado,
-          fechaCreacion: res.fechaCreacion,
-          usuarioCreacion: res.usuarioCreacion,
-        });
-        this.listarProveedor();
-        this.modificar = true;
-      });
+      );
   }
 
   async initParams() {
@@ -223,28 +243,92 @@ export class AgregarComprobanteComponent implements OnInit {
   }
 
   async listarProveedores() {
-    this._proveedorService.listarPoveedores().subscribe((res) => {
-      this.listaProveedores = res;
-      this.listarProveedoresFiltro();
-    });
+    this._proveedorService.listarPoveedores().subscribe(
+      (res) => {
+        this.listaProveedores = res;
+        this.listarProveedoresFiltro();
+      },
+      (error) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobantes_agregar,
+          proceso: auditoriaLog.procesos.listar + ' proveedor',
+          codigoError: error.id,
+          mensageError: error.message,
+          detalleError: error.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+      }
+    );
   }
 
   async listarTipoDocumento() {
-    this._tipoDocumentoService.listarTipoDocumento().subscribe((res) => {
-      this.listaTipoDocumento = res;
-    });
+    this._tipoDocumentoService.listarTipoDocumento().subscribe(
+      (res) => {
+        this.listaTipoDocumento = res;
+      },
+      (error) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobantes_agregar,
+          proceso: auditoriaLog.procesos.listar + ' tipo de documento',
+          codigoError: error.id,
+          mensageError: error.message,
+          detalleError: error.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+      }
+    );
   }
 
   async listarMoneda() {
-    this._monedaService.listarMonedas().subscribe((res) => {
-      this.listaMoneda = res;
-    });
+    this._monedaService.listarMonedas().subscribe(
+      (res) => {
+        this.listaMoneda = res;
+      },
+      (error) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobantes_agregar,
+          proceso: auditoriaLog.procesos.listar + ' moneda',
+          codigoError: error.id,
+          mensageError: error.message,
+          detalleError: error.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+      }
+    );
   }
 
   async listarFormaPago() {
-    this._formaPagoService.listarFormaPago().subscribe((res) => {
-      this.listaFormaPago = res;
-    });
+    this._formaPagoService.listarFormaPago().subscribe(
+      (res) => {
+        this.listaFormaPago = res;
+      },
+      (error) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobantes_agregar,
+          proceso: auditoriaLog.procesos.listar + ' forma de pago',
+          codigoError: error.id,
+          mensageError: error.message,
+          detalleError: error.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+      }
+    );
   }
 
   agregarComprobante() {
@@ -321,6 +405,20 @@ export class AgregarComprobanteComponent implements OnInit {
             );
           },
           (err) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobantes_agregar,
+              proceso: auditoriaLog.procesos.actualiar + ' comprobante',
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
             this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
@@ -344,6 +442,19 @@ export class AgregarComprobanteComponent implements OnInit {
           if (result.id === 1) this.back();
         },
         (err) => {
+          this.auditoria = {
+            fecha: new Date(),
+            opcion: auditoriaLog.opciones.comprobantes_agregar,
+            proceso: auditoriaLog.procesos.guardar + ' comprobante',
+            codigoError: err.id,
+            mensageError: err.message,
+            detalleError: err.detail,
+            codigoUsuario:
+              this._usuarioService.currentUsuarioValue.codigoUsuario,
+          };
+          this._auditoriaService
+            .agregarAuditoria(this.auditoria)
+            .subscribe((res) => {});
           this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
@@ -389,6 +500,19 @@ export class AgregarComprobanteComponent implements OnInit {
               );
             },
             (err) => {
+              this.auditoria = {
+                fecha: new Date(),
+                opcion: auditoriaLog.opciones.comprobantes_agregar,
+                proceso: auditoriaLog.procesos.eliminar + ' comprobante',
+                codigoError: err.id,
+                mensageError: err.message,
+                detalleError: err.detail,
+                codigoUsuario:
+                  this._usuarioService.currentUsuarioValue.codigoUsuario,
+              };
+              this._auditoriaService
+                .agregarAuditoria(this.auditoria)
+                .subscribe((res) => {});
               this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
                 horizontalPosition: 'center',
                 verticalPosition: 'bottom',

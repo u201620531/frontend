@@ -4,9 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
-import { Comprobante } from 'src/app/interfaces/comprobante';
+import { AuditoriaService } from 'src/app/services/auditoria.service';
 import { ComprobanteService } from 'src/app/services/comprobante.service';
-import { accion_mensaje, filters } from 'src/shared/config';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { accion_mensaje, auditoriaLog, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-comprobante',
@@ -15,7 +16,6 @@ import { accion_mensaje, filters } from 'src/shared/config';
 })
 export class ListarComprobanteComponent implements OnInit {
   listaComprobante: any[] = [];
-
   displayedColumns: string[] = [
     'idComprobante',
     'nroDocumento',
@@ -31,6 +31,7 @@ export class ListarComprobanteComponent implements OnInit {
   private paginator!: MatPaginator;
   private sort: MatSort;
   loading: boolean = true;
+  auditoria: any = {};
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -54,6 +55,8 @@ export class ListarComprobanteComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private _ComprobanteService: ComprobanteService,
+    private _auditoriaService: AuditoriaService,
+    private _usuarioService: UsuarioService,
     private _router: Router
   ) {}
 
@@ -70,8 +73,26 @@ export class ListarComprobanteComponent implements OnInit {
         this.loading = false;
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_listar,
+          proceso: auditoriaLog.procesos.listar + ' comprobantes',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+
         this.loading = false;
-        console.log(err.message);
       }
     );
   }
@@ -93,6 +114,19 @@ export class ListarComprobanteComponent implements OnInit {
         if (result.id === 1) this.listarComprobante();
       },
       (err) => {
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_listar,
+          proceso: auditoriaLog.procesos.eliminar + ' comprobantes',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',

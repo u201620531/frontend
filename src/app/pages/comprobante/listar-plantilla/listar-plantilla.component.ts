@@ -5,8 +5,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { PlantillaComprobante } from 'src/app/interfaces/plantilla-comprobante';
+import { AuditoriaService } from 'src/app/services/auditoria.service';
 import { PlantillaComprobanteService } from 'src/app/services/plantilla-comprobante.service';
-import { accion_mensaje, filters } from 'src/shared/config';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { accion_mensaje, auditoriaLog, filters } from 'src/shared/config';
 import { CustomPaginator } from '../../shared/CustomPaginatorConfiguration';
 
 @Component({
@@ -31,6 +33,7 @@ export class ListarPlantillaComponent implements OnInit {
   private paginator!: MatPaginator;
   private sort: MatSort;
   loading: boolean = true;
+  auditoria: any = {};
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -54,6 +57,8 @@ export class ListarPlantillaComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private _plantillaComprobanteService: PlantillaComprobanteService,
+    private _auditoriaService: AuditoriaService,
+    private _usuarioService: UsuarioService,
     private _router: Router
   ) {}
 
@@ -72,7 +77,24 @@ export class ListarPlantillaComponent implements OnInit {
       },
       (err) => {
         this.loading = false;
-        console.log(err.message);
+        this.auditoria = {
+          fecha: new Date(),
+          opcion: auditoriaLog.opciones.comprobante_plantilla_listar,
+          proceso: auditoriaLog.procesos.listar + ' plantillas',
+          codigoError: err.id,
+          mensageError: err.message,
+          detalleError: err.detail,
+          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
+        };
+        this._auditoriaService
+          .agregarAuditoria(this.auditoria)
+          .subscribe((res) => {});
+
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
       }
     );
   }
@@ -100,6 +122,20 @@ export class ListarPlantillaComponent implements OnInit {
           if (result.id === 1) this.listarPlantillas();
         },
         (err) => {
+          this.auditoria = {
+            fecha: new Date(),
+            opcion: auditoriaLog.opciones.comprobante_plantilla_listar,
+            proceso: auditoriaLog.procesos.eliminar + ' plantilla',
+            codigoError: err.id,
+            mensageError: err.message,
+            detalleError: err.detail,
+            codigoUsuario:
+              this._usuarioService.currentUsuarioValue.codigoUsuario,
+          };
+          this._auditoriaService
+            .agregarAuditoria(this.auditoria)
+            .subscribe((res) => {});
+
           this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
