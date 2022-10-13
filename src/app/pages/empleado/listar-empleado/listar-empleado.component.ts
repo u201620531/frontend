@@ -11,10 +11,10 @@ import { filters } from 'src/shared/config';
 @Component({
   selector: 'app-listar-empleado',
   templateUrl: './listar-empleado.component.html',
-  styleUrls: ['./listar-empleado.component.css']
+  styleUrls: ['./listar-empleado.component.css'],
 })
 export class ListarEmpleadoComponent implements OnInit {
-    listaEmpleados: Empleado[] = [];
+  listaEmpleados: Empleado[] = [];
   displayedColumns: string[] = [
     'idEmpleado',
     'desCargo',
@@ -29,15 +29,20 @@ export class ListarEmpleadoComponent implements OnInit {
   placeholderValue: string = '';
   private paginator: MatPaginator;
   private sort: MatSort;
+  loading = false;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
-    this.sort = ms;
-    this.setDataSourceAttributes();
+    if (ms !== undefined) {
+      this.sort = ms;
+      this.setDataSourceAttributes();
+    }
   }
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-    this.paginator = mp;
-    this.setDataSourceAttributes();
+    if (mp !== undefined) {
+      this.paginator = mp;
+      this.setDataSourceAttributes();
+    }
   }
 
   setDataSourceAttributes() {
@@ -53,10 +58,10 @@ export class ListarEmpleadoComponent implements OnInit {
 
   ngOnInit(): void {
     this.placeholderValue = filters.placeholders.empleado;
-    this.listarEmpleadoes();
+    this.listarEmpleados();
   }
 
-  listarEmpleadoes() {
+  listarEmpleados() {
     this._empleadoService.listarEmpleados().subscribe(
       (res) => {
         this.listaEmpleados = res;
@@ -64,9 +69,11 @@ export class ListarEmpleadoComponent implements OnInit {
         this.dataSource.data = res;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.loading = false;
       },
       (err) => {
         console.log(err.message);
+        this.loading = false;
       }
     );
   }
@@ -78,7 +85,7 @@ export class ListarEmpleadoComponent implements OnInit {
 
   eliminarEmpleado(idEmpleado: string) {
     this._empleadoService.eliminarEmpleado(idEmpleado);
-    this.listarEmpleadoes();
+    this.listarEmpleados();
 
     this._snackBar.open('El Empleado fue eliminado con éxito.', '', {
       horizontalPosition: 'center',

@@ -27,6 +27,7 @@ export class ListarUsuarioComponent implements OnInit {
   viewOptions: boolean = true;
   private paginator!: MatPaginator;
   private sort: MatSort;
+  loading: boolean = true;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     if (ms !== undefined) {
@@ -43,6 +44,7 @@ export class ListarUsuarioComponent implements OnInit {
   }
 
   setDataSourceAttributes() {
+    console.log('pagi',this.paginator);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -63,9 +65,11 @@ export class ListarUsuarioComponent implements OnInit {
       (res) => {
         this.listaUsuarios = res;
         this.dataSource = new MatTableDataSource<Usuario[]>(res);
+        this.loading = false;
       },
       (err) => {
         console.log(err.message);
+        this.loading = false;
       }
     );
   }

@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ListarUsuarioComponent', () => {
   let component: ListarUsuarioComponent;
@@ -24,6 +25,7 @@ describe('ListarUsuarioComponent', () => {
         HttpClientTestingModule,
         FormsModule,
         ReactiveFormsModule,
+        BrowserAnimationsModule,
         RouterModule.forRoot([]),
       ],
     }).compileComponents();
