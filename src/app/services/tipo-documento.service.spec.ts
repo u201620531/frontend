@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { TipoDocumentoService } from './tipo-documento.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('TipoDocumentoService', () => {
   let service: TipoDocumentoService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ imports: [HttpClientModule] });
     service = TestBed.inject(TipoDocumentoService);
   });
 
