@@ -21,8 +21,6 @@ import { ReporteComprobanteComponent } from './pages/comprobante/reporte-comprob
 import { PlantillaComprobanteComponent } from './pages/comprobante/plantilla-comprobante/plantilla-comprobante.component';
 import { AgregarFormaPagoComponent } from './pages/forma-pago/agregar-forma-pago/agregar-forma-pago.component';
 import { ListarFormaPagoComponent } from './pages/forma-pago/listar-forma-pago/listar-forma-pago.component';
-import { AgregarProductoComponent } from './pages/producto/agregar-producto/agregar-producto.component';
-import { ListarProductoComponent } from './pages/producto/listar-producto/listar-producto.component';
 import { AgregarEmpleadoComponent } from './pages/empleado/agregar-empleado/agregar-empleado.component';
 import { ListarEmpleadoComponent } from './pages/empleado/listar-empleado/listar-empleado.component';
 import { AgregarProveedorComponent } from './pages/proveedor/agregar-proveedor/agregar-proveedor.component';
@@ -63,8 +61,6 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     PlantillaComprobanteComponent,
     AgregarFormaPagoComponent,
     ListarFormaPagoComponent,
-    AgregarProductoComponent,
-    ListarProductoComponent,
     AgregarEmpleadoComponent,
     ListarEmpleadoComponent,
     AgregarProveedorComponent,

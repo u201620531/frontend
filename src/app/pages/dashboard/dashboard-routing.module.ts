@@ -12,8 +12,6 @@ import { ListarFormaPagoComponent } from '../forma-pago/listar-forma-pago/listar
 import { AgregarComprobanteComponent } from '../comprobante/agregar-comprobante/agregar-comprobante.component';
 import { AgregarProveedorComponent } from '../proveedor/agregar-proveedor/agregar-proveedor.component';
 import { ListarProveedorComponent } from '../proveedor/listar-proveedor/listar-proveedor.component';
-import { AgregarProductoComponent } from '../producto/agregar-producto/agregar-producto.component';
-import { ListarProductoComponent } from '../producto/listar-producto/listar-producto.component';
 import { CargarComprobanteComponent } from '../comprobante/cargar-comprobante/cargar-comprobante.component';
 import { AgregarUsuarioComponent } from '../auth/usuario/agregar-usuario/agregar-usuario.component';
 import { ListarUsuarioComponent } from '../auth/usuario/listar-usuario/listar-usuario.component';
@@ -43,8 +41,6 @@ const routes: Routes = [
       { path: 'reporte-comprobante', component: ReporteComprobanteComponent },
       { path: 'agregar-proveedor', component: AgregarProveedorComponent },
       { path: 'listar-proveedor', component: ListarProveedorComponent },
-      { path: 'agregar-producto', component: AgregarProductoComponent },
-      { path: 'listar-producto', component: ListarProductoComponent },
       {
         path: 'agregar-tipo-documento',
         component: AgregarTipoDocumentoComponent,
