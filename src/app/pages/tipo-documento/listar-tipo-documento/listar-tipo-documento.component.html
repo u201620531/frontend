@@ -20,7 +20,7 @@
     </button>
     <div class="form-controls" *ngIf="viewOptions">
       <div *ngIf="listaTipoDocumento.length > 0">
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="standard" class="testFilter">
           <mat-label>Filtro (Ingrese aquí el filtro)</mat-label>
           <input
             matInput
@@ -28,6 +28,7 @@
             placeholder="{{ placeholderValue }}"
             #input
             autocomplete="off"
+            name="filtroTipo"
           />
         </mat-form-field>
         <table mat-table [dataSource]="dataSource" matSort>
