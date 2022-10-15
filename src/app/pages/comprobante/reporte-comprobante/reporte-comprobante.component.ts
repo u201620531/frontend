@@ -201,16 +201,12 @@ export class ReporteComprobanteComponent implements OnInit {
         this.idTipoDocumento === '' ? 'X' : this.idTipoDocumento,
         this.idFormaPago === '' ? 'X' : this.idFormaPago,
         this.idMoneda === '' ? 'X' : this.idMoneda,
-        this.rangeDates.value.start === ''
+        this.rangeDates.value.start === null
           ? 'X'
-          : this.rangeDates.value.start !== null
-          ? formatoFechaGuion(this.rangeDates.value.start)
-          : this.rangeDates.value.start,
-        this.rangeDates.value.end === ''
+          : formatoFechaGuion(this.rangeDates.value.start),
+        this.rangeDates.value.end === null
           ? 'X'
-          : this.rangeDates.value.end !== null
-          ? formatoFechaGuion(this.rangeDates.value.end)
-          : this.rangeDates.value.end,
+          : formatoFechaGuion(this.rangeDates.value.end),
         this.estado === '' ? 'X' : this.estado
       )
       .subscribe(
