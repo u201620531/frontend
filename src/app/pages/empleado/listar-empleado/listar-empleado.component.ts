@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { Empleado } from 'src/app/interfaces/empleado';
 import { EmpleadoService } from 'src/app/services/empleado.service';
-import { filters } from 'src/shared/config';
+import { accion_mensaje, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-empleado',
@@ -72,7 +72,11 @@ export class ListarEmpleadoComponent implements OnInit {
         this.loading = false;
       },
       (err) => {
-        console.log(err.message);
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
         this.loading = false;
       }
     );
@@ -84,14 +88,24 @@ export class ListarEmpleadoComponent implements OnInit {
   }
 
   eliminarEmpleado(idEmpleado: string) {
-    this._empleadoService.eliminarEmpleado(idEmpleado);
-    this.listarEmpleados();
-
-    this._snackBar.open('El Empleado fue eliminado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 5000,
-    });
+    this._empleadoService.eliminarEmpleado(idEmpleado).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+        if (result.id === 1) this.listarEmpleados();
+      },
+      (err) => {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+      }
+    );
   }
 
   modificarEmpleado(idEmpleado: string, modificar: number): void {

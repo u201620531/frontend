@@ -52,7 +52,7 @@
         >
         </mat-grid-tile>
         <mat-grid-tile
-          [colspan]="3"
+          [colspan]="2"
           [rowspan]="1"
           [style.background]="'transparent'"
         >
@@ -72,7 +72,7 @@
           [rowspan]="1"
           [style.background]="'transparent'"
         >
-          <mat-form-field class="input-option">
+          <mat-form-field class="input-option input-option-right">
             <mat-label>Abreviatura</mat-label>
             <input
               matInput
@@ -80,6 +80,21 @@
               formControlName="abreviatura"
               [readonly]="readonlyOption"
               maxlength="10"
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
+          <mat-form-field class="input-option">
+            <mat-label>Asientos</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              formControlName="asientos"
+              [readonly]="readonlyOption"
             />
           </mat-form-field>
           <div style="display: none">

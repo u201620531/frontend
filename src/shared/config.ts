@@ -16,10 +16,11 @@ export const filters = {
     formaPago: 'Forma de pago',
     usuario: 'Usuario',
     moneda: 'Moneda',
-    plantilla: 'Plaantilla Excel',
+    plantilla: 'Plantilla Excel',
     tipoCambio: 'Tipo de cambio',
     cuentaContable: 'Cuenta contable',
     subCuentaContable: 'Sub cuenta contable',
+    correlativoPlantilla: 'Correlativo',
   },
 };
 
@@ -41,6 +42,7 @@ export const nombre_servicios = {
   tipoCambio: 'tipocambios',
   moneda: 'monedas',
   auditoria: 'auditorias',
+  correlativoPlantilla: 'correlativoplantillas',
 };
 
 export const accion_mensaje = {
@@ -127,7 +129,8 @@ export const plantilla_CONCAR = {
       'Número de Documento',
       'Fecha de Documento',
       'Fecha de Vencimiento',
-      'Código de Area,	Glosa Detalle',
+      'Código de Área',
+      'Glosa Detalle',
       'Código de Anexo Auxiliar',
       'Medio de Pago',
       'Tipo de Documento de Referencia',
@@ -171,20 +174,20 @@ export const auditoriaLog = {
   opciones: {
     login: 'Login',
     comprobantes_agregar: 'Agregar comprobante',
-    comprobante_cargar:'Cargar comprobante',
-    comprobante_reporte:'Reporte comprobantes',
-    comprobante_listar:'Listar comprobantes',
-    comprobante_plantilla_agregar:'Agregar plantilla ',
-    comprobante_plantilla_listar: 'Listar plantilla'
+    comprobante_cargar: 'Cargar comprobante',
+    comprobante_reporte: 'Reporte comprobantes',
+    comprobante_listar: 'Listar comprobantes',
+    comprobante_plantilla_agregar: 'Agregar plantilla ',
+    comprobante_plantilla_listar: 'Listar plantilla',
   },
   procesos: {
     acceso: 'Acceder al sistema',
     guardar: 'Guardar',
     actualiar: 'Actualizar',
     eliminar: 'Eliminar',
-    consultar: 'Consultar', 
+    consultar: 'Consultar',
     listar: 'Listar',
     generar: 'Generar',
-    descargar:'Descargar'
+    descargar: 'Descargar',
   },
 };

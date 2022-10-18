@@ -22,7 +22,7 @@ export class ListarPlantillaComponent implements OnInit {
   displayedColumns: string[] = [
     'idPlantillaComprobante',
     'nroTicket',
-    'fechaCreacion',
+    'fechaCarga',
     'fechaDeclaracion',
     'observacion',
     'estado',

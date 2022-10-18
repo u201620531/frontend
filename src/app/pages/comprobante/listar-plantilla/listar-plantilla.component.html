@@ -73,22 +73,22 @@
           </td>
         </ng-container>
 
-        <!-- fechaCreacion Column -->
-        <ng-container matColumnDef="fechaCreacion">
+        <!-- fechaCarga Column -->
+        <ng-container matColumnDef="fechaCarga">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="header-table"
             style="text-align: center"
           >
-            F. creación
+            F. carga
           </th>
           <td
             mat-cell
             *matCellDef="let element"
             [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
-            {{ element.fechaCreacion }}
+            {{ element.fechaCarga | date: 'dd/MM/yyyy'}}
           </td>
         </ng-container>
 
@@ -107,7 +107,7 @@
             *matCellDef="let element"
             [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
-            {{ element.fechaDeclaracion }}
+            {{ element.fechaDeclaracion| date: 'dd/MM/yyyy' }}
           </td>
         </ng-container>
 

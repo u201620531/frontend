@@ -6,7 +6,8 @@ import { Usuario } from 'src/app/interfaces/usuario';
 import { ModuloService } from 'src/app/services/modulo.service';
 import { Router } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { nombre_empresa } from 'src/shared/config';
+import { accion_mensaje, nombre_empresa } from 'src/shared/config';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface subMenuItem {
   idSubMenu: string;
@@ -54,6 +55,7 @@ export class NavbarComponent implements OnInit {
 
   currentUsuario?: Usuario;
   constructor(
+    private _snackBar: MatSnackBar,
     private _moduloService: ModuloService,
     private router: Router,
     private _usuarioService: UsuarioService
@@ -65,13 +67,14 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadModulo();
-    //console.log(this.modulos);
   }
 
   loadModulo() {
     this._moduloService
       .listarModulosPorIdPerfilUsuario(
-        this._usuarioService.currentUsuarioValue.idPerfilUsuario===''?'P01':this._usuarioService.currentUsuarioValue.idPerfilUsuario,
+        this._usuarioService.currentUsuarioValue.idPerfilUsuario === ''
+          ? 'P01'
+          : this._usuarioService.currentUsuarioValue.idPerfilUsuario,
         'A'
       )
       .subscribe(
@@ -138,7 +141,11 @@ export class NavbarComponent implements OnInit {
           });
         },
         (err) => {
-          console.log(err.message);
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 5000,
+          });
         }
       );
   }

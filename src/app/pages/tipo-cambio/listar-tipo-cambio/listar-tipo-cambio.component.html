@@ -46,7 +46,7 @@
             [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
           >
             <div class="cell-table">
-              {{ element.fecha }}
+              {{ element.fecha | date: 'dd/MM/yyyy'}}
             </div>
           </td>
         </ng-container>

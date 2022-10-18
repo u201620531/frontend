@@ -1,7 +1,7 @@
 export interface Moneda {
   idMoneda: string;
   descripcion: string;
-  signo?: string;
+  abreviatura?: string;
   estado: string; //A-Activo, I-Inactivo
   fechaCreacion: string;
   usuarioCreacion: string;

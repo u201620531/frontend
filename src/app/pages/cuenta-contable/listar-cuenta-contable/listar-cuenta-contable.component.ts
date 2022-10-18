@@ -67,8 +67,12 @@ export class ListarCuentaContableComponent implements OnInit {
         this.loading = false;
       },
       (err) => {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
         this.loading = false;
-        console.log(err.message);
       }
     );
   }

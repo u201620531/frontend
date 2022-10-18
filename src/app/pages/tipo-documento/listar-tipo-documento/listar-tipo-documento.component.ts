@@ -21,6 +21,7 @@ export class ListarTipoDocumentoComponent implements OnInit {
   displayedColumns: string[] = [
     'idTipoDocumento',
     'descripcion',
+    'asientos',
     'estado',
     'acciones',
   ];
@@ -71,7 +72,11 @@ export class ListarTipoDocumentoComponent implements OnInit {
       },
       (err) => {
         this.loading = false;
-        console.log(err.message);
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
       }
     );
   }

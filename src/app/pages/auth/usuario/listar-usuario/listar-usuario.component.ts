@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { filters } from 'src/shared/config';
+import { accion_mensaje, filters } from 'src/shared/config';
 
 @Component({
   selector: 'app-listar-usuario',
@@ -44,7 +44,6 @@ export class ListarUsuarioComponent implements OnInit {
   }
 
   setDataSourceAttributes() {
-    console.log('pagi',this.paginator);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -57,7 +56,7 @@ export class ListarUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.placeholderValue = filters.placeholders.usuario;
-  this.listarUsuarios();
+    this.listarUsuarios();
   }
 
   listarUsuarios() {
@@ -68,8 +67,11 @@ export class ListarUsuarioComponent implements OnInit {
         this.loading = false;
       },
       (err) => {
-        console.log(err.message);
-        this.loading = false;
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
       }
     );
   }
@@ -80,14 +82,24 @@ export class ListarUsuarioComponent implements OnInit {
   }
 
   eliminarUsuario(idEmpleado: string, idUsuario: string) {
-    this._usuarioService.eliminarUsuario(idEmpleado, idUsuario);
-    this.listarUsuarios();
-
-    this._snackBar.open('El Usuario fue eliminado con éxito.', '', {
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      duration: 5000,
-    });
+    this._usuarioService.eliminarUsuario(idEmpleado, idUsuario).subscribe(
+      (res) => {
+        const result: any = res;
+        this._snackBar.open(result.message, accion_mensaje.registro_correcto, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+        if (result.id === 1) this.listarUsuarios();
+      },
+      (err) => {
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
+      }
+    );
   }
 
   modificarUsuario(

@@ -24,7 +24,7 @@ export class AgregarTipoDocumentoComponent implements OnInit {
   eliminar: boolean = true;
   confirmation: boolean = false;
   modificar: boolean = false;
-  loading:boolean=true;
+  loading: boolean = true;
 
   constructor(
     private _TipoDocumentoService: TipoDocumentoService,
@@ -38,7 +38,8 @@ export class AgregarTipoDocumentoComponent implements OnInit {
     this.form = this._formBuilder.group({
       idTipoDocumento: ['', Validators.required],
       descripcion: ['', Validators.required],
-      abreviatura: ['', Validators.required],
+      abreviatura: [''],
+      asientos: ['', Validators.required],
       estado: [''],
       fechaCreacion: [''],
       usuarioCreacion: [''],
@@ -51,7 +52,8 @@ export class AgregarTipoDocumentoComponent implements OnInit {
 
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
-      if (params && params['idTipoDocumento']===undefined) this.loading=false;
+      if (params && params['idTipoDocumento'] === undefined)
+        this.loading = false;
       if (params && params['idTipoDocumento']) {
         this.IdTipoDocumento = params['idTipoDocumento'];
         this.readonlyId = this.IdTipoDocumento ? true : false;
@@ -62,12 +64,13 @@ export class AgregarTipoDocumentoComponent implements OnInit {
               idTipoDocumento: res.idTipoDocumento,
               descripcion: res.descripcion,
               abreviatura: res.abreviatura,
+              asientos: res.asientos,
               estado: res.estado,
               fechaCreacion: res.fechaCreacion,
               usuarioCreacion: res.usuarioCreacion,
             });
             this.modificar = true;
-            this.loading=false;
+            this.loading = false;
           });
       }
       if (params && params['modificar']) {
@@ -86,6 +89,7 @@ export class AgregarTipoDocumentoComponent implements OnInit {
       idTipoDocumento: this.form.value.idTipoDocumento,
       descripcion: this.form.value.descripcion,
       abreviatura: this.form.value.abreviatura,
+      asientos: this.form.value.asientos,
       estado: this.modificar ? this.form.value.estado : estado_inicial,
       fechaCreacion: this.modificar
         ? this.form.value.fechaCreacion

@@ -80,7 +80,7 @@
             *matCellDef="let element"
             [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
           >
-            {{ element.fechaEmision }}
+            {{ element.fechaEmision| date: 'dd/MM/yyyy' }}
           </td>
         </ng-container>
 

@@ -13,8 +13,7 @@ import { CustomPaginator } from '../../shared/CustomPaginatorConfiguration';
   selector: 'app-listar-proveedor',
   templateUrl: './listar-proveedor.component.html',
   styleUrls: ['./listar-proveedor.component.css'],
-  providers: [
-    { provide: MatPaginatorIntl, useValue: CustomPaginator() }]
+  providers: [{ provide: MatPaginatorIntl, useValue: CustomPaginator() }],
 })
 export class ListarProveedorComponent implements OnInit {
   listaProveedores: Proveedor[] = [];
@@ -71,7 +70,11 @@ export class ListarProveedorComponent implements OnInit {
       },
       (err) => {
         this.loading = false;
-        console.log(err.message);
+        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        });
       }
     );
   }
