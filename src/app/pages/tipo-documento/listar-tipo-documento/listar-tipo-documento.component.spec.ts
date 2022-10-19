@@ -71,6 +71,7 @@ describe('ListarTipoDocumentoComponent', () => {
         idTipoDocumento: '01',
         descripcion: 'Factura',
         abreviatura: 'FAC',
+        asientos:3,
         estado: 'A',
         fechaCreacion: '',
       },

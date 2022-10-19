@@ -39,8 +39,6 @@ import { ListarTipoCambioComponent } from './pages/tipo-cambio/listar-tipo-cambi
 import { AgregarTipoCambioComponent } from './pages/tipo-cambio/agregar-tipo-cambio/agregar-tipo-cambio.component';
 import { ListarCuentaContableComponent } from './pages/cuenta-contable/listar-cuenta-contable/listar-cuenta-contable.component';
 import { AgregarCuentaContableComponent } from './pages/cuenta-contable/agregar-cuenta-contable/agregar-cuenta-contable.component';
-import { AgregarSubCuentaContableComponent } from './pages/sub-cuenta-contable/agregar-sub-cuenta-contable/agregar-sub-cuenta-contable.component';
-import { ListarSubCuentaContableComponent } from './pages/sub-cuenta-contable/listar-sub-cuenta-contable/listar-sub-cuenta-contable.component';
 import { CambiarContrasenaComponent } from './pages/auth/cambiar-contrasena/cambiar-contrasena.component';
 import { SoloNumeros } from './directives/solo-numeros.directive';
 import { FormatoMonedaDirective } from './directives/formatoMoneda';
@@ -72,8 +70,6 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     AgregarTipoCambioComponent,
     ListarCuentaContableComponent,
     AgregarCuentaContableComponent,
-    AgregarSubCuentaContableComponent,
-    ListarSubCuentaContableComponent,
     SoloNumeros,
     FormatoMonedaDirective
   ],

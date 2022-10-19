@@ -8,7 +8,7 @@ import { nombre_servicios } from 'src/shared/config';
 @Injectable({
   providedIn: 'root',
 })
-export class CorrelativocorrelativoPlantillaComprobanteService {
+export class CorrelativoPlantillaComprobanteService {
   constructor(private http: HttpClient) {}
 
   listarCorrelativoPlantillaComprobante(): Observable<any> {

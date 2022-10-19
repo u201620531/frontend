@@ -32,7 +32,7 @@ export class AgregarFormaPagoComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
-    private _route: ActivatedRoute,
+    public _route: ActivatedRoute,
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({

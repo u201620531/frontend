@@ -1,13 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TipoCambio } from 'src/app/interfaces/tipo-cambio';
 import { TipoCambioService } from 'src/app/services/tipo-cambio.service';
-import { SoporteService } from 'src/app/services/soporte.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { accion_mensaje, estado_inicial, soporte } from 'src/shared/config';
+import { accion_mensaje, estado_inicial } from 'src/shared/config';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
 import { formatoFechaGuion } from 'src/shared/functions';
 
@@ -29,12 +28,11 @@ export class AgregarTipoCambioComponent implements OnInit {
 
   constructor(
     private _usuarioService: UsuarioService,
-    private _soporteService: SoporteService,
     private _tipoCambioService: TipoCambioService,
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
-    private _route: ActivatedRoute,
+    public _route: ActivatedRoute,
     public _dialog: MatDialog
   ) {
     this.form = this._formBuilder.group({

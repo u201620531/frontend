@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { accion_mensaje, auditoriaLog } from 'src/shared/config';
@@ -24,7 +23,6 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
-    private _route: ActivatedRoute,
     private _auditoriaService: AuditoriaService,
     private _usuarioService: UsuarioService
   ) {

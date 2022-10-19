@@ -20,8 +20,6 @@ import { AgregarCuentaContableComponent } from '../cuenta-contable/agregar-cuent
 import { AgregarTipoCambioComponent } from '../tipo-cambio/agregar-tipo-cambio/agregar-tipo-cambio.component';
 import { ListarTipoCambioComponent } from '../tipo-cambio/listar-tipo-cambio/listar-tipo-cambio.component';
 import { ListarCuentaContableComponent } from '../cuenta-contable/listar-cuenta-contable/listar-cuenta-contable.component';
-import { AgregarSubCuentaContableComponent } from '../sub-cuenta-contable/agregar-sub-cuenta-contable/agregar-sub-cuenta-contable.component';
-import { ListarSubCuentaContableComponent } from '../sub-cuenta-contable/listar-sub-cuenta-contable/listar-sub-cuenta-contable.component';
 import { CambiarContrasenaComponent } from '../auth/cambiar-contrasena/cambiar-contrasena.component';
 
 const routes: Routes = [
@@ -63,14 +61,6 @@ const routes: Routes = [
       {
         path: 'listar-cuenta-contable',
         component: ListarCuentaContableComponent,
-      },
-      {
-        path: 'agregar-sub-cuenta-contable',
-        component: AgregarSubCuentaContableComponent,
-      },
-      {
-        path: 'listar-sub-cuenta-contable',
-        component: ListarSubCuentaContableComponent,
       },
     ],
   },

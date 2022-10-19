@@ -13,11 +13,10 @@ import { PlantillaComprobante } from 'src/app/interfaces/plantilla-comprobante';
 import { PlantillaCONCAR } from 'src/app/interfaces/plantilla-concar';
 import { SubCuentaContable } from 'src/app/interfaces/sub-cuenta-contable';
 import { AuditoriaService } from 'src/app/services/auditoria.service';
-import { CorrelativocorrelativoPlantillaComprobanteService } from 'src/app/services/correlativo-plantilla-comprobante.service';
+import { CorrelativoPlantillaComprobanteService } from 'src/app/services/correlativo-plantilla-comprobante.service';
 import { CuentaContableService } from 'src/app/services/cuenta-contable.service';
 import { DetallePlantillaComprobanteService } from 'src/app/services/detalle-plantilla-comprobante.service';
 import { PlantillaComprobanteService } from 'src/app/services/plantilla-comprobante.service';
-import { SubCuentaContableService } from 'src/app/services/sub-cuenta-contable.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import {
   accion_mensaje,
@@ -115,9 +114,8 @@ export class PlantillaComprobanteComponent implements OnInit {
     private _detallePlantillaComprobanteService: DetallePlantillaComprobanteService,
     private _usuarioService: UsuarioService,
     private _cuentaContableService: CuentaContableService,
-    private _subCuentaContableService: SubCuentaContableService,
     private _auditoriaService: AuditoriaService,
-    private _correlativocorrelativoPlantillaComprobanteService: CorrelativocorrelativoPlantillaComprobanteService,
+    private _correlativocorrelativoPlantillaComprobanteService: CorrelativoPlantillaComprobanteService,
     private _formBuilder: FormBuilder,
     private _route: ActivatedRoute,
     private _router: Router
@@ -150,38 +148,9 @@ export class PlantillaComprobanteComponent implements OnInit {
 
   ngOnInit(): void {
     this.listarCuentasContables();
-    this.listarSubCuentasContables();
     this.placeholderValue = filters.placeholders.plantilla;
     this.listarPlantilla();
     this.listarDetallePlantilla();
-  }
-
-  async listarSubCuentasContables() {
-    this._subCuentaContableService.listarSubCuentasContables().subscribe(
-      (res) => {
-        this.listaSubCuentasContables = res;
-      },
-      (err) => {
-        this.auditoria = {
-          fecha: new Date(),
-          opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
-          proceso: auditoriaLog.procesos.listar + ' subcuentas',
-          codigoError: err.id,
-          mensageError: err.message,
-          detalleError: err.detail,
-          codigoUsuario: this._usuarioService.currentUsuarioValue.codigoUsuario,
-        };
-        this._auditoriaService
-          .agregarAuditoria(this.auditoria)
-          .subscribe((res) => {});
-
-        this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-          duration: 5000,
-        });
-      }
-    );
   }
 
   async listarCuentasContables() {
@@ -309,8 +278,8 @@ export class PlantillaComprobanteComponent implements OnInit {
     dateCarga.setDate(dateCarga.getDate());
     this.fechaCarga = formatoFechaGuion(dateCarga);
     const ano = dateCarga.getFullYear();
-    const mes = dateCarga.getMonth()+1;
-    this.mesCarga = (mes).toString().padStart(2, '0');
+    const mes = dateCarga.getMonth() + 1;
+    this.mesCarga = mes.toString().padStart(2, '0');
     this._correlativocorrelativoPlantillaComprobanteService
       .listarCorrelativoPlantillaComprobantePorAnoyMes(ano, mes)
       .subscribe(
@@ -640,9 +609,10 @@ export class PlantillaComprobanteComponent implements OnInit {
   }
 
   async generarPlantilla() {
-    if (this.form.value.fechaCarga === ''){
+    if (this.form.value.fechaCarga === '') {
       this._snackBar.open(
-        accion_mensaje.faltan_datos,'Seleccione Fecha de carga',
+        accion_mensaje.faltan_datos,
+        'Seleccione Fecha de carga',
         {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
@@ -650,8 +620,8 @@ export class PlantillaComprobanteComponent implements OnInit {
         }
       );
       return false;
-    }   
-     this.descargarPlantilla();
+    }
+    this.descargarPlantilla();
     if (this.validaRegistro) this.registrarPlantilla();
     return true;
   }
@@ -830,7 +800,7 @@ export class PlantillaComprobanteComponent implements OnInit {
     let dateCarga = new Date(this.form.value.fechaCarga);
     dateCarga.setDate(dateCarga.getDate());
     const ano = dateCarga.getFullYear();
-    const mes = dateCarga.getMonth() +1;
+    const mes = dateCarga.getMonth() + 1;
     const correlativoPlantillaComprobante = {
       correlativo: this.numCorrelativo,
       ano: ano,
