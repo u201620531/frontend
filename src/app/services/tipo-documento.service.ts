@@ -33,7 +33,7 @@ export class TipoDocumentoService {
     );
   }
 
-  agegarTipoDocumento(tipoDocumento: TipoDocumento) {
+  agregarTipoDocumento(tipoDocumento: TipoDocumento) {
     return this.http.post(`${environment.apiURL}/${nombre_servicios.tipoDocumento}`, tipoDocumento);
   }
 

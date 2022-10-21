@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { EmpleadoService } from 'src/app/services/empleado.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
@@ -10,12 +11,12 @@ describe('MainComponent', () => {
   let fixture: ComponentFixture<MainComponent>;
   let _UsuarioService: UsuarioService;
   let _EmpleadoService: EmpleadoService;
+  let _respuesta: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MainComponent],
-      imports: [
-        HttpClientTestingModule],
+      imports: [HttpClientTestingModule],
     }).compileComponents();
   });
 
@@ -27,8 +28,28 @@ describe('MainComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    spyOn(component,'consultaEmpleado');
+  it('Crear Componemte', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('Llama al método ngOnInit', () => {
+    spyOn(component, 'consultaEmpleado');
+    component.ngOnInit();
+
+    expect(component).toBeTruthy();
+  });
+
+  it('Llama al método ngOnInit', () => {
+    _UsuarioService.currentUsuarioValue.idEmpleado;
+    _respuesta = {
+      nombre: 'test',
+      apellido: 'test',
+    };
+    spyOn(_EmpleadoService, 'listarEmpleadoPoridEmpleado').and.returnValue(
+      of(_respuesta)
+    );
+    component.consultaEmpleado();
+
     expect(component).toBeTruthy();
   });
 });

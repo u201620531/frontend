@@ -11,7 +11,6 @@ import { CuentaContable } from 'src/app/interfaces/cuenta-contable';
 import { DetallePlantillaComprobante } from 'src/app/interfaces/detalle-plantilla-comprobante';
 import { PlantillaComprobante } from 'src/app/interfaces/plantilla-comprobante';
 import { PlantillaCONCAR } from 'src/app/interfaces/plantilla-concar';
-import { SubCuentaContable } from 'src/app/interfaces/sub-cuenta-contable';
 import { AuditoriaService } from 'src/app/services/auditoria.service';
 import { CorrelativoPlantillaComprobanteService } from 'src/app/services/correlativo-plantilla-comprobante.service';
 import { CuentaContableService } from 'src/app/services/cuenta-contable.service';
@@ -39,7 +38,6 @@ import * as XLSX from 'xlsx';
 export class PlantillaComprobanteComponent implements OnInit {
   form: FormGroup;
   listaDetallePlantillaComprobante: any;
-  listaSubCuentasContables: SubCuentaContable[] = [];
   listaCuentasContables: CuentaContable[] = [];
   correlativo: CorrelativoPlantillaComprobante;
   displayedColumns: string[] = [

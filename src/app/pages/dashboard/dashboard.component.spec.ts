@@ -19,7 +19,13 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Crear Componemte', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('Llama al método ngOnInit', () => {
+    component.ngOnInit();
+
     expect(component).toBeTruthy();
   });
 });

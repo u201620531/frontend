@@ -57,10 +57,10 @@ export class ListarTipoCambioComponent implements OnInit {
 
   async ngOnInit() {
     this.placeholderValue = filters.placeholders.tipoCambio;
-    this.listarTipoCambioes();
+    this.listarTipoCambio();
   }
 
-  async listarTipoCambioes() {
+  async listarTipoCambio() {
     this._TipoCambioService.listarTiposCambio().subscribe(
       (res) => {
         this.listaTiposCambio = res;
@@ -92,7 +92,7 @@ export class ListarTipoCambioComponent implements OnInit {
           verticalPosition: 'bottom',
           duration: 5000,
         });
-        if (result.id === 1) this.listarTipoCambioes();
+        if (result.id === 1) this.listarTipoCambio();
       },
       (err) => {
         this._snackBar.open(err.message, accion_mensaje.error_tecnico, {

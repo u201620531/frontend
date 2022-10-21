@@ -50,8 +50,9 @@ describe('ListarTipoCambioComponent', () => {
   });
 
   it('Llama al método ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+    spyOn(component, 'listarTipoCambio');
 
+    component.ngOnInit();
     expect(component.placeholderValue).toBe('Tipo de cambio');
   });
 

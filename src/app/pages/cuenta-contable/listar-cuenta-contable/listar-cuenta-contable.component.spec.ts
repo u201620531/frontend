@@ -52,7 +52,9 @@ describe('ListarCuentaContableComponent', () => {
   });
 
   it('Llama al método ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+    spyOn(component, 'listarCuentasContables');
+
+    component.ngOnInit();
 
     expect(component.placeholderValue).toBe('Cuenta contable');
   });

@@ -50,8 +50,9 @@ describe('ListarEmpleadoComponent', () => {
   });
 
   it('Llama al método ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+    spyOn(component, 'listarEmpleados');
 
+    component.ngOnInit();
     expect(component.placeholderValue).toBe('Empleado');
   });
 

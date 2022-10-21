@@ -50,7 +50,9 @@ describe('ListarUsuarioComponent', () => {
   });
 
   it('Llama al método ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+    spyOn(component, 'listarUsuarios');
+
+    component.ngOnInit();
 
     expect(component.placeholderValue).toBe('Usuario');
   });

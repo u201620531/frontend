@@ -52,8 +52,10 @@ describe('ListarTipoDocumentoComponent', () => {
   });
 
   it('Llama al método ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+    spyOn(component, 'listarTipoDocumento');
 
+    component.ngOnInit();
+    
     expect(component.placeholderValue).toBe('Tipo de documento');
   });
 

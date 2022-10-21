@@ -143,7 +143,7 @@ describe('AgregarTipoDocumentoComponent', () => {
       detail: '',
     };
 
-    spyOn(_TipoDocumentoService, 'agegarTipoDocumento').and.returnValue(
+    spyOn(_TipoDocumentoService, 'agregarTipoDocumento').and.returnValue(
       of(_respuesta)
     );
 
@@ -168,7 +168,7 @@ describe('AgregarTipoDocumentoComponent', () => {
       detail: '',
     };
 
-    spyOn(_TipoDocumentoService, 'agegarTipoDocumento').and.returnValue(
+    spyOn(_TipoDocumentoService, 'agregarTipoDocumento').and.returnValue(
       of(_respuesta)
     );
 

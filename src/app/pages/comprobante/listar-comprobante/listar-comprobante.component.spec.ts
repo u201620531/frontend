@@ -50,7 +50,9 @@ describe('ListarComprobanteComponent', () => {
   });
 
   it('Llama al método ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+    spyOn(component, 'listarComprobante');
+
+    component.ngOnInit();
 
     expect(component.placeholderValue).toBe('Comprobante electrónico');
   });

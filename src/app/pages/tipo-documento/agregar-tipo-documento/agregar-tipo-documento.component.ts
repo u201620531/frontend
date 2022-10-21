@@ -125,7 +125,7 @@ export class AgregarTipoDocumentoComponent implements OnInit {
           }
         );
     } else {
-      this._TipoDocumentoService.agegarTipoDocumento(TipoDocumento).subscribe(
+      this._TipoDocumentoService.agregarTipoDocumento(TipoDocumento).subscribe(
         (res) => {
           const result: any = res;
           this._snackBar.open(

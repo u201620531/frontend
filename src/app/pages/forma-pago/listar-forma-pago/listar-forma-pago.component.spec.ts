@@ -51,7 +51,9 @@ describe('ListarFormaPagoComponent', () => {
   });
 
   it('Llama al método ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+    spyOn(component, 'listarFormasPago');
+
+    component.ngOnInit();
 
     expect(component.placeholderValue).toBe('Forma de pago');
   });
