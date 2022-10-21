@@ -64,6 +64,8 @@ describe('AgregarFormaPagoComponent', () => {
       params['idFormaPago'] = undefined;
     });
 
+component.initParams();
+
     expect(component).toBeTruthy();
   });
 

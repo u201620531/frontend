@@ -30,8 +30,8 @@ export class ListarPlantillaComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<PlantillaComprobante>;
   placeholderValue: string = '';
-  private paginator!: MatPaginator;
-  private sort: MatSort;
+  paginator!: MatPaginator;
+  sort: MatSort;
   loading: boolean = true;
   auditoria: any = {};
 

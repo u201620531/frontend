@@ -100,39 +100,6 @@ export class CargarComprobanteComponent implements OnInit {
     this.inicializarListados();
   }
 
-  deleteScannedElectronicDocument(index: number) {
-    // this._electronicDocumentsService.deleteElectronicDocument(index);
-    // this.loadElectronicDocuments();
-    // this._snackBar.open(
-    //   'El Comprobante electrónico fue eliminado con éxito.',
-    //   '',
-    //   {
-    //     horizontalPosition: 'center',
-    //     verticalPosition: 'bottom',
-    //     duration:  5000,
-    //   }
-    // );
-  }
-
-  scan(event: any): void {
-    // var selectedFiles = event.target.files;
-    // let id = this.listaComprobantesEscaneados.length;
-    // for (var i = 0; i < selectedFiles.length; i++) {
-    //   id += 1;
-    //   this.scannedElectronicDocument = {
-    //     Id: id,
-    //     Name: selectedFiles[i].name,
-    //     FileType: selectedFiles[i].type,
-    //     FileSize: selectedFiles[i].size,
-    //     State: 'C',
-    //     Detail: '',
-    //     ScanDate: new Date().toLocaleString(),
-    //     ScanUser: 'jlre',
-    //   };
-    //   this.listaComprobantesEscaneados.push(this.scannedElectronicDocument);
-    // }
-  }
-
   inicializarListados() {
     this.cantidadComprobantes();
     this.listarProveedores();
@@ -142,7 +109,7 @@ export class CargarComprobanteComponent implements OnInit {
     this.listarTipoCambio();
   }
 
-  private cantidadComprobantes() {
+  cantidadComprobantes() {
     this._comprobanteService.listarComprobante().subscribe(
       (res) => {
         this.totalComprobantes = res.length;
@@ -170,7 +137,7 @@ export class CargarComprobanteComponent implements OnInit {
     );
   }
 
-  private listarProveedores() {
+  listarProveedores() {
     this._proveedorService.listarPoveedores().subscribe(
       (res) => {
         this.listaProveedores = res;
@@ -198,7 +165,7 @@ export class CargarComprobanteComponent implements OnInit {
     );
   }
 
-  private listarTiposDocumento() {
+  listarTiposDocumento() {
     this._tipoDocumentoService.listarTipoDocumento().subscribe(
       (res) => {
         this.listaTiposDocumento = res;
@@ -226,7 +193,7 @@ export class CargarComprobanteComponent implements OnInit {
     );
   }
 
-  private listarMonedas() {
+  listarMonedas() {
     this._monedaService.listarMonedas().subscribe(
       (res) => {
         this.listaMonedas = res;
@@ -254,7 +221,7 @@ export class CargarComprobanteComponent implements OnInit {
     );
   }
 
-  private listarFormasPago() {
+  listarFormasPago() {
     this._formaPagoService.listarFormaPago().subscribe(
       (res) => {
         this.listaFormasPago = res;
@@ -282,7 +249,7 @@ export class CargarComprobanteComponent implements OnInit {
     );
   }
 
-  private listarTipoCambio() {
+  listarTipoCambio() {
     this._tipoCambioService.listarTiposCambio().subscribe(
       (res) => {
         this.listaTipoCambio = res;
@@ -455,7 +422,7 @@ export class CargarComprobanteComponent implements OnInit {
     }
   }
 
-  private validarRegistro(comprobanteValidar: any) {
+  validarRegistro(comprobanteValidar: any) {
     let detalle = '';
     detalle = this.validarNroDoumento(
       comprobanteValidar.NRO_DOCUMENTO,
@@ -527,12 +494,12 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private agregarSeparador(cadena: string) {
+  agregarSeparador(cadena: string) {
     if (cadena.length > 0) return (cadena = ',');
     return '';
   }
 
-  private validarNroDoumento(NRO_DOCUMENTO: string, detalle: string) {
+  validarNroDoumento(NRO_DOCUMENTO: string, detalle: string) {
     if (NRO_DOCUMENTO === '')
       return (
         detalle +
@@ -553,7 +520,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private validarProveedor(RUC: string, detalle: string) {
+  validarProveedor(RUC: string, detalle: string) {
     if (RUC === '')
       return (
         this.agregarSeparador(detalle) +
@@ -586,7 +553,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private validarTipoDocumento(TIPO_DOCUMENTO: string, detalle: string) {
+  validarTipoDocumento(TIPO_DOCUMENTO: string, detalle: string) {
     if (TIPO_DOCUMENTO === '')
       return (
         detalle +
@@ -621,7 +588,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private validarMoneda(TIPO_MONEDA: string, detalle: string) {
+  validarMoneda(TIPO_MONEDA: string, detalle: string) {
     if (TIPO_MONEDA === '')
       return (
         detalle +
@@ -657,7 +624,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private validarFormaPago(FORMA_PAGO: string, detalle: string) {
+  validarFormaPago(FORMA_PAGO: string, detalle: string) {
     if (FORMA_PAGO === '')
       return (
         detalle +
@@ -688,7 +655,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private validarValorNumerico(valor: string, cadena: string, detalle: string) {
+  validarValorNumerico(valor: string, cadena: string, detalle: string) {
     if (cadena === '' || cadena === undefined) return detalle;
     if (isNaN(parseFloat(cadena)))
       return (
@@ -701,7 +668,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private validarValorFecha(
+  validarValorFecha(
     valor: string,
     fecha: string,
     detalle: string,
@@ -757,7 +724,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private validarTipoCambio(FECHA_EMISION: any, detalle: string) {
+  validarTipoCambio(FECHA_EMISION: any, detalle: string) {
     if (!this.existeFechaEmision)
       return (
         detalle +
@@ -791,7 +758,7 @@ export class CargarComprobanteComponent implements OnInit {
     return detalle;
   }
 
-  private asignarValoresComprobantes(
+  asignarValoresComprobantes(
     comprobanteRegistro: Comprobante,
     comprobantesPorCargar: any
   ) {

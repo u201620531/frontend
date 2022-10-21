@@ -117,7 +117,7 @@ export class PlantillaComprobanteComponent implements OnInit {
     private _auditoriaService: AuditoriaService,
     private _correlativocorrelativoPlantillaComprobanteService: CorrelativoPlantillaComprobanteService,
     private _formBuilder: FormBuilder,
-    private _route: ActivatedRoute,
+    public _route: ActivatedRoute,
     private _router: Router
   ) {
     this.form = this._formBuilder.group({

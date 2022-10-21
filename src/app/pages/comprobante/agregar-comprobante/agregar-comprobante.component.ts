@@ -11,7 +11,7 @@ import { MonedaService } from 'src/app/services/moneda.service';
 import { Moneda } from 'src/app/interfaces/moneda';
 import { FormaPagoService } from 'src/app/services/forma-pago.service';
 import { FormaPago } from 'src/app/interfaces/forma-pago';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ConfirmationModalComponent } from '../../modals/confirmation-modal/confirmation-modal.component';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { accion_mensaje, auditoriaLog } from 'src/shared/config';
@@ -19,10 +19,7 @@ import { Proveedor } from 'src/app/interfaces/proveedor';
 import { ProveedorService } from 'src/app/services/proveedor.service';
 import { map, startWith } from 'rxjs/operators';
 import { TipoCambioService } from 'src/app/services/tipo-cambio.service';
-import {
-  formatoFechaGuion,
-  formatoFechaGuionCadena,
-} from 'src/shared/functions';
+import { formatoFechaGuion } from 'src/shared/functions';
 import { AuditoriaService } from 'src/app/services/auditoria.service';
 
 @Component({
@@ -74,7 +71,7 @@ export class AgregarComprobanteComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
     private _router: Router,
-    private _route: ActivatedRoute,
+    public _route: ActivatedRoute,
     public _dialog: MatDialog,
     private formBuilder: FormBuilder
   ) {
