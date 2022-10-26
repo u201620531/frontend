@@ -12,6 +12,7 @@ import { DetallePlantillaComprobante } from 'src/app/interfaces/detalle-plantill
 import { PlantillaComprobante } from 'src/app/interfaces/plantilla-comprobante';
 import { PlantillaCONCAR } from 'src/app/interfaces/plantilla-concar';
 import { AuditoriaService } from 'src/app/services/auditoria.service';
+import { ComprobanteService } from 'src/app/services/comprobante.service';
 import { CorrelativoPlantillaComprobanteService } from 'src/app/services/correlativo-plantilla-comprobante.service';
 import { CuentaContableService } from 'src/app/services/cuenta-contable.service';
 import { DetallePlantillaComprobanteService } from 'src/app/services/detalle-plantilla-comprobante.service';
@@ -75,7 +76,7 @@ export class PlantillaComprobanteComponent implements OnInit {
     usuarioCreacion: '',
   };
   detallePlantillaRegistro: DetallePlantillaComprobante[] = [];
-  validaRegistro: boolean = false;
+  nuevoRegistro: boolean = false;
   nroTicketEnvio: string = '';
   fechaCarga: string = '';
   fechaDeclaracion: string = '';
@@ -114,6 +115,7 @@ export class PlantillaComprobanteComponent implements OnInit {
     private _cuentaContableService: CuentaContableService,
     private _auditoriaService: AuditoriaService,
     private _correlativocorrelativoPlantillaComprobanteService: CorrelativoPlantillaComprobanteService,
+    private _comprobanteService: ComprobanteService,
     private _formBuilder: FormBuilder,
     public _route: ActivatedRoute,
     private _router: Router
@@ -232,9 +234,13 @@ export class PlantillaComprobanteComponent implements OnInit {
         this.readonlyFCarga = true;
         this.eliminar = params['modificar'] !== '1' ? true : false;
       } else this.readonlyOption = false;
-      if (params && params['idPlantillaComprobante'])
+      if (params && params['idPlantillaComprobante']) {
         this.idPlantillaComprobante = params['idPlantillaComprobante'];
-      else this.idPlantillaComprobante = '0';
+        this.nuevoRegistro = false;
+      } else {
+        this.nuevoRegistro = true;
+        this.idPlantillaComprobante = '0';
+      }
       this._detallePlantillaComprobanteService
         .listarDetallePlantillaComprobante(this.idPlantillaComprobante)
         .subscribe(
@@ -420,7 +426,7 @@ export class PlantillaComprobanteComponent implements OnInit {
     let tipoConversion = 'V';
     let mismoAnoCarga = true;
     let mismoMesCarga = true;
-    this.validaRegistro = false;
+    let numRegistro = 0;
     let detalleRegistro: DetallePlantillaComprobante = {
       idComprobante: '',
       idPlantillaComprobante: '',
@@ -439,169 +445,256 @@ export class PlantillaComprobanteComponent implements OnInit {
       estado: '',
     };
     this.listaDetallePlantillaComprobante.forEach((_comprobante: any) => {
-      if (_comprobante.select === '1') {
-        for (let i = 0; i < _comprobante.asiTipoDocumento; i++) {
-          detalleRegistro = {
-            idComprobante: '',
-            idPlantillaComprobante: '',
-            subDiario: '',
-            numeroComprobante: '',
-            fechaComprobante: '',
-            glosaPrincipal: '',
-            glosaDetalle: '',
-            tipoConvergencia: '',
-            idCuentaContable: '',
-            codigoAnexo: '',
-            idCentroCosto: '',
-            debeHaber: '',
-            importeOriginal: 0,
-            detalle: '',
-            estado: '',
-          };
-          plantilla = {};
-          this.numCorrelativo += 1;
-          plantilla.Sub_Diario = this.subDiario;
-          plantilla.Número_de_Comprobante =
-            this.mesCarga + this.numCorrelativo.toString().padStart(4, '0');
-          plantilla.Fecha_de_Comprobante = new Date(
-            this.fechaCarga
-          ).toLocaleDateString();
-          plantilla.Código_de_Moneda = _comprobante.abrMoneda;
-          glosaPrincipal =
-            (_comprobante.razonSocial.length > 25
-              ? _comprobante.razonSocial.substring(0, 24)
-              : _comprobante.razonSocial) +
-            ' ' +
-            _comprobante.serie +
-            '-' +
-            _comprobante.correlativo;
-          plantilla.Glosa_Principal = glosaPrincipal;
-          plantilla.Tipo_de_Cambio = '0';
-          mismoAnoCarga =
-            this.fechaCarga.substring(0, 4) ===
-            _comprobante.fechaEmision.substring(0, 4);
-          mismoMesCarga = mismoAnoCarga
-            ? this.fechaCarga.substring(5, 7) ===
-              _comprobante.fechaEmision.substring(5, 7)
-            : false;
-          tipoConversion =
-            !mismoMesCarga && _comprobante.abrMoneda === 'ME' ? 'E' : 'V';
-          plantilla.Tipo_de_Conversión = tipoConversion;
-          plantilla.Flag_de_Conversión_de_Moneda = this.flagConversionMoneda;
-          plantilla.Fecha_Tipo_de_Cambio = '';
-          if (i === 0) {
-            plantilla.Cuenta_Contable =
-              _comprobante.abrMoneda === 'MN'
-                ? this.listaCuentasContables.filter((_cuenta) =>
-                    _cuenta.idCuentaContable.toString().match('421201')
-                  )[0].idCuentaContable
-                : this.listaCuentasContables.filter((_cuenta) =>
-                    _cuenta.idCuentaContable.toString().match('421202')
-                  )[0].idCuentaContable;
-            plantilla.Código_de_Anexo = _comprobante.nroDocumento;
-            plantilla.Código_de_Centro_de_Costo = '';
-            plantilla.Debe_____Haber =
-              _comprobante.abrTipoDocumento === 'NC' ? 'H' : 'D';
-            plantilla.Importe_Original = _comprobante.valorCompra;
-          }
-          if (i === 1 && _comprobante.asiTipoDocumento === 3) {
-            plantilla.Cuenta_Contable = this.listaCuentasContables.filter(
-              (_cuenta) => _cuenta.idCuentaContable.toString().match('401111')
-            )[0].idCuentaContable;
-            plantilla.Código_de_Anexo = _comprobante.nroDocumento;
-            plantilla.Código_de_Centro_de_Costo = '';
-            plantilla.Debe_____Haber =
-              _comprobante.abrTipoDocumento === 'NC' ? 'D' : 'H';
-            plantilla.Importe_Original = _comprobante.igv;
-          }
-          if (i === 1 && _comprobante.asiTipoDocumento === 2) {
-            plantilla.Cuenta_Contable = this.listaCuentasContables.filter(
-              (_cuenta) => _cuenta.idCuentaContable.toString().match('639999')
-            )[0].idCuentaContable;
-            plantilla.Código_de_Anexo = '';
-            plantilla.Código_de_Centro_de_Costo =
-              this.listaCuentasContables.filter((_cuenta) =>
-                _cuenta.idCuentaContable.toString().match('639999')
+      if (this.nuevoRegistro) {
+        if (_comprobante.select === '1') {
+          for (let i = 0; i < _comprobante.asiTipoDocumento; i++) {
+            numRegistro += 1;
+            detalleRegistro = {
+              idComprobante: '',
+              idPlantillaComprobante: '',
+              subDiario: '',
+              numeroComprobante: '',
+              fechaComprobante: '',
+              glosaPrincipal: '',
+              glosaDetalle: '',
+              tipoConvergencia: '',
+              idCuentaContable: '',
+              codigoAnexo: '',
+              idCentroCosto: '',
+              debeHaber: '',
+              importeOriginal: 0,
+              detalle: '',
+              estado: '',
+            };
+            plantilla = {};
+            if (numRegistro === 1) this.numCorrelativo += 1;
+            if (numRegistro === _comprobante.asiTipoDocumento) numRegistro = 0;
+            plantilla.Sub_Diario = this.subDiario;
+            plantilla.Número_de_Comprobante =
+              this.mesCarga + this.numCorrelativo.toString().padStart(4, '0');
+            plantilla.Fecha_de_Comprobante = new Date(
+              this.fechaCarga
+            ).toLocaleDateString();
+            plantilla.Código_de_Moneda = _comprobante.abrMoneda;
+            glosaPrincipal =
+              (_comprobante.razonSocial.length > 25
+                ? _comprobante.razonSocial.substring(0, 24)
+                : _comprobante.razonSocial) +
+              ' ' +
+              _comprobante.serie +
+              '-' +
+              _comprobante.correlativo;
+            plantilla.Glosa_Principal = glosaPrincipal;
+            plantilla.Tipo_de_Cambio = '0';
+            mismoAnoCarga =
+              this.fechaCarga.substring(0, 4) ===
+              _comprobante.fechaEmision.substring(0, 4);
+            mismoMesCarga = mismoAnoCarga
+              ? this.fechaCarga.substring(5, 7) ===
+                _comprobante.fechaEmision.substring(5, 7)
+              : false;
+            tipoConversion =
+              !mismoMesCarga && _comprobante.abrMoneda === 'ME' ? 'E' : 'V';
+            plantilla.Tipo_de_Conversión = tipoConversion;
+            plantilla.Flag_de_Conversión_de_Moneda = this.flagConversionMoneda;
+            plantilla.Fecha_Tipo_de_Cambio = '';
+            if (i === 0) {
+              plantilla.Cuenta_Contable =
+                _comprobante.abrMoneda === 'MN'
+                  ? this.listaCuentasContables.filter((_cuenta) =>
+                      _cuenta.idCuentaContable.toString().match('421201')
+                    )[0].idCuentaContable
+                  : this.listaCuentasContables.filter((_cuenta) =>
+                      _cuenta.idCuentaContable.toString().match('421202')
+                    )[0].idCuentaContable;
+              plantilla.Código_de_Anexo = _comprobante.nroDocumento;
+              plantilla.Código_de_Centro_de_Costo = '';
+              plantilla.Debe_____Haber =
+                _comprobante.abrTipoDocumento === 'NC' ? 'D' : 'H';
+              plantilla.Importe_Original = _comprobante.importeTotal;
+            }
+            if (i === 1 && _comprobante.asiTipoDocumento === 3) {
+              plantilla.Cuenta_Contable = this.listaCuentasContables.filter(
+                (_cuenta) => _cuenta.idCuentaContable.toString().match('401111')
               )[0].idCuentaContable;
-            plantilla.Debe_____Haber =
-              _comprobante.abrTipoDocumento === 'NC' ? 'D' : 'H';
-            plantilla.Importe_Original = _comprobante.importeTotal;
-          }
-          if (i === 2) {
-            plantilla.Cuenta_Contable = this.listaCuentasContables.filter(
-              (_cuenta) => _cuenta.idCuentaContable.toString().match('639999')
-            )[0].idCuentaContable;
-            plantilla.Código_de_Anexo = '';
-            plantilla.Código_de_Centro_de_Costo =
-              this.listaCuentasContables.filter((_cuenta) =>
-                _cuenta.idCuentaContable.toString().match('639999')
+              plantilla.Código_de_Anexo = _comprobante.nroDocumento;
+              plantilla.Código_de_Centro_de_Costo = '';
+              plantilla.Debe_____Haber =
+                _comprobante.abrTipoDocumento === 'NC' ? 'H' : 'D';
+              plantilla.Importe_Original = _comprobante.igv;
+            }
+            if (i === 1 && _comprobante.asiTipoDocumento === 2) {
+              plantilla.Cuenta_Contable = this.listaCuentasContables.filter(
+                (_cuenta) => _cuenta.idCuentaContable.toString().match('639999')
               )[0].idCuentaContable;
-            plantilla.Debe_____Haber =
-              _comprobante.abrTipoDocumento === 'NC' ? 'H' : 'D';
-            plantilla.Importe_Original = _comprobante.importeTotal;
+              plantilla.Código_de_Anexo = '';
+              plantilla.Código_de_Centro_de_Costo =
+                this.listaCuentasContables.filter((_cuenta) =>
+                  _cuenta.idCuentaContable.toString().match('639999')
+                )[0].idCuentaContable;
+              plantilla.Debe_____Haber =
+                _comprobante.abrTipoDocumento === 'NC' ? 'H' : 'D';
+              plantilla.Importe_Original = _comprobante.importeTotal;
+            }
+            if (i === 2) {
+              plantilla.Cuenta_Contable = this.listaCuentasContables.filter(
+                (_cuenta) => _cuenta.idCuentaContable.toString().match('639999')
+              )[0].idCuentaContable;
+              plantilla.Código_de_Anexo = '';
+              plantilla.Código_de_Centro_de_Costo =
+                this.listaCuentasContables.filter((_cuenta) =>
+                  _cuenta.idCuentaContable.toString().match('639999')
+                )[0].idCuentaContable;
+              plantilla.Debe_____Haber =
+                _comprobante.abrTipoDocumento === 'NC' ? 'H' : 'D';
+              plantilla.Importe_Original = _comprobante.valorCompra;
+            }
+
+            plantilla.Importe_en_Dólares = '';
+            plantilla.Importe_en_Soles = 0.0;
+            plantilla.Tipo_de_Documento = _comprobante.abrTipoDocumento;
+            plantilla.Número_de_Documento =
+              _comprobante.serie + '-' + _comprobante.correlativo;
+            plantilla.Fecha_de_Documento = new Date(
+              _comprobante.fechaEmision
+            ).toLocaleDateString();
+            plantilla.Fecha_de_Vencimiento =
+              _comprobante.fechaVencimiento !== '' &&
+              _comprobante.fechaVencimiento !== null &&
+              _comprobante.fechaVencimiento !== undefined
+                ? new Date(_comprobante.fechaVencimiento).toLocaleDateString()
+                : '';
+            plantilla.Código_de_Area = '';
+            glosaDetalle =
+              (_comprobante.razonSocial.length > 15
+                ? _comprobante.razonSocial.substring(0, 14)
+                : _comprobante.razonSocial) +
+              ' ' +
+              _comprobante.serie +
+              '-' +
+              _comprobante.correlativo;
+            plantilla.Glosa_Detalle = glosaDetalle;
+            plantilla.Código_de_Anexo_Auxiliar = '';
+            plantilla.Medio_de_Pago = '';
+            plantilla.Tipo_de_Documento_de_Referencia = '';
+            plantilla.Número_de_Documento_Referencia = '';
+            plantilla.Fecha_Documento_Referencia = '';
+            plantilla.Nro_Máq__Registradora_Tipo_Doc__Ref_ = '';
+            plantilla.Base_Imponible_Documento_Referencia = '';
+            plantilla.IGV_Documento_Provisión = '';
+            plantilla.Tipo_Referencia_en_estado_MQ = '';
+            plantilla.Número_Serie_Caja_Registradora = '';
+            plantilla.Fecha_de_Operación = '';
+            plantilla.Tipo_de_Tasa = '';
+            plantilla.Tasa_Detracción_____Percepción = '';
+            plantilla.Importe_Base_Detracción_____Percepción_Dólares = '';
+            plantilla.Importe_Base_Detracción_____Percepción_Soles = '';
+            plantilla.Tipo_Cambio_para_____F___ = '';
+            plantilla.Importe_de_IGV_sin_derecho_crédito_fiscal = '';
+
+            this.plantillaCONCAR.push(plantilla);
+
+            //Detalle
+            detalleRegistro.idComprobante = _comprobante.idComprobante;
+            detalleRegistro.estado = estado_inicial;
+            detalleRegistro.subDiario = this.subDiario;
+            detalleRegistro.numeroComprobante = plantilla.Número_de_Comprobante;
+            detalleRegistro.fechaComprobante = this.fechaCarga;
+            detalleRegistro.glosaPrincipal = glosaPrincipal;
+            detalleRegistro.glosaDetalle = glosaDetalle;
+            detalleRegistro.tipoConvergencia = tipoConversion;
+            detalleRegistro.idCuentaContable = plantilla.Cuenta_Contable;
+            detalleRegistro.codigoAnexo = plantilla.Código_de_Anexo;
+            detalleRegistro.idCentroCosto = plantilla.Código_de_Centro_de_Costo;
+            detalleRegistro.debeHaber = plantilla.Debe_____Haber;
+            detalleRegistro.importeOriginal = plantilla.Importe_Original;
+            this.detallePlantillaRegistro.push(detalleRegistro);
           }
-
-          plantilla.Importe_en_Dólares = '';
-          plantilla.Importe_en_Soles = 0.0;
-          plantilla.Tipo_de_Documento = _comprobante.abrTipoDocumento;
-          plantilla.Número_de_Documento =
-            _comprobante.serie + '-' + _comprobante.correlativo;
-          plantilla.Fecha_de_Documento = new Date(
-            _comprobante.fechaEmision
-          ).toLocaleDateString();
-          plantilla.Fecha_de_Vencimiento =
-            _comprobante.fechaVencimiento !== '' &&
-            _comprobante.fechaVencimiento !== null &&
-            _comprobante.fechaVencimiento !== undefined
-              ? new Date(_comprobante.fechaVencimiento).toLocaleDateString()
-              : '';
-          plantilla.Código_de_Area = '';
-          glosaDetalle =
-            (_comprobante.razonSocial.length > 15
-              ? _comprobante.razonSocial.substring(0, 14)
-              : _comprobante.razonSocial) +
-            ' ' +
-            _comprobante.serie +
-            '-' +
-            _comprobante.correlativo;
-          plantilla.Glosa_Detalle = glosaDetalle;
-          plantilla.Código_de_Anexo_Auxiliar = '';
-          plantilla.Medio_de_Pago = '';
-          plantilla.Tipo_de_Documento_de_Referencia = '';
-          plantilla.Número_de_Documento_Referencia = '';
-          plantilla.Fecha_Documento_Referencia = '';
-          plantilla.Nro_Máq__Registradora_Tipo_Doc__Ref_ = '';
-          plantilla.Base_Imponible_Documento_Referencia = '';
-          plantilla.IGV_Documento_Provisión = '';
-          plantilla.Tipo_Referencia_en_estado_MQ = '';
-          plantilla.Número_Serie_Caja_Registradora = '';
-          plantilla.Fecha_de_Operación = '';
-          plantilla.Tipo_de_Tasa = '';
-          plantilla.Tasa_Detracción_____Percepción = '';
-          plantilla.Importe_Base_Detracción_____Percepción_Dólares = '';
-          plantilla.Importe_Base_Detracción_____Percepción_Soles = '';
-          plantilla.Tipo_Cambio_para_____F___ = '';
-          plantilla.Importe_de_IGV_sin_derecho_crédito_fiscal = '';
-
-          this.plantillaCONCAR.push(plantilla);
-
-          //Detalle
-          detalleRegistro.idComprobante = _comprobante.idComprobante;
-          detalleRegistro.estado = estado_inicial;
-          detalleRegistro.subDiario = this.subDiario;
-          detalleRegistro.numeroComprobante = plantilla.Número_de_Comprobante;
-          detalleRegistro.fechaComprobante = this.fechaCarga;
-          detalleRegistro.glosaPrincipal = glosaPrincipal;
-          detalleRegistro.glosaDetalle = glosaDetalle;
-          detalleRegistro.tipoConvergencia = tipoConversion;
-          detalleRegistro.idCuentaContable = plantilla.Cuenta_Contable;
-          detalleRegistro.codigoAnexo = plantilla.Código_de_Anexo;
-          detalleRegistro.idCentroCosto = plantilla.Código_de_Centro_de_Costo;
-          detalleRegistro.debeHaber = plantilla.Debe_____Haber;
-          detalleRegistro.importeOriginal = plantilla.Importe_Original;
-          this.detallePlantillaRegistro.push(detalleRegistro);
-          this.validaRegistro = true;
         }
+      } else {
+        detalleRegistro = {
+          idComprobante: '',
+          idPlantillaComprobante: '',
+          subDiario: '',
+          numeroComprobante: '',
+          fechaComprobante: '',
+          glosaPrincipal: '',
+          glosaDetalle: '',
+          tipoConvergencia: '',
+          idCuentaContable: '',
+          codigoAnexo: '',
+          idCentroCosto: '',
+          debeHaber: '',
+          importeOriginal: 0,
+          detalle: '',
+          estado: '',
+        };
+        plantilla = {};
+        plantilla.Sub_Diario = _comprobante.subDiario;
+        plantilla.Número_de_Comprobante = _comprobante.numeroComprobante;
+        plantilla.Fecha_de_Comprobante = _comprobante.fechaComprobante;
+        plantilla.Código_de_Moneda = _comprobante.abrMoneda;
+        plantilla.Glosa_Principal = _comprobante.glosaPrincipal;
+        plantilla.Tipo_de_Cambio = '0';
+        plantilla.Tipo_de_Conversión = _comprobante.tipoConvergencia;
+        plantilla.Flag_de_Conversión_de_Moneda = this.flagConversionMoneda;
+        plantilla.Fecha_Tipo_de_Cambio = '';
+        plantilla.Cuenta_Contable = _comprobante.idCuentaContable;
+        plantilla.Código_de_Anexo = _comprobante.codigoAnexo;
+        plantilla.Código_de_Centro_de_Costo = _comprobante.idCentroCosto;
+        plantilla.Debe_____Haber = _comprobante.debeHaber;
+        plantilla.Importe_Original = _comprobante.importeOriginal;
+        plantilla.Importe_en_Dólares = '';
+        plantilla.Importe_en_Soles = 0.0;
+        plantilla.Tipo_de_Documento = _comprobante.abrTipoDocumento;
+        plantilla.Número_de_Documento =
+          _comprobante.serie + '-' + _comprobante.correlativo;
+        plantilla.Fecha_de_Documento = new Date(
+          _comprobante.fechaEmision
+        ).toLocaleDateString();
+        plantilla.Fecha_de_Vencimiento =
+          _comprobante.fechaVencimiento !== '' &&
+          _comprobante.fechaVencimiento !== null &&
+          _comprobante.fechaVencimiento !== undefined
+            ? new Date(_comprobante.fechaVencimiento).toLocaleDateString()
+            : '';
+        plantilla.Código_de_Area = '';
+        plantilla.Glosa_Detalle = _comprobante.glosaDetalle;
+        plantilla.Código_de_Anexo_Auxiliar = '';
+        plantilla.Medio_de_Pago = '';
+        plantilla.Tipo_de_Documento_de_Referencia = '';
+        plantilla.Número_de_Documento_Referencia = '';
+        plantilla.Fecha_Documento_Referencia = '';
+        plantilla.Nro_Máq__Registradora_Tipo_Doc__Ref_ = '';
+        plantilla.Base_Imponible_Documento_Referencia = '';
+        plantilla.IGV_Documento_Provisión = '';
+        plantilla.Tipo_Referencia_en_estado_MQ = '';
+        plantilla.Número_Serie_Caja_Registradora = '';
+        plantilla.Fecha_de_Operación = '';
+        plantilla.Tipo_de_Tasa = '';
+        plantilla.Tasa_Detracción_____Percepción = '';
+        plantilla.Importe_Base_Detracción_____Percepción_Dólares = '';
+        plantilla.Importe_Base_Detracción_____Percepción_Soles = '';
+        plantilla.Tipo_Cambio_para_____F___ = '';
+        plantilla.Importe_de_IGV_sin_derecho_crédito_fiscal = '';
+
+        this.plantillaCONCAR.push(plantilla);
+
+        //Detalle
+        // detalleRegistro.idComprobante = _comprobante.idComprobante;
+        // detalleRegistro.estado = estado_inicial;
+        // detalleRegistro.subDiario = this.subDiario;
+        // detalleRegistro.numeroComprobante = plantilla.Número_de_Comprobante;
+        // detalleRegistro.fechaComprobante = this.fechaCarga;
+        // detalleRegistro.glosaPrincipal = glosaPrincipal;
+        // detalleRegistro.glosaDetalle = glosaDetalle;
+        // detalleRegistro.tipoConvergencia = tipoConversion;
+        // detalleRegistro.idCuentaContable = plantilla.Cuenta_Contable;
+        // detalleRegistro.codigoAnexo = plantilla.Código_de_Anexo;
+        // detalleRegistro.idCentroCosto = plantilla.Código_de_Centro_de_Costo;
+        // detalleRegistro.debeHaber = plantilla.Debe_____Haber;
+        // detalleRegistro.importeOriginal = plantilla.Importe_Original;
+        // this.detallePlantillaRegistro.push(detalleRegistro);
       }
     });
   }
@@ -620,7 +713,7 @@ export class PlantillaComprobanteComponent implements OnInit {
       return false;
     }
     this.descargarPlantilla();
-    if (this.validaRegistro) this.registrarPlantilla();
+    if (this.nuevoRegistro) this.registrarPlantilla();
     return true;
   }
 
@@ -794,6 +887,62 @@ export class PlantillaComprobanteComponent implements OnInit {
     }
   }
 
+  actualizarDetalle() {
+    let error_detalle = '';
+    let _comprobanteActualizar: any;
+    this.listaDetallePlantillaComprobante.forEach((element: any) => {
+      _comprobanteActualizar = {
+        idComprobante: element.idComprobante,
+        estado: 'D',
+      };
+      this._comprobanteService
+        .actualizarComprobante(_comprobanteActualizar, element.idComprobante)
+        .subscribe(
+          (res) => {
+            const result: any = res;
+          },
+          (err) => {
+            this.auditoria = {
+              fecha: new Date(),
+              opcion: auditoriaLog.opciones.comprobante_plantilla_agregar,
+              proceso:
+                auditoriaLog.procesos.actualiar +
+                ' comprobante ' +
+                element.idComprobante,
+              codigoError: err.id,
+              mensageError: err.message,
+              detalleError: err.detail,
+              codigoUsuario:
+                this._usuarioService.currentUsuarioValue.codigoUsuario,
+            };
+            this._auditoriaService
+              .agregarAuditoria(this.auditoria)
+              .subscribe((res) => {});
+
+            error_detalle = err.message;
+          }
+        );
+    });
+    if (error_detalle === '') {
+      this._snackBar.open(
+        'Registro detalle Ok',
+        accion_mensaje.registro_correcto,
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        }
+      );
+      this.back();
+    } else {
+      this._snackBar.open(error_detalle, accion_mensaje.error_tecnico, {
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        duration: 5000,
+      });
+    }
+  }
+
   actualizarCorrelativo() {
     let dateCarga = new Date(this.form.value.fechaCarga);
     dateCarga.setDate(dateCarga.getDate());
@@ -864,7 +1013,7 @@ export class PlantillaComprobanteComponent implements OnInit {
         ? this.form.value.idPlantillaComprobante
         : '',
       nroTicketEnvio: this.form.value.nroTicketEnvio,
-      fechaCarga: formatoFechaGuion(this.form.value.fechaCarga),
+      fechaCarga: this.form.value.fechaCarga,
       fechaDeclaracion: formatoFechaGuion(this.form.value.fechaDeclaracion),
       observacion: this.form.value.observacion,
       estado: this.modificar ? this.form.value.estado : estado_inicial,
@@ -885,6 +1034,7 @@ export class PlantillaComprobanteComponent implements OnInit {
         .subscribe(
           (res) => {
             const result: any = res;
+            this.actualizarDetalle();
             if (result.id === 1) this.back();
             this._snackBar.open(
               result.message,

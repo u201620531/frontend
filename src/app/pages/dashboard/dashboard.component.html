@@ -1,2 +1,71 @@
-<app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<!-- <app-navbar></app-navbar>
+<router-outlet></router-outlet> -->
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+    </button>
+    <h1>{{ nombreEmpresa }}</h1>
+    <span class="menu-spacer"></span>
+    <div *ngFor="let bann of banner">
+      <a mat-button routerLink="{{ bann.vistaSubMenu }}"> {{bann.nombreSubMenu}} </a>
+    </div>
+    <span class="button-spacer"></span>
+  <label *ngIf="currentUsuario !== undefined"
+    >Usuario: {{ currentUsuario.codigoUsuario }}</label
+  ><button
+    mat-icon-button
+    (click)="logout()"
+    class="example-icon"
+    aria-label="menu icon"
+  >
+    <mat-icon>logout</mat-icon>
+  </button>
+  </mat-toolbar-row>
+
+  <!-- <mat-toolbar-row>
+    <span style="font-size: 16px"
+      >Bienvenido {{ nombreUsuario }}!!!</span
+    >
+  </mat-toolbar-row> -->
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav
+    #sidenav
+    style="
+      background-color: gainsboro;
+      font-size: 14px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      color: #3f51b5;
+      font-weight: bold;
+      padding: 8px;
+    "
+  >
+    <mat-nav-list *ngFor="let modulo of modulos" style="padding: 4px">
+        <a routerLink="{{ modulo.vistaModulo }}"  *ngIf="modulo.esPrincipal === 1">
+          <mat-icon style="vertical-align: bottom">{{
+            modulo.iconoModulo
+          }}</mat-icon>
+          {{ modulo.nombreModulo }}
+        </a>
+        <p *ngIf="modulo.esPrincipal === 0">
+          <mat-icon style="vertical-align: bottom">{{
+            modulo.iconoModulo
+          }}</mat-icon>
+          {{ modulo.nombreModulo }}
+        </p>
+      <div *ngFor="let menu of modulo.menu" style="padding: 4px">
+        <a routerLink="{{ menu.vistaMenu }}" style="padding-left: 8px">
+          <mat-icon style="vertical-align: bottom"
+            >{{ menu.iconoMenu }}
+          </mat-icon>
+          {{ menu.nombreMenu }}
+        </a>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="height: 88vh"><router-outlet></router-outlet></div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -28,7 +28,7 @@ import { ListarProveedorComponent } from './pages/proveedor/listar-proveedor/lis
 import { CargarComprobanteComponent } from './pages/comprobante/cargar-comprobante/cargar-comprobante.component';
 
 import { JwtInterceptor, ErrorInterceptor } from './helpers';
-import { fakeBackendProvider } from './helpers';
+// import { fakeBackendProvider } from './helpers';
 import { AgregarUsuarioComponent } from './pages/auth/usuario/agregar-usuario/agregar-usuario.component';
 import { ListarUsuarioComponent } from './pages/auth/usuario/listar-usuario/listar-usuario.component';
 import { ListarPlantillaComponent } from './pages/comprobante/listar-plantilla/listar-plantilla.component';
@@ -86,7 +86,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     { provide: MatPaginatorIntl, useValue: CustomPaginator() },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     // provider used to create fake backend
-    fakeBackendProvider,
+    // fakeBackendProvider,
     DatePipe
   ],
   bootstrap: [AppComponent],

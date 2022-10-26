@@ -31,7 +31,34 @@ describe('SearchModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Crear Componemte', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('Llama al método ngOnInit', () => {
+    spyOn(component, 'loadDocumentTypes');
+    component.ngOnInit();
+
+    expect(component).toBeTruthy();
+  });
+
+  it('Llama al método loadDocumentTypes', () => {
+    component.listaEmpleados = [
+      {
+        idEmpleado: '',
+        nombre: '',
+        apellido: '',
+        idCargo: '',
+        email1: '',
+        email2: '',
+        estado: '',
+        usuarioCreacion: '',
+        fechaCreacion: '',
+        fechaNacimiento: '',
+      },
+    ];
+    component.loadDocumentTypes();
+
     expect(component).toBeTruthy();
   });
 });
