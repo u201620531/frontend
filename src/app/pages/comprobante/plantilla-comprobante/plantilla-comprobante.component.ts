@@ -679,22 +679,6 @@ export class PlantillaComprobanteComponent implements OnInit {
         plantilla.Importe_de_IGV_sin_derecho_crédito_fiscal = '';
 
         this.plantillaCONCAR.push(plantilla);
-
-        //Detalle
-        // detalleRegistro.idComprobante = _comprobante.idComprobante;
-        // detalleRegistro.estado = estado_inicial;
-        // detalleRegistro.subDiario = this.subDiario;
-        // detalleRegistro.numeroComprobante = plantilla.Número_de_Comprobante;
-        // detalleRegistro.fechaComprobante = this.fechaCarga;
-        // detalleRegistro.glosaPrincipal = glosaPrincipal;
-        // detalleRegistro.glosaDetalle = glosaDetalle;
-        // detalleRegistro.tipoConvergencia = tipoConversion;
-        // detalleRegistro.idCuentaContable = plantilla.Cuenta_Contable;
-        // detalleRegistro.codigoAnexo = plantilla.Código_de_Anexo;
-        // detalleRegistro.idCentroCosto = plantilla.Código_de_Centro_de_Costo;
-        // detalleRegistro.debeHaber = plantilla.Debe_____Haber;
-        // detalleRegistro.importeOriginal = plantilla.Importe_Original;
-        // this.detallePlantillaRegistro.push(detalleRegistro);
       }
     });
   }

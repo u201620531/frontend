@@ -818,8 +818,6 @@ export class CargarComprobanteComponent implements OnInit {
         ? 0
         : comprobanteRegistro.importeTotal;
     comprobanteRegistro.tipoCambio = comprobanteRegistro.tipoCambio;
-    // comprobanteRegistro.serieGuia: string;
-    // comprobanteRegistro.correlativoGuia: string;
     comprobanteRegistro.estado = estado_inicial;
     comprobanteRegistro.fechaCreacion = formatoFechaGuion(new Date());
     comprobanteRegistro.usuarioCreacion =

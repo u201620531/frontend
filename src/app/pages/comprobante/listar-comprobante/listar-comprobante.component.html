@@ -80,7 +80,7 @@
             *matCellDef="let element"
             [ngClass]="element.estado === 'A' ? 'rowActive' : 'rowInactive'"
           >
-            {{ element.fechaEmision| date: 'dd/MM/yyyy' }}
+            {{ element.fechaEmision | date: "dd/MM/yyyy" }}
           </td>
         </ng-container>
 
@@ -163,6 +163,7 @@
               type="button"
               color="success"
               class="option-button"
+              [disabled]="element.estado === 'D'"
               (click)="modificarComprobante(element.idComprobante, 1)"
             >
               <mat-icon>edit</mat-icon>Editar
@@ -172,6 +173,7 @@
               type="button"
               color="warn"
               class="option-button"
+              [disabled]="element.estado === 'D'"
               (click)="eliminarComprobante(element.idComprobante)"
             >
               <mat-icon>delete</mat-icon>Eliminar
