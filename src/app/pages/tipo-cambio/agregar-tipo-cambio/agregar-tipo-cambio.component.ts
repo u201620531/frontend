@@ -78,6 +78,18 @@ export class AgregarTipoCambioComponent implements OnInit {
   }
 
   agregarTipoCambio() {
+    if (!this.form.valid) {
+      this._snackBar.open(
+        accion_mensaje.faltan_datos,
+        accion_mensaje.agregar_valor_ingresado_seleccionado,
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        }
+      );
+      return false;
+    }
     const tipoCambio: TipoCambio = {
       fecha:
         this.form.value.fecha !== null
@@ -143,6 +155,7 @@ export class AgregarTipoCambioComponent implements OnInit {
         }
       );
     }
+    return true;
   }
 
   back() {

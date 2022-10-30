@@ -68,9 +68,7 @@ export class AgregarUsuarioComponent implements OnInit {
         this.codigoUsuario = params['codigoUsuario'];
         this.readonlyId = this.codigoUsuario ? true : false;
         this._usuarioService
-          .listarUsuarioPorCodigoUsuario(
-            this.codigoUsuario
-          )
+          .listarUsuarioPorCodigoUsuario(this.codigoUsuario)
           .subscribe((res: any) => {
             this.idPerfilUsuario = res.idPerfilUsuario;
             this.form.setValue({
@@ -136,6 +134,19 @@ export class AgregarUsuarioComponent implements OnInit {
   }
 
   agregarUsuario() {
+    if (!this.form.valid) {
+      this._snackBar.open(
+        accion_mensaje.faltan_datos,
+        accion_mensaje.agregar_valor_ingresado_seleccionado,
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        }
+      );
+      return false;
+    }
+
     if (this.form.value.contrasena !== this.form.value.confirmarContrasena) {
       this._snackBar.open(
         'Contraseña diferente',
@@ -157,7 +168,7 @@ export class AgregarUsuarioComponent implements OnInit {
         estado: this.modificar ? this.form.value.estado : estado_inicial,
         fechaCreacion: this.modificar
           ? this.form.value.fechaCreacion
-          : formatoFechaGuion( new Date()),
+          : formatoFechaGuion(new Date()),
         usuarioCreacion: this.modificar
           ? this.form.value.usuarioCreacion
           : this._usuarioService.currentUsuarioValue.codigoUsuario,
@@ -186,7 +197,7 @@ export class AgregarUsuarioComponent implements OnInit {
           }
         );
       } else {
-        console.log('user',usuario);
+        console.log('user', usuario);
         this._usuarioService.agregarUsuario(usuario).subscribe(
           (res) => {
             const result: any = res;
@@ -211,6 +222,7 @@ export class AgregarUsuarioComponent implements OnInit {
         );
       }
     }
+    return true;
   }
 
   back() {

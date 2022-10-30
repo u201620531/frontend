@@ -64,7 +64,6 @@ export class ListarPerfilUsuarioComponent implements OnInit {
     this._perfilUsuarioService.listarPerfilesUsuario().subscribe(
       (res) => {
         this.listaPerfilesUsuario = res;
-        console.log('li',this.listaPerfilesUsuario);
         this.viewOptions = this.listaPerfilesUsuario.length > 0;
         this.dataSource = new MatTableDataSource<PerfilUsuario[]>(res);
         this.loading = false;
@@ -106,11 +105,11 @@ export class ListarPerfilUsuarioComponent implements OnInit {
     );
   }
 
-  modificarPerfilUsuario(idPerfilUsuario: string, edit: number): void {
+  modificarPerfilUsuario(idPerfilUsuario: string, modificar: number): void {
     const extras: NavigationExtras = {
       queryParams: {
         idPerfilUsuario: idPerfilUsuario,
-        edit: edit,
+        modificar: modificar,
       },
     };
 

@@ -77,10 +77,6 @@ export class AgregarFormaPagoComponent implements OnInit {
     });
   }
 
-  consultarFormaPago(id: string) {
-    return this._formaPagoService.listarFormaPagoPorId(id);
-  }
-
   agregarFormaPago() {
     const FormaPago: FormaPago = {
       idFormaPago: this.form.value.idFormaPago,

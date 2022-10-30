@@ -78,6 +78,19 @@ export class AgregarCuentaContableComponent implements OnInit {
   }
 
   agregarCuentaContable() {
+    if (!this.form.valid) {
+      this._snackBar.open(
+        accion_mensaje.faltan_datos,
+        accion_mensaje.agregar_valor_ingresado_seleccionado,
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        }
+      );
+      return false;
+    }
+
     const CuentaContable: CuentaContable = {
       idCuentaContable: this.form.value.idCuentaContable,
       nombre: this.form.value.nombre,
@@ -144,6 +157,7 @@ export class AgregarCuentaContableComponent implements OnInit {
           }
         );
     }
+    return true;
   }
 
   back() {

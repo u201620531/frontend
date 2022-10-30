@@ -117,6 +117,19 @@ export class AgregarProveedorComponent implements OnInit {
   }
 
   agregarProveedor() {
+    if (!this.form.valid) {
+      this._snackBar.open(
+        accion_mensaje.faltan_datos,
+        accion_mensaje.agregar_valor_ingresado_seleccionado,
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        }
+      );
+      return false;
+    }
+
     const proveedor: Proveedor = {
       idProveedor: this.modificar ? this.form.value.idProveedor : '',
       idTipoProveedor: this.form.value.idTipoProveedor,
@@ -186,6 +199,7 @@ export class AgregarProveedorComponent implements OnInit {
         }
       );
     }
+    return true;
   }
 
   back() {

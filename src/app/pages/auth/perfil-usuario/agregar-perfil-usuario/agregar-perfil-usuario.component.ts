@@ -43,13 +43,14 @@ export class AgregarPerfilUsuarioComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.initParams();
   }
 
-  initParams(): void {
+  async initParams() {
     this._route.queryParams.subscribe((params) => {
-      if (params && params['idPerfilUsuario'] === undefined) this.loading = false;
+      if (params && params['idPerfilUsuario'] === undefined)
+        this.loading = false;
       if (params && params['idPerfilUsuario']) {
         this.IdPerfilUsuario = params['idPerfilUsuario'];
         this.readonlyId = this.IdPerfilUsuario ? true : false;
@@ -69,17 +70,27 @@ export class AgregarPerfilUsuarioComponent implements OnInit {
       }
       if (params && params['modificar']) {
         this.readonlyOption = params['modificar'] !== '1' ? true : false;
+        console.log('read', this.readonlyOption);
         this.eliminar = params['modificar'] !== '1' ? true : false;
       }
     });
   }
 
-  consultarPerfilUsuario(id: string) {
-    return this._perfilUsuarioService.listaPerfilUsuarioPoridPerfilUsuario(id);
-  }
-
   agregarPerfilUsuario() {
-    const PerfilUsuario: PerfilUsuario = {
+    if (!this.form.valid) {
+      this._snackBar.open(
+        accion_mensaje.faltan_datos,
+        accion_mensaje.agregar_valor_ingresado_seleccionado,
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        }
+      );
+      return false;
+    }
+
+    const perfilUsuario: PerfilUsuario = {
       idPerfilUsuario: this.form.value.idPerfilUsuario,
       nombre: this.form.value.nombre,
       estado: this.modificar ? this.form.value.estado : estado_inicial,
@@ -93,7 +104,7 @@ export class AgregarPerfilUsuarioComponent implements OnInit {
 
     if (this.modificar) {
       this._perfilUsuarioService
-        .actualizarPerfilUsuario(PerfilUsuario, PerfilUsuario.idPerfilUsuario)
+        .actualizarPerfilUsuario(perfilUsuario, perfilUsuario.idPerfilUsuario)
         .subscribe(
           (res) => {
             const result: any = res;
@@ -117,7 +128,7 @@ export class AgregarPerfilUsuarioComponent implements OnInit {
           }
         );
     } else {
-      this._perfilUsuarioService.agregarPerfilUsuario(PerfilUsuario).subscribe(
+      this._perfilUsuarioService.agregarPerfilUsuario(perfilUsuario).subscribe(
         (res) => {
           const result: any = res;
           this._snackBar.open(
@@ -140,6 +151,7 @@ export class AgregarPerfilUsuarioComponent implements OnInit {
         }
       );
     }
+    return true;
   }
 
   back() {

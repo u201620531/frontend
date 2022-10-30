@@ -105,11 +105,11 @@ export class ListarFormaPagoComponent implements OnInit {
     );
   }
 
-  modificarFormaPago(idFormaPago: string, edit: number): void {
+  modificarFormaPago(idFormaPago: string, modificar: number): void {
     const extras: NavigationExtras = {
       queryParams: {
         idFormaPago: idFormaPago,
-        edit: edit,
+        modificar: modificar,
       },
     };
 
