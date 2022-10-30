@@ -75,7 +75,8 @@ export class LoginComponent {
         this._auditoriaService
           .agregarAuditoria(this.auditoria)
           .subscribe((res) => {});
-        this.error = result.detail;
+          console.log('mee',result);
+        this.error = result.message;
         this._snackBar.open(
           this.error,
           accion_mensaje.modificar_valor_ingresado,

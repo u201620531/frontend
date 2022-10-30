@@ -1,0 +1,19 @@
+.option-button {
+    margin: 0 5px;
+    display: inline-block;
+    line-height: 30px;
+  }
+  
+  .mat-column-idPerfilUsuario {
+    width: 15%;
+  }
+  .mat-column-nombre {
+    width: 45%;
+  }
+  .mat-column-estado {
+    width: 15%;
+  }
+  .mat-column-acciones {
+    width: 25%;
+  }
+  

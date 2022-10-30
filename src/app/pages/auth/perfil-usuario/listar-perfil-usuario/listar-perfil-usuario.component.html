@@ -1,0 +1,149 @@
+<div class="container">
+    <mat-toolbar class="toolbar">
+      <span>Listado de perfiles de usuario</span>
+      <div class="button-spacer"></div>
+    </mat-toolbar>
+    <mat-spinner
+      *ngIf="loading"
+      diameter="50"
+      class="spinner"
+      style="margin-top: 200px"
+    ></mat-spinner>
+    <div class="form-controls" *ngIf="viewOptions">
+      <button
+        mat-raised-button
+        type="button"
+        color="primary"
+        routerLink="/dashboard/agregar-perfil-usuario"
+      >
+        <mat-icon>add_circle_outline</mat-icon>Agregar
+      </button>
+      <div *ngIf="listaPerfilesUsuario.length > 0">
+        <mat-form-field appearance="standard">
+          <mat-label>Filtro (Ingrese aquí el filtro)</mat-label>
+          <input
+            matInput
+            (keyup)="aplicarFiltro($event)"
+            placeholder="{{ placeholderValue }}"
+            #input
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- Id Column -->
+          <ng-container matColumnDef="idPerfilUsuario">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="header-table"
+              style="border-radius: 20px 0 0 20px"
+            >
+              Id perfil usuario
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
+            >
+              {{ element.idPerfilUsuario }}
+            </td>
+          </ng-container>
+  
+          <!-- Description Column -->
+          <ng-container matColumnDef="nombre">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="header-table"
+              style="text-align: center"
+            >
+              Descripción
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado == 'A' ? 'row-active' : 'row-inactive'"
+            >
+              {{ element.nombre }}
+            </td>
+          </ng-container>
+          <!-- Estado Column -->
+          <ng-container matColumnDef="estado">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="header-table"
+              style="text-align: center"
+            >
+              Estado
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.estado === 'A' ? 'row-active' : 'row-inactive'"
+            >
+              {{ element.desEstado }}
+            </td>
+          </ng-container>
+  
+          <!-- Acciones Column -->
+          <ng-container matColumnDef="acciones">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="header-table"
+              style="border-radius: 0 20px 20px 0"
+            ></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="row-option">
+                <button
+                  mat-raised-button
+                  class="option-button"
+                  type="button"
+                  color="view"
+                  (click)="modificarPerfilUsuario(element.idPerfilUsuario, 0)"
+                >
+                  <mat-icon>search</mat-icon>Ver
+                </button>
+                <button
+                  mat-raised-button
+                  type="button"
+                  color="success"
+                  class="option-button"
+                  (click)="modificarPerfilUsuario(element.idPerfilUsuario, 1)"
+                >
+                  <mat-icon>edit</mat-icon>Editar
+                </button>
+                <button
+                  mat-raised-button
+                  type="button"
+                  color="warn"
+                  class="option-button"
+                  (click)="eliminarPerfilUsuario(element.idPerfilUsuario)"
+                >
+                  <mat-icon>delete</mat-icon>Eliminar
+                </button>
+              </div>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+  
+        <mat-paginator
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons
+          aria-label="Seleccionar página del listado"
+        ></mat-paginator>
+      </div>
+      <div *ngIf="viewOptions">
+        <div *ngIf="listaPerfilesUsuario.length === 0" class="empty-list">
+          <h2>No hay formas de pago para mostrar</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  

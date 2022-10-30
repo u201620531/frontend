@@ -21,6 +21,8 @@ import { AgregarTipoCambioComponent } from '../tipo-cambio/agregar-tipo-cambio/a
 import { ListarTipoCambioComponent } from '../tipo-cambio/listar-tipo-cambio/listar-tipo-cambio.component';
 import { ListarCuentaContableComponent } from '../cuenta-contable/listar-cuenta-contable/listar-cuenta-contable.component';
 import { CambiarContrasenaComponent } from '../auth/cambiar-contrasena/cambiar-contrasena.component';
+import { AgregarPerfilUsuarioComponent } from '../auth/perfil-usuario/agregar-perfil-usuario/agregar-perfil-usuario.component';
+import { ListarPerfilUsuarioComponent } from '../auth/perfil-usuario/listar-perfil-usuario/listar-perfil-usuario.component';
 
 const routes: Routes = [
   {
@@ -62,6 +64,8 @@ const routes: Routes = [
         path: 'listar-cuenta-contable',
         component: ListarCuentaContableComponent,
       },
+      { path: 'agregar-perfil-usuario', component: AgregarPerfilUsuarioComponent },
+      { path: 'listar-perfil-usuario', component: ListarPerfilUsuarioComponent },
     ],
   },
 ];

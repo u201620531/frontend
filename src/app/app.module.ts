@@ -43,6 +43,8 @@ import { CambiarContrasenaComponent } from './pages/auth/cambiar-contrasena/camb
 import { SoloNumeros } from './directives/solo-numeros.directive';
 import { FormatoMonedaDirective } from './directives/formatoMoneda';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { AgregarPerfilUsuarioComponent } from './pages/auth/perfil-usuario/agregar-perfil-usuario/agregar-perfil-usuario.component';
+import { ListarPerfilUsuarioComponent } from './pages/auth/perfil-usuario/listar-perfil-usuario/listar-perfil-usuario.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,6 +72,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     AgregarTipoCambioComponent,
     ListarCuentaContableComponent,
     AgregarCuentaContableComponent,
+   AgregarPerfilUsuarioComponent,
+   ListarPerfilUsuarioComponent,
     SoloNumeros,
     FormatoMonedaDirective
   ],
@@ -85,8 +89,6 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: MatPaginatorIntl, useValue: CustomPaginator() },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-    // provider used to create fake backend
-    // fakeBackendProvider,
     DatePipe
   ],
   bootstrap: [AppComponent],

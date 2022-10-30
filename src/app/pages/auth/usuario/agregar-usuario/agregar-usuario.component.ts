@@ -12,6 +12,7 @@ import {
   contrasena_inicial,
   estado_inicial,
 } from 'src/shared/config';
+import { formatoFechaGuion } from 'src/shared/functions';
 import { ConfirmationModalComponent } from '../../../modals/confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -102,6 +103,8 @@ export class AgregarUsuarioComponent implements OnInit {
           if (espacioApellido > -1)
             nomUsuario = res.nombre.substring(0, espacioApellido);
           else nomUsuario = res.nombre;
+          console.log(res.fechaNacimiento);
+          console.log(new Date(res.fechaNacimiento));
           const anoUsuario = new Date(res.fechaNacimiento);
           const codUsuario =
             res.apellido.substring(0, 1) +
@@ -154,7 +157,7 @@ export class AgregarUsuarioComponent implements OnInit {
         estado: this.modificar ? this.form.value.estado : estado_inicial,
         fechaCreacion: this.modificar
           ? this.form.value.fechaCreacion
-          : new Date().toLocaleDateString(),
+          : formatoFechaGuion( new Date()),
         usuarioCreacion: this.modificar
           ? this.form.value.usuarioCreacion
           : this._usuarioService.currentUsuarioValue.codigoUsuario,
@@ -183,6 +186,7 @@ export class AgregarUsuarioComponent implements OnInit {
           }
         );
       } else {
+        console.log('user',usuario);
         this._usuarioService.agregarUsuario(usuario).subscribe(
           (res) => {
             const result: any = res;
