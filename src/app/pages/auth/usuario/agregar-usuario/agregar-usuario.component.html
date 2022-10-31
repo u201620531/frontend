@@ -1,20 +1,27 @@
 <div class="container">
-  <mat-toolbar
-    style="background: cornflowerblue; color: white; font-family: cursive"
-  >
-    <span>Agregar Usuario</span>
+  <mat-toolbar class="toolbar">
+    <span>Mantenimiento de usuarios</span>
+    <div class="button-spacer"></div>
+    <button mat-button (click)="back()">
+      <mat-icon> arrow_back </mat-icon>Regresar
+    </button>
   </mat-toolbar>
-
-  <mat-card class="cardOptions">
+  <mat-spinner
+    *ngIf="loading"
+    diameter="50"
+    class="spinner"
+    style="margin-top: 200px"
+  ></mat-spinner>
+  <div class="form-controls" *ngIf="!loading">
     <form [formGroup]="form" (ngSubmit)="agregarUsuario()">
       <mat-grid-list cols="6" rowHeight="70px">
         <mat-grid-tile
-          [colspan]="2"
+          [colspan]="3"
           [rowspan]="1"
           [style.background]="'transparent'"
         >
-          <div class="inputID">
-            <mat-form-field class="inputOptionMedium">
+          <div class="input-option">
+            <mat-form-field class="input-option">
               <mat-label>Empleado</mat-label>
               <mat-select
                 formControlName="idEmpleado"
@@ -25,7 +32,7 @@
                 <mat-option
                   *ngFor="let empleado of listaEmpleados"
                   [value]="empleado.idEmpleado"
-                  (click)="consultarEmpleado();"
+                  (click)="consultarEmpleado()"
                 >
                   {{ empleado.nombre }} {{ empleado.apellido }}
                 </mat-option>
@@ -34,41 +41,38 @@
           </div>
         </mat-grid-tile>
         <mat-grid-tile
-          [colspan]="4"
-          [rowspan]="1"
+          [colspan]="3"
+          [rowspan]="3"
           [style.background]="'transparent'"
         >
           <img
             src="../../../../assets/img/png/empleado.png"
             alt="Usuario"
             width="350"
-            height="70"
+            height="120"
           />
         </mat-grid-tile>
         <mat-grid-tile
-          [colspan]="2"
+          [colspan]="1"
           [rowspan]="1"
           [style.background]="'transparent'"
         >
-          <div class="inputID">
-            <mat-form-field>
-              <mat-label>Código usuario</mat-label>
-              <input
-                matInput
-                autocomplete="off"
-                readonly
-                formControlName="codigoUsuario"
-              />
-            </mat-form-field>
-          </div>
-        </mat-grid-tile>
-        <mat-grid-tile
-          [colspan]="2"
+          <mat-form-field class="input-option input-option-right">
+            <mat-label>Código usuario</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              readonly
+              formControlName="codigoUsuario"
+            />
+          </mat-form-field> </mat-grid-tile
+        ><mat-grid-tile
+          [colspan]="3"
           [rowspan]="1"
           [style.background]="'transparent'"
         >
-          <div class="inputID">
-            <mat-form-field class="inputOptionMedium">
+          <div class="input-option">
+            <mat-form-field class="input-option">
               <mat-label>Perfil</mat-label>
               <mat-select
                 formControlName="idPerfilUsuario"
@@ -84,43 +88,18 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
+          </div> </mat-grid-tile
+        ><mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1"
+          [style.background]="'transparent'"
+        >
         </mat-grid-tile>
         <mat-grid-tile
           [colspan]="2"
           [rowspan]="1"
           [style.background]="'transparent'"
         >
-          <div class="inputID" style="display:none;">
-            <mat-form-field class="inputOptionMedium">
-              <mat-label>Contraseña</mat-label>
-              <input
-                type="password"
-                matInput
-                autocomplete="off"
-                formControlName="contrasena"
-                [readonly]="readonlyOption"
-              />
-            </mat-form-field>
-          </div>
-        <!-- </mat-grid-tile>
-        <mat-grid-tile
-          [colspan]="2"
-          [rowspan]="1"
-          [style.background]="'transparent'"
-        > -->
-          <div style="display:none;" class="inputID">
-            <mat-form-field class="inputOptionMedium">
-              <mat-label>Confirmar Contraseña</mat-label>
-              <input
-                type="password"
-                matInput
-                autocomplete="off"
-                formControlName="confirmarContrasena"
-                [readonly]="readonlyOption"
-              />
-            </mat-form-field>
-          </div>
           <div style="display: none">
             <mat-form-field>
               <mat-label>Estado</mat-label>
@@ -164,6 +143,7 @@
             mat-raised-button
             style="margin-right: 20px"
             type="submit"
+            color="primary"
             [disabled]="readonlyOption"
           >
             Guardar
@@ -172,16 +152,14 @@
             mat-raised-button
             style="margin-right: 20px"
             type="button"
+            color="warn"
             [disabled]="eliminar"
             (click)="eliminarUsuario()"
           >
             Eliminar
           </button>
-          <button type="button" mat-raised-button (click)="back()">
-            Volver
-          </button>
         </mat-grid-tile>
       </mat-grid-list>
     </form>
-  </mat-card>
+  </div>
 </div>

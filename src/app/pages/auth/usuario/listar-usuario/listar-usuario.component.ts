@@ -104,13 +104,13 @@ export class ListarUsuarioComponent implements OnInit {
 
   modificarUsuario(
     idEmpleado: string,
-    idUsuario: string,
+    codigoUsuario: string,
     modificar: number
   ): void {
     const extras: NavigationExtras = {
       queryParams: {
         idEmpleado: idEmpleado,
-        idUsuario: idUsuario,
+        codigoUsuario: codigoUsuario,
         modificar: modificar,
       },
     };

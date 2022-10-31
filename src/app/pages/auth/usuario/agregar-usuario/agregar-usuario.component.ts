@@ -32,6 +32,7 @@ export class AgregarUsuarioComponent implements OnInit {
   eliminar: boolean = true;
   confirmacion: boolean = false;
   modificar: boolean = false;
+  loading: boolean = true;
 
   constructor(
     private _empleadoService: EmpleadoService,
@@ -46,8 +47,6 @@ export class AgregarUsuarioComponent implements OnInit {
     this.form = this._formBuilder.group({
       idEmpleado: ['', Validators.required],
       codigoUsuario: ['', Validators.required],
-      contrasena: ['', Validators.required],
-      confirmarContrasena: ['', Validators.required],
       idPerfilUsuario: ['', Validators.required],
       estado: [''],
       fechaCreacion: [''],
@@ -63,6 +62,12 @@ export class AgregarUsuarioComponent implements OnInit {
 
   initParams(): void {
     this._route.queryParams.subscribe((params) => {
+      if (
+        params &&
+        params['idEmpleado'] === undefined &&
+        params['codigoUsuario'] === undefined
+      )
+        this.loading = false;
       if (params && params['idEmpleado'] && params['codigoUsuario']) {
         this.idEmpleado = params['idEmpleado'];
         this.codigoUsuario = params['codigoUsuario'];
@@ -74,14 +79,13 @@ export class AgregarUsuarioComponent implements OnInit {
             this.form.setValue({
               codigoUsuario: res.codigoUsuario,
               idEmpleado: res.idEmpleado,
-              contrasena: res.contrasena,
-              confirmarContrasena: res.contrasena,
               idPerfilUsuario: res.idPerfilUsuario,
               estado: res.estado,
               fechaCreacion: res.fechaCreacion,
               usuarioCreacion: res.usuarioCreacion,
             });
             this.modificar = true;
+            this.loading = false;
           });
       }
       if (params && params['modificar']) {
@@ -101,9 +105,9 @@ export class AgregarUsuarioComponent implements OnInit {
           if (espacioApellido > -1)
             nomUsuario = res.nombre.substring(0, espacioApellido);
           else nomUsuario = res.nombre;
-          console.log(res.fechaNacimiento);
-          console.log(new Date(res.fechaNacimiento));
-          const anoUsuario = new Date(res.fechaNacimiento);
+          console.log('2022-01-05');
+          console.log(new Date('2022-01-05'));
+          const anoUsuario = new Date('2022-01-05');
           const codUsuario =
             res.apellido.substring(0, 1) +
             nomUsuario.toLowerCase() +
@@ -146,81 +150,77 @@ export class AgregarUsuarioComponent implements OnInit {
       );
       return false;
     }
-
-    if (this.form.value.contrasena !== this.form.value.confirmarContrasena) {
-      this._snackBar.open(
-        'Contraseña diferente',
-        accion_mensaje.modificar_valor_ingresado,
-        {
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-          duration: 5000,
+    const usuarioUpd: any = {
+      codigoUsuario: this.form.value.codigoUsuario,
+      idEmpleado: this.form.value.idEmpleado,
+      idPerfilUsuario: this.form.value.idPerfilUsuario,
+      estado: this.modificar ? this.form.value.estado : estado_inicial,
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : formatoFechaGuion(new Date()),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
+    };
+    const usuarioReg: any = {
+      codigoUsuario: this.form.value.codigoUsuario,
+      idEmpleado: this.form.value.idEmpleado,
+      idPerfilUsuario: this.form.value.idPerfilUsuario,
+      contrasena: contrasena_inicial,
+      estado: this.modificar ? this.form.value.estado : estado_inicial,
+      fechaCreacion: this.modificar
+        ? this.form.value.fechaCreacion
+        : formatoFechaGuion(new Date()),
+      usuarioCreacion: this.modificar
+        ? this.form.value.usuarioCreacion
+        : this._usuarioService.currentUsuarioValue.codigoUsuario,
+    };
+    if (this.modificar) {
+      this._usuarioService.actualizarUsuario(usuarioUpd).subscribe(
+        (res) => {
+          const result: any = res;
+          if (result.id === 1) this.back();
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom',
+              duration: 5000,
+            }
+          );
+        },
+        (err) => {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 5000,
+          });
         }
       );
     } else {
-      const usuario: Usuario = {
-        codigoUsuario: this.form.value.codigoUsuario,
-        idEmpleado: this.form.value.idEmpleado,
-        idPerfilUsuario: this.form.value.idPerfilUsuario,
-        contrasena: this.modificar
-          ? this.form.value.contrasena
-          : contrasena_inicial,
-        estado: this.modificar ? this.form.value.estado : estado_inicial,
-        fechaCreacion: this.modificar
-          ? this.form.value.fechaCreacion
-          : formatoFechaGuion(new Date()),
-        usuarioCreacion: this.modificar
-          ? this.form.value.usuarioCreacion
-          : this._usuarioService.currentUsuarioValue.codigoUsuario,
-      };
-      if (this.modificar) {
-        this._usuarioService.actualizarUsuario(usuario).subscribe(
-          (res) => {
-            const result: any = res;
-            if (result.id === 1) this.back();
-            this._snackBar.open(
-              result.message,
-              accion_mensaje.registro_correcto,
-              {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 5000,
-              }
-            );
-          },
-          (err) => {
-            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+      this._usuarioService.agregarUsuario(usuarioReg).subscribe(
+        (res) => {
+          const result: any = res;
+          this._snackBar.open(
+            result.message,
+            accion_mensaje.registro_correcto,
+            {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
               duration: 5000,
-            });
-          }
-        );
-      } else {
-        console.log('user', usuario);
-        this._usuarioService.agregarUsuario(usuario).subscribe(
-          (res) => {
-            const result: any = res;
-            this._snackBar.open(
-              result.message,
-              accion_mensaje.registro_correcto,
-              {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 5000,
-              }
-            );
-            if (result.id === 1) this.back();
-          },
-          (err) => {
-            this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 5000,
-            });
-          }
-        );
-      }
+            }
+          );
+          if (result.id === 1) this.back();
+        },
+        (err) => {
+          this._snackBar.open(err.message, accion_mensaje.error_tecnico, {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 5000,
+          });
+        }
+      );
     }
     return true;
   }
