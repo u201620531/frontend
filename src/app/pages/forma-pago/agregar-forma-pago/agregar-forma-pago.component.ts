@@ -77,7 +77,20 @@ export class AgregarFormaPagoComponent implements OnInit {
     });
   }
 
-  agregarFormaPago() {
+  agregarFormaPago() {    
+    if (!this.form.valid) {
+      this._snackBar.open(
+        accion_mensaje.faltan_datos,
+        accion_mensaje.agregar_valor_ingresado_seleccionado,
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 5000,
+        }
+      );
+      return false;
+    }
+    
     const FormaPago: FormaPago = {
       idFormaPago: this.form.value.idFormaPago,
       descripcion: this.form.value.descripcion,
@@ -140,6 +153,8 @@ export class AgregarFormaPagoComponent implements OnInit {
         }
       );
     }
+    
+    return true;
   }
 
   back() {
