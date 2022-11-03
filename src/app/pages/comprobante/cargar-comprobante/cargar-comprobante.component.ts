@@ -441,7 +441,7 @@ export class CargarComprobanteComponent implements OnInit {
       detalle,
       true
     );
-    detalle = this.validarTipoCambio(comprobanteValidar.FECHA_EMISION, detalle);
+    // detalle = this.validarTipoCambio(comprobanteValidar.FECHA_EMISION, detalle);
     detalle = this.validarValorFecha(
       'Fecha vcmto',
       comprobanteValidar.FECHA_VENCIMIENTO,
@@ -817,7 +817,7 @@ export class CargarComprobanteComponent implements OnInit {
       comprobantesPorCargar.importeTotal === ''
         ? 0
         : comprobanteRegistro.importeTotal;
-    comprobanteRegistro.tipoCambio = comprobanteRegistro.tipoCambio;
+    comprobanteRegistro.tipoCambio = 0;//comprobanteRegistro.tipoCambio;
     comprobanteRegistro.estado = estado_inicial;
     comprobanteRegistro.fechaCreacion = formatoFechaGuion(new Date());
     comprobanteRegistro.usuarioCreacion =
